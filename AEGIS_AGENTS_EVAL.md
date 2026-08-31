@@ -1,144 +1,144 @@
-# Aegis Agents — Avaliação Comportamental contra poc-frame-ai
+# Aegis Agents — Behavioral Evaluation against poc-frame-ai
 
-> Data: 2026-05-17
-> Repo alvo: `/home/wellington/Documents/RD/IA-RD-Iframe/poc-frame-ai`
-> Aegis v2.0.0 instalado em `aegis/` (28 skills)
-> Método: leitura sistemática de cada `SKILL.md` + simulação manual contra diff hipotético
-> Diff simulado:
->   - SIM-1: modify `web/Shared/src/services/searchProducts/index.ts` (regex `{2,}` → `{3,}`, adicionar param `customSort`)
+> Date: 2026-05-17
+> Target repo: `/home/wellington/Documents/RD/IA-RD-Iframe/poc-frame-ai`
+> Aegis v2.0.0 installed in `aegis/` (28 skills)
+> Method: systematic reading of each `SKILL.md` + manual simulation against hypothetical diff
+> Simulated diffs:
+>   - SIM-1: modify `web/Shared/src/services/searchProducts/index.ts` (regex `{2,}` → `{3,}`, add param `customSort`)
 >   - SIM-2: add `web/Shared/src/services/searchProducts/sortHelpers.ts`
 >   - SIM-3: delete `web/Shared/src/containers/search/SearchContainer.test.tsx`
 
 ---
 
-## Resumo executivo
+## Executive Summary
 
-Pipeline de descoberta rodou completo (Scout→Reviewer, confidence 0.81). Estado pós-instalação tem 28 skills, mas **maquinaria reativa nunca foi exercitada**: keeper queue vazia, audit vazio, session-summaries vazio, sem hooks git. **Forward team inteiro bloqueado** (8 skills) por falta de `active-requirements.json`. **Migration team bloqueado** (5 skills) por falta de `migration_brief.md` — by design. Skills generativas são non-destructive: rerodar Writer/Architect **não propaga mudanças de código** para specs já existentes. O **único agente reativo a diffs é o Keeper**, e ele opera em modo degradado (sem `graph.json`, sem CLI publicada).
+Discovery pipeline ran complete (Scout→Reviewer, confidence 0.81). Post-install state has 28 skills, but **reactive machinery never exercised**: empty Keeper queue, empty audit, empty session-summaries, no git hooks. **Entire Forward team blocked** (8 skills) by missing `active-requirements.json`. **Migration team blocked** (5 skills) by missing `migration_brief.md` — by design. Generative skills are non-destructive: re-running Writer/Architect **doesn't propagate code changes** to already-existing specs. **Only reactive agent is Keeper**, and it operates in degraded mode (without `graph.json`, without published CLI).
 
-**Veredito**: arquitetura cobre o ciclo, mas integração no dia-a-dia depende de instalação de hooks git + CLI funcional + bootstrap de `aegis/forward/` que **não acontecem automaticamente** após `aegis install`.
+**Verdict:** architecture covers the cycle, but day-to-day integration depends on git hook installation + functional CLI + `aegis/forward/` bootstrap that **don't happen automatically** after `aegis install`.
 
 ---
 
-## Issues por agente
+## Issues by agent
 
-Severidade: 🔴 CRITICAL · 🟠 HIGH · 🟡 MEDIUM · 🔵 LOW
+Severity: 🔴 CRITICAL · 🟠 HIGH · 🟡 MEDIUM · 🔵 LOW
 
-### Cross-cutting (afetam múltiplos agentes)
+### Cross-cutting (affect multiple agents)
 
-| # | Sev | Issue | Onde |
+| # | Sev | Issue | Where |
 |---|-----|-------|------|
-| ~~X-01~~ | ❌ falso positivo | `npx aegis-spec <subcmd>` funciona pós-publish: pacote tem bin único (`aegis`), npm resolve single-bin packages automaticamente. Não há bug aqui. | revisado 2026-05-17 |
-| X-02 | 🔴 | Pacote `aegis-spec` **não publicado no npm registry** (HTTP 404). Toda referência `npx aegis-spec ...` quebra em projeto cliente. Version check do orquestrador (`registry.npmjs.org/aegis-spec/latest`) também quebra. | global |
-| X-03 | 🟠 | `state.json.checkpoints` desincronizado do filesystem. `detective.outputs` lista ADRs (`ADR-001-busca-dual-engine`, `ADR-002-patrocinados-topsort`) que **não existem** — nomes reais no FS são `001-multi-tenant-via-yarn-workspaces.md` etc. Nenhum agente reconcilia. | `aegis/config/state.json` |
-| X-04 | 🟠 | 8 skills do Forward (requirements, doubt, plan, to-do, audit, quality, coding, resume) abortam por falta de `aegis/config/active-requirements.json`. Esse arquivo é criado **só** por `/aegis-requirements`. **Sem caminho de bootstrap claro** — usuário precisa adivinhar que `/aegis-requirements` é o ponto de entrada. | Forward team |
-| X-05 | 🟠 | `aegis/forward/` referenciado em `state.json.forward_folder` e `setup.json.paths.forward-dir`, mas **não existe**. Instalador cria a pasta de specs mas não a pasta forward — UX inconsistente. | installer + state.json |
-| X-06 | 🟠 | `aegis/runtime/context/graph.json` **nunca gerado** (só modules.json + surface.json). Keeper modo `after` cai em modo degradado: sem `blast_radius`, sem `severity`. Nenhum passo do pipeline de descoberta gera graph.json — ele é v1.8.0+ feature mas instalador 2.0.0 não dispara. | installer + graph cmd |
-| X-07 | 🟡 | `aegis/runtime/hooks.yml` instalado com todos os arrays vazios (before-/after- pra 9 stages). Instalador não interage com usuário pra wirear hooks específicos do projeto. | installer |
-| X-08 | 🟡 | `aegis/runtime/queue/`, `aegis/runtime/audit/`, `aegis/runtime/session-summaries/` criados vazios. Sem git hook que escreva em `keeper-queue.jsonl`, Keeper depende de `git diff HEAD` (manual). | installer |
-| X-09 | 🟡 | Skills generativas (writer, architect, detective, scout) são **non-destructive**: rerodar não atualiza specs existentes. **Apenas Keeper reage a mudanças de código**. Re-extração só funciona se usuário deletar specs antigas manualmente. | writer, architect, detective, scout |
-| X-10 | 🟡 | `setup.json.watch.archive-after` e `watch.block-on-red` definidos mas **não espelhados** em `state.json`. Duas fontes de verdade pra config — risco de divergência. | config |
-| X-11 | 🔵 | `aegis/config/files-manifest.json` listado como **deleted** no git status. Instalador parece tê-lo gerado em runs anteriores mas não na instalação atual — re-instalação pode falhar ou duplicar. | installer |
-| X-12 | 🔵 | Mistura de naming convention em config: `state.json` usa `snake_case` (`output_folder`, `chat_language`), `setup.json` usa `kebab-case` (`schema-version`, `aegis-version`), `manifest.yaml` usa `camelCase` (`installDate`, `lastUpdated`). | config |
+| ~~X-01~~ | ❌ false positive | `npx aegis-spec <subcmd>` works post-publish: package has single bin (`aegis`), npm resolves single-bin packages automatically. No bug here. | reviewed 2026-05-17 |
+| X-02 | 🔴 | Package `aegis-spec` **not published on npm registry** (HTTP 404). All references to `npx aegis-spec ...` break in client project. Version check from orchestrator (`registry.npmjs.org/aegis-spec/latest`) also breaks. | global |
+| X-03 | 🟠 | `state.json.checkpoints` out of sync with filesystem. `detective.outputs` lists ADRs (`ADR-001-busca-dual-engine`, `ADR-002-patrocinados-topsort`) that **don't exist** — actual names in FS are `001-multi-tenant-via-yarn-workspaces.md` etc. No agent reconciles. | `aegis/config/state.json` |
+| X-04 | 🟠 | 8 Forward skills (requirements, doubt, plan, to-do, audit, quality, coding, resume) abort due to missing `aegis/config/active-requirements.json`. This file is created **only** by `/aegis-requirements`. **No clear bootstrap path** — user must guess that `/aegis-requirements` is the entry point. | Forward team |
+| X-05 | 🟠 | `aegis/forward/` referenced in `state.json.forward_folder` and `setup.json.paths.forward-dir`, but **doesn't exist**. Installer creates specs folder but not forward folder — inconsistent UX. | installer + state.json |
+| X-06 | 🟠 | `aegis/runtime/context/graph.json` **never generated** (only modules.json + surface.json). Keeper `after` mode falls to degraded mode: no `blast_radius`, no `severity`. No pipeline step generates graph.json — it's v1.8.0+ feature but installer 2.0.0 doesn't trigger. | installer + graph cmd |
+| X-07 | 🟡 | `aegis/runtime/hooks.yml` installed with all arrays empty (before-/after- for 9 stages). Installer doesn't interact with user to wire project-specific hooks. | installer |
+| X-08 | 🟡 | `aegis/runtime/queue/`, `aegis/runtime/audit/`, `aegis/runtime/session-summaries/` created empty. Without git hook writing to `keeper-queue.jsonl`, Keeper depends on manual `git diff HEAD`. | installer |
+| X-09 | 🟡 | Generative skills (writer, architect, detective, scout) are **non-destructive**: re-running doesn't update existing specs. **Only Keeper reacts to code changes**. Re-extraction only works if user manually deletes old specs. | writer, architect, detective, scout |
+| X-10 | 🟡 | `setup.json.watch.archive-after` and `watch.block-on-red` defined but **not mirrored** in `state.json`. Two sources of truth for config — risk of divergence. | config |
+| X-11 | 🔵 | `aegis/config/files-manifest.json` listed as **deleted** in git status. Installer seems to have generated it in previous runs but not in current install — reinstall may fail or duplicate. | installer |
+| X-12 | 🔵 | Mix of naming convention in config: `state.json` uses `snake_case` (`output_folder`, `chat_language`), `setup.json` uses `kebab-case` (`schema-version`, `aegis-version`), `manifest.yaml` uses `camelCase` (`installDate`, `lastUpdated`). | config |
 
-### aegis (orquestrador)
+### aegis (orchestrator)
 
 | # | Sev | Issue |
 |---|-----|-------|
-| O-01 | 🟠 | Comportamento com `phase=completo` (estado atual do poc-frame-ai) **não documentado** em `references/step-02-resume.md`. Provavelmente diz "nada a fazer". UX confuso — usuário não sabe se deve re-rodar agentes individuais ou aceitar estado. |
-| O-02 | 🟡 | Version check via `registry.npmjs.org/aegis-spec/latest` falha (X-02). Skill diz "informe discretamente após saudação" — silenciosamente broken. |
-| O-03 | 🟡 | Compressão de contexto via `session-summaries/` é boa ideia mas dir está vazio. Nunca acionado em primeira run (provavelmente skill gera summaries só durante execução, não retroativamente). |
-| O-04 | 🔵 | "Salve checkpoint" + "Marque tarefa em plan.md" — `plan.md` atual ainda tem todos `[ ]` apesar de `state.json.completed` listar tudo. **plan.md não foi atualizado** apesar de checkpoint feito. |
+| O-01 | 🟠 | Behavior with `phase=complete` (current state of poc-frame-ai) **not documented** in `references/step-02-resume.md`. Probably says "nothing to do". Confusing UX — user doesn't know if should re-run individual agents or accept state. |
+| O-02 | 🟡 | Version check via `registry.npmjs.org/aegis-spec/latest` fails (X-02). Skill says "inform discreetly after greeting" — silently broken. |
+| O-03 | 🟡 | Context compression via `session-summaries/` is good idea but dir is empty. Never triggered on first run (probably skill generates summaries only during execution, not retroactively). |
+| O-04 | 🔵 | "Save checkpoint" + "Mark task in plan.md" — current `plan.md` still has all `[ ]` despite `state.json.completed` listing everything. **plan.md not updated** despite checkpoint done. |
 
 ### aegis-scout
 
 | # | Sev | Issue |
 |---|-----|-------|
-| S-01 | 🟡 | Hard-coded exclusions: `node_modules`, `.git`, `aegis`, `dist`, `build`, `coverage`, `__pycache__`, `.cache`. **Não inclui** `.next`, `.turbo`, `.vercel`, `target` (Rust), `vendor` (Go), `_modules` (yarn berry pnp). |
-| S-02 | 🔵 | Conta extensões mas não detecta multi-language repos com mesma extensão (`.js` Node vs Deno, `.ts` Node vs Bun). Não bloqueante. |
+| S-01 | 🟡 | Hard-coded exclusions: `node_modules`, `.git`, `aegis`, `dist`, `build`, `coverage`, `__pycache__`, `.cache`. **Doesn't include** `.next`, `.turbo`, `.vercel`, `target` (Rust), `vendor` (Go), `_modules` (yarn berry pnp). |
+| S-02 | 🔵 | Counts extensions but doesn't detect multi-language repos with same extension (`.js` Node vs Deno, `.ts` Node vs Bun). Not blocking. |
 
 ### aegis-archaeologist
 
 | # | Sev | Issue |
 |---|-----|-------|
-| A-01 | 🟠 | Reroda só se usuário invocar manualmente — não detecta automaticamente módulo modificado. Se SIM-2 (`sortHelpers.ts`) adiciona arquivo importante, archaeologist precisa ser re-rodado mas não há sinal pro orquestrador. |
-| A-02 | 🟡 | `modules.json` regenerado preserva existentes? SKILL diz "non-destructive" — verificar se merge módulos novos com mantidos. |
+| A-01 | 🟠 | Re-runs only if user invokes manually — doesn't auto-detect modified module. If SIM-2 (`sortHelpers.ts`) adds important file, archaeologist needs re-run but no signal to orchestrator. |
+| A-02 | 🟡 | Does regenerated `modules.json` preserve existing ones? SKILL says "non-destructive" — verify if merges new modules with kept ones. |
 
 ### aegis-detective
 
 | # | Sev | Issue |
 |---|-----|-------|
-| D-01 | 🟠 | ADRs gerados com nomes "tópicos" (002-search-engine-fallback-ladder) ao invés de "decisão" sequenciais. `state.json` ainda referencia nomes antigos. Não há reconciliação. |
-| D-02 | 🟡 | `domain.md` regras numeradas (RN-01, RN-02…) mas **sem schema enforced**. Reroda renumera? Mantém? Quebra rastreabilidade do keeper que cita "RN-01". |
+| D-01 | 🟠 | ADRs generated with "topic" names (002-search-engine-fallback-ladder) instead of sequential "decision" names. `state.json` still references old names. No reconciliation. |
+| D-02 | 🟡 | `domain.md` rules numbered (RN-01, RN-02…) but **without enforced schema**. Re-run renumbers? Keeps? Breaks traceability of keeper citing "RN-01". |
 
 ### aegis-architect
 
 | # | Sev | Issue |
 |---|-----|-------|
-| AR-01 | 🟡 | Gera C4 + ERD + spec-impact-matrix. Re-execução com `non-destructive` significa que diagramas Mermaid não atualizam após mudanças. Manual delete necessário. |
-| AR-02 | 🟡 | Não há "diff mode" — usuário não consegue pedir "atualize só C4 components". |
+| AR-01 | 🟡 | Generates C4 + ERD + spec-impact-matrix. Re-execution with `non-destructive` means Mermaid diagrams don't update after changes. Manual delete necessary. |
+| AR-02 | 🟡 | No "diff mode" — user can't request "update only C4 components". |
 
 ### aegis-writer
 
 | # | Sev | Issue |
 |---|-----|-------|
-| W-01 | 🟠 | Non-destructive estrito: **arquivos canônicos existentes nunca são sobrescritos**, mesmo se código drift. Único caminho: deletar arquivo manualmente antes de re-rodar. Não há flag `--force` documentada. |
-| W-02 | 🟡 | `state.json.redator_progress` campo citado mas **ausente** no state.json atual. Resume de Writer interrompido fica órfão. |
-| W-03 | 🟡 | "Pausa preventiva entre units (3+)" boa para context budget mas força fricção UX desnecessária quando rodando em modo automation. |
-| W-04 | 🔵 | Confidence marker (🟢🟡🔴) "sempre presente" — verificar se tooling valida ou é só convenção textual. |
+| W-01 | 🟠 | Strict non-destructive: **existing canonical files never overwritten**, even if code drifts. Only path: delete file manually before re-run. No documented `--force` flag. |
+| W-02 | 🟡 | `state.json.redator_progress` field cited but **absent** in current state.json. Writer interrupted resume left orphaned. |
+| W-03 | 🟡 | "Preventive pause between units (3+)" good for context budget but creates unnecessary UX friction when running in automation mode. |
+| W-04 | 🔵 | Confidence marker (🟢🟡🔴) "always present" — verify if tooling validates or just textual convention. |
 
 ### aegis-reviewer
 
 | # | Sev | Issue |
 |---|-----|-------|
-| R-01 | 🟠 | "Revisão cruzada via Codex" condicional em `doc_level=completo/detalhado`. Codex é provedor específico — assume API key. Sem fallback claro pra outros providers. |
-| R-02 | 🟡 | `confidence-report.md` regerado a cada run sobrescreve histórico de confiança. Sem timeline de regressão de qualidade. |
+| R-01 | 🟠 | "Cross-review via Codex" conditional on `doc_level=complete/detailed`. Codex is specific provider — assumes API key. No clear fallback for other providers. |
+| R-02 | 🟡 | `confidence-report.md` regenerated each run overwrites confidence history. No timeline for quality regression. |
 
-### aegis-keeper ⭐ (mais crítico — único reativo)
+### aegis-keeper ⭐ (most critical — only reactive)
 
 | # | Sev | Issue |
 |---|-----|-------|
-| K-01 | 🔴 | Sem `code-spec-matrix.md` aborta. Sem `graph.json` cai em degradado sem severity. **Dois pré-reqs frágeis**, instalação default não garante nenhum. |
-| K-02 | 🔴 | CLI `aegis-spec graph impact <file> --json` referenciado mas comando errado (X-01) + package não publicado (X-02). Modo `after` v1.8.0+ broken em qualquer projeto cliente. |
-| K-03 | 🟠 | "Atualizar specs in-place" depende de LLM detectar contradição textual entre código novo e spec antiga. **Sem validação AST/regex**. SIM-1 (regex `{2,}` → `{3,}`) pode passar batido se LLM não notar a string específica no spec. |
-| K-04 | 🟠 | `aegis/reports/domain.md` contém RN-XX referenciadas no código (`services/searchProducts/index.ts:122-129` para RN-01). Keeper SKILL diz ler "regras de negócio do domain.md **quando referenciado**" — ambíguo. Se spec SDD não menciona RN-01 explicitamente, mudança no regex invalida RN-01 mas keeper não percebe. |
-| K-05 | 🟠 | Heurística "spec do diretório pai" pra mapear arquivo novo. **Falha** pra utilitários cross-module (e.g. `sortHelpers.ts` em SIM-2 — qual spec é "pai"? `search/` ou nenhuma?). Resulta em entry vago na matrix. |
-| K-06 | 🟠 | Arquivo deletado: matrix marca `~~deletado~~` mas spec correspondente **não é atualizada** para remover referências ao arquivo morto. SIM-3 (test removido) deixa spec referenciando teste inexistente. |
-| K-07 | 🟡 | `state-machines.md`, `permissions.md`, `architecture/*` **não estão no read path** do keeper. Mudanças que afetam fluxo (não regra de negócio simples) podem ficar invisíveis. |
-| K-08 | 🟡 | `aegis/changelog/` e `aegis/reports/drift.md` criados sob demanda — primeiro run de keeper bootstraps esses paths. Usuário não sabe que vão existir. |
-| K-09 | 🟡 | Queue file `keeper-queue.jsonl` esperado em `aegis/runtime/queue/` mas **nenhum hook gera**. Schema em `references/queue-schema.md` mas instalador não wira git pre-commit/post-commit para escrever. |
-| K-10 | 🟡 | Reconciliação `state.json` desync (X-03) não é responsabilidade do keeper — mas ninguém faz. Bug órfão. |
-| K-11 | 🔵 | Modo `before` "Mostre ao usuário" — só funciona em modo interativo. Em CI/automation onde keeper roda sem prompt, retorno é descartado. |
+| K-01 | 🔴 | Without `code-spec-matrix.md` aborts. Without `graph.json` falls to degraded without severity. **Two fragile pre-reqs**, default install guarantees neither. |
+| K-02 | 🔴 | CLI `aegis-spec graph impact <file> --json` referenced but wrong command (X-01) + package not published (X-02). Mode `after` v1.8.0+ broken in any client project. |
+| K-03 | 🟠 | "Update specs in-place" depends on LLM detecting textual contradiction between new code and old spec. **No AST/regex validation**. SIM-1 (regex `{2,}` → `{3,}`) could be missed if LLM doesn't notice specific string in spec. |
+| K-04 | 🟠 | `aegis/reports/domain.md` contains RN-XX referenced in code (`services/searchProducts/index.ts:122-129` for RN-01). Keeper SKILL says read "business rules from domain.md **when referenced**" — ambiguous. If spec SDD doesn't explicitly mention RN-01, regex change invalidates RN-01 but keeper doesn't notice. |
+| K-05 | 🟠 | "Parent directory spec" heuristic to map new file. **Fails** for cross-module utilities (e.g. `sortHelpers.ts` in SIM-2 — which spec is "parent"? `search/` or none?). Results in vague matrix entry. |
+| K-06 | 🟠 | Deleted file: matrix marks `~~deleted~~` but corresponding spec **not updated** to remove references to dead file. SIM-3 (test removed) leaves spec referencing non-existent test. |
+| K-07 | 🟡 | `state-machines.md`, `permissions.md`, `architecture/*` **not in keeper's read path**. Changes affecting flow (not simple business rule) can stay invisible. |
+| K-08 | 🟡 | `aegis/changelog/` and `aegis/reports/drift.md` created on-demand — first Keeper run bootstraps these paths. User doesn't know they'll exist. |
+| K-09 | 🟡 | Queue file `keeper-queue.jsonl` expected in `aegis/runtime/queue/` but **no hook generates**. Schema in `references/queue-schema.md` but installer doesn't wire git pre-commit/post-commit to write. |
+| K-10 | 🟡 | `state.json` desync reconciliation (X-03) not Keeper's responsibility — but no one does. Orphaned bug. |
+| K-11 | 🔵 | Mode `before` "Show to user" — only works in interactive mode. In CI/automation where Keeper runs without prompt, output discarded. |
 
 ### aegis-data-master / aegis-design-system / aegis-visor
 
 | # | Sev | Issue |
 |---|-----|-------|
-| DM-01 | 🟡 | Skills "any phase" mas sem trigger automatic. Usuário precisa lembrar de invocar quando DB schema ou design tokens mudam. |
-| DS-01 | 🟡 | Design-system reroda regenerando `color-palette.md` etc — overrides customizações manuais. Non-destructive comportamento documentado pro writer mas não-claro pra design-system. |
-| V-01 | 🔵 | Visor precisa de screenshots manualmente; sem integração com Playwright/storybook screenshot capture. |
+| DM-01 | 🟡 | Skills "any phase" but without automatic trigger. User must remember to invoke when DB schema or design tokens change. |
+| DS-01 | 🟡 | Design-system re-runs regenerating `color-palette.md` etc — overrides manual customizations. Non-destructive behavior documented for writer but unclear for design-system. |
+| V-01 | 🔵 | Visor requires screenshots manually; no Playwright/storybook screenshot capture integration. |
 
 ### aegis-migrate / paradigm-advisor / curator / strategist / designer / inspector
 
 | # | Sev | Issue |
 |---|-----|-------|
-| M-01 | 🟠 | Time inteiro bloqueado sem `migration_brief.md`. `aegis-migrate` orquestra criação mas usuário precisa saber que esse é o entry-point. |
-| M-02 | 🟡 | Pausa humana obrigatória entre paradigm-advisor → curator → strategist → designer → inspector. **5 stops** em pipeline. Bom pra controle, ruim pra throughput. Sem modo `--auto-approve`. |
-| M-03 | 🟡 | `inspector` gera Gherkin `.feature` — não há tradutor automático pra Jest/Playwright/Cypress. Specs viram código por outro caminho. |
+| M-01 | 🟠 | Entire team blocked without `migration_brief.md`. `aegis-migrate` orchestrates creation but user must know that's the entry-point. |
+| M-02 | 🟡 | Mandatory human pause between paradigm-advisor → curator → strategist → designer → inspector. **5 stops** in pipeline. Good for control, bad for throughput. No `--auto-approve` mode. |
+| M-03 | 🟡 | `inspector` generates Gherkin `.feature` — no automatic translator to Jest/Playwright/Cypress. Specs become code via different path. |
 
 ### aegis-reconstructor
 
 | # | Sev | Issue |
 |---|-----|-------|
-| RC-01 | 🟡 | "Bottom-up, uma tarefa por sessão" preserva tokens mas requer disciplina pra resumir. Sem state tracking robusto, fácil perder o lugar. |
+| RC-01 | 🟡 | "Bottom-up, one task per session" preserves tokens but requires discipline to summarize. Without robust state tracking, easy to lose place. |
 
 ### Forward team (requirements, doubt, plan, to-do, audit, quality, coding, resume)
 
 | # | Sev | Issue |
 |---|-----|-------|
-| F-01 | 🟠 | **Todos bloqueados** sem `active-requirements.json` (X-04). |
-| F-02 | 🟠 | `aegis-coding` exige `architecture.md` E `domain.md` "no diretório aegis/". V2 layout move pra `aegis/architecture/architecture.md` e `aegis/reports/domain.md` — **check pode falhar por path literal**. Precisa testar. |
-| F-03 | 🟡 | `aegis-audit` produz `feature-dir/audit/cross-check.md`. Sem feature ativa, dir nem existe. |
-| F-04 | 🟡 | `aegis-doubt` integra respostas no `requirements.md` original. Se usuário edita requirements entre runs, integração pode quebrar markdown. |
+| F-01 | 🟠 | **All blocked** without `active-requirements.json` (X-04). |
+| F-02 | 🟠 | `aegis-coding` requires `architecture.md` AND `domain.md` "in `aegis/` directory". V2 layout moves to `aegis/architecture/architecture.md` and `aegis/reports/domain.md` — **check may fail on literal path**. Needs testing. |
+| F-03 | 🟡 | `aegis-audit` outputs to `feature-dir/audit/cross-check.md`. Without active feature, dir doesn't exist. |
+| F-04 | 🟡 | `aegis-doubt` integrates responses in original `requirements.md`. If user edits requirements between runs, integration can break markdown. |
 | F-05 | 🟡 | `aegis-quality` purely reader — good principle. But report goes in `feature-dir/quality/`? SKILL doesn't specify exact path. |
 | F-06 | 🟡 | `aegis-coding` "updates checkboxes to [X]" in `actions.md` — depends on consistent checkbox pattern. Without validated schema. |
 | F-07 | 🔵 | `aegis-resume` swap only works if `paused-features` has entries. Without it, clear abort. OK. |
