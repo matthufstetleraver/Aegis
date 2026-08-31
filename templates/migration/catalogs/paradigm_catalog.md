@@ -1,52 +1,52 @@
 ---
 schemaVersion: 1
 kind: paradigm_catalog
-description: Catálogo consultivo de paradigmas de programação, mapeamento de stacks ao paradigma natural, e gaps típicos por par (origem → destino). Usado pelo Paradigm Advisor.
+description: Advisory catalog of programming paradigms, stack mapping to natural paradigm, and typical gaps by pair (source → target). Used by Paradigm Advisor.
 ---
 
 # Paradigm Catalog
 
-> Conhecimento estruturado sobre paradigmas e como eles se relacionam com stacks comuns.
-> Atualizar este catálogo é tarefa de manutenção independente do agente Paradigm Advisor.
+> Structured knowledge about paradigms and how they relate to common stacks.
+> Updating this catalog is an independent maintenance task of the Paradigm Advisor agent.
 
-## Catálogo de paradigmas
+## Paradigm Catalog
 
 ### Procedural
-- **Características**: funções top-level, fluxo linear em controllers, ausência de classes ou uso ornamental, dados como dicts/structs, side effects abertos.
-- **Exemplos no legado**: scripts PHP clássicos, COBOL batch, sistemas Perl pré-OO, scripts shell.
-- **Sinais em `aegis/`**: domínio descrito como "funções", fluxos lineares em `process_flows`, ausência de aggregates explícitos.
+- **Characteristics**: top-level functions, linear flow in controllers, absence of classes or ornamental use, data as dicts/structs, open side effects.
+- **Examples in legacy**: classic PHP scripts, COBOL batch, pre-OO Perl systems, shell scripts.
+- **Signals in `aegis/`**: domain described as "functions", linear flows in `process_flows`, absence of explicit aggregates.
 
-### OO clássico
-- **Características**: hierarquia de classes, herança forte, padrão Active Record, lógica acoplada aos modelos, framework dita estrutura.
-- **Exemplos no legado**: Rails monolítico, Django tradicional, Java EE pré-DI, .NET WebForms / clássico.
-- **Sinais em `aegis/`**: classes com responsabilidades amplas, herança em domain model, controllers anêmicos chamando métodos do modelo.
+### Classic OO
+- **Characteristics**: class hierarchy, strong inheritance, Active Record pattern, logic coupled to models, framework dictates structure.
+- **Examples in legacy**: monolithic Rails, traditional Django, pre-DI Java EE, .NET WebForms / classic.
+- **Signals in `aegis/`**: classes with broad responsibilities, inheritance in domain model, anemic controllers calling model methods.
 
-### OO com DI
-- **Características**: containers de injeção, interfaces explícitas, padrão Repository / Service, separação clara entre camadas.
-- **Exemplos no legado**: Spring moderno, .NET 6+, NestJS, Symfony moderno.
-- **Sinais em `aegis/`**: aggregates explícitos, interfaces de repositório, ausência de Active Record.
+### OO with DI
+- **Characteristics**: injection containers, explicit interfaces, Repository / Service pattern, clear layer separation.
+- **Examples in legacy**: modern Spring, .NET 6+, NestJS, modern Symfony.
+- **Signals in `aegis/`**: explicit aggregates, repository interfaces, absence of Active Record.
 
-### Funcional
-- **Características**: imutabilidade dominante, funções puras, composição, ausência de side effects implícitos, tipagem rica.
-- **Exemplos no legado**: Haskell, Elm, F#, Scala funcional, Clojure.
-- **Sinais em `aegis/`**: tipos algébricos, ausência de classes, fluxo expresso como composição.
+### Functional
+- **Characteristics**: dominant immutability, pure functions, composition, absence of implicit side effects, rich typing.
+- **Examples in legacy**: Haskell, Elm, F#, functional Scala, Clojure.
+- **Signals in `aegis/`**: algebraic types, absence of classes, flow expressed as composition.
 
-### Event-driven (assíncrono)
-- **Características**: filas / tópicos, handlers desacoplados, ausência de fluxo linear, consistência eventual, idempotência explícita.
-- **Exemplos no legado**: backends Node moderno orientado a fila, sistemas SQS / Kafka heavy, microsserviços assíncronos.
-- **Sinais em `aegis/`**: eventos no domain model, integrações via fila, processos de longa duração com retry.
+### Event-driven (Asynchronous)
+- **Characteristics**: queues / topics, decoupled handlers, absence of linear flow, eventual consistency, explicit idempotency.
+- **Examples in legacy**: modern queue-oriented Node backends, SQS / Kafka heavy systems, asynchronous microservices.
+- **Signals in `aegis/`**: events in domain model, integrations via queue, long-running processes with retry.
 
-### Actor model
-- **Características**: atores isolados com mailbox, supervisão, isolamento de estado.
-- **Exemplos no legado**: Erlang / Elixir / OTP, Akka.
-- **Sinais em `aegis/`**: processos supervisionados, mensagens entre atores.
+### Actor Model
+- **Characteristics**: isolated actors with mailbox, supervision, state isolation.
+- **Examples in legacy**: Erlang / Elixir / OTP, Akka.
+- **Signals in `aegis/`**: supervised processes, messages between actors.
 
 ### Dataflow
-- **Características**: pipelines declarativos, transformações em fluxo, ausência de loops imperativos no domínio.
-- **Exemplos no legado**: ETLs clássicos, Spark, Flink.
-- **Sinais em `aegis/`**: descrição em DAG, transformações em estágios.
+- **Characteristics**: declarative pipelines, flow transformations, absence of imperative loops in domain.
+- **Examples in legacy**: classic ETLs, Spark, Flink.
+- **Signals in `aegis/`**: DAG description, transformations in stages.
 
-## Mapeamento stack → paradigma natural
+## Stack → Natural Paradigm Mapping
 
 | Stack alvo | Paradigma natural | Alternativas viáveis | Notas |
 |---|---|---|---|

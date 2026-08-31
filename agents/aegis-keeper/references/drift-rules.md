@@ -1,141 +1,141 @@
-# Regras de detecção e classificação de drift
+# Drift detection and classification rules
 
-Drift = divergência entre o que a spec descreve e o que o código realmente faz.
+Drift = divergence between what the spec describes and what the code actually does.
 
-Use este guia ao processar mudanças no modo `after` para decidir como atualizar a spec e como reclassificar a confiança das afirmações.
-
----
-
-## Categorias de drift
-
-### 1. Drift trivial — atualização direta da spec
-
-Mudança no código que **substitui** comportamento descrito sem mudar contrato:
-
-- Refatoração interna (mesmo input/output, lógica diferente)
-- Renomeação de variável local / função privada
-- Otimização de performance sem mudança de comportamento
-- Correção de bug que alinha o código com o que a spec já dizia
-
-**Ação:** atualize a spec mantendo a confiança original (🟢 segue 🟢). Se a spec descrevia o comportamento errado anterior, atualize sem downgrade.
-
-### 2. Drift incremental — adição
-
-Código novo adiciona comportamento que a spec não cobre:
-
-- Nova função / método / endpoint
-- Novo branch lógico (if/else, novo case)
-- Nova validação / guard clause
-
-**Ação:** adicione seção nova na spec descrevendo o comportamento. Marque como 🟢 se evidência direta no diff, 🟡 se inferido de contexto.
-
-### 3. Drift estrutural — quebra de contrato
-
-Mudança que viola o que a spec descrevia como invariante:
-
-- Assinatura de função mudou (parâmetros adicionados/removidos/reordenados)
-- Tipo de retorno mudou
-- Comportamento documentado como 🟢 não é mais verdade
-- Status code de API mudou
-
-**Ação:**
-1. Atualize a spec com o novo contrato
-2. Mantenha 🟢 se a evidência continua direta
-3. Adicione nota de "breaking change" referenciando o changelog: `> ⚠️ Breaking change em YYYY-MM-DD HH:MM — ver changelog`
-4. Force questão sobre quebra de compatibilidade na pergunta #2 do modo after
-
-### 4. Drift semântico — código diverge de regra de negócio
-
-Código viola regra documentada em `aegis/reports/domain.md`:
-
-- Validação de regra de negócio removida ou afrouxada
-- Estado permitido que não deveria ser (state machine quebrada)
-- Cálculo financeiro / fiscal / regulatório alterado
-
-**Ação:**
-1. **Não atualize a regra silenciosamente.** Pergunte ao usuário: "A regra de negócio em `domain.md` mudou intencionalmente, ou o código está com bug?"
-2. Se intencional: atualize `domain.md` + spec, marque entrada de changelog com `**Impacto:** Mudança de regra de negócio — revisar com stakeholders`
-3. Se bug: NÃO atualize a spec. Adicione entrada em `aegis/reports/drift.md` como `pending` com `suggested_action: "Reverter mudança ou alinhar regra"`
-
-### 5. Drift por deleção
-
-Código removido que tinha spec:
-
-- Função / endpoint / módulo deletado
-
-**Ação:**
-1. Marque a seção da spec como `~~deprecated~~` em vez de deletar
-2. Adicione nota: `> Removido em YYYY-MM-DD — ver changelog`
-3. Em `code-spec-matrix.md`, riscar a linha do arquivo
+Use this guide when processing changes in `after` mode to decide how to update the spec and how to reclassify the confidence of statements.
 
 ---
 
-## Reclassificação de confiança após drift
+## Drift categories
 
-Use as regras de `agents/aegis-reviewer/references/confidence-rules.md` como base. Adições específicas para o Keeper:
+### 1. Trivial drift — direct spec update
 
-### Pós-mudança — quando manter 🟢
+Code change that **replaces** described behavior without changing contract:
 
-- O diff confirma diretamente a nova afirmação (linha visível, lógica clara)
-- Teste automatizado novo cobre o comportamento
+- Internal refactoring (same input/output, different logic)
+- Local variable / private function renaming
+- Performance optimization without behavior change
+- Bug fix that aligns code with what the spec already said
 
-### Pós-mudança — quando rebaixar 🟢 → 🟡
+**Action:** update spec maintaining original confidence (🟢 stays 🟢). If spec described incorrect prior behavior, update without downgrade.
 
-- Mudança parcial — uma parte do contrato confirmada pelo diff, outra inferida
-- Spec descreve módulo grande, diff só toca uma fatia
-- Comentário no diff sugere comportamento mas código não está totalmente visível
+### 2. Incremental drift — addition
 
-### Pós-mudança — quando criar 🔴 novo
+New code adds behavior that spec doesn't cover:
 
-- Diff remove implementação mas spec ainda referencia funcionalidade
-- Diff cita configuração externa (env var, feature flag) que não dá pra inspecionar
-- Mudança contradiz state machine sem caminho de transição claro
+- New function / method / endpoint
+- New logical branch (if/else, new case)
+- New validation / guard clause
+
+**Action:** add new section in spec describing the behavior. Mark as 🟢 if direct evidence in diff, 🟡 if inferred from context.
+
+### 3. Structural drift — contract break
+
+Change that violates what spec described as invariant:
+
+- Function signature changed (parameters added/removed/reordered)
+- Return type changed
+- Behavior documented as 🟢 is no longer true
+- API status code changed
+
+**Action:**
+1. Update spec with new contract
+2. Keep 🟢 if evidence remains direct
+3. Add note of "breaking change" referencing changelog: `> ⚠️ Breaking change on YYYY-MM-DD HH:MM — see changelog`
+4. Force question about backward compatibility in question #2 of after mode
+
+### 4. Semantic drift — code diverges from business rule
+
+Code violates rule documented in `aegis/reports/domain.md`:
+
+- Business rule validation removed or loosened
+- State allowed that shouldn't be (state machine broken)
+- Financial / fiscal / regulatory calculation altered
+
+**Action:**
+1. **Don't update the rule silently.** Ask the user: "Did the business rule in `domain.md` change intentionally, or is the code buggy?"
+2. If intentional: update `domain.md` + spec, mark changelog entry with `**Impact:** Business rule change — review with stakeholders`
+3. If bug: DON'T update spec. Add entry in `aegis/reports/drift.md` as `pending` with `suggested_action: "Revert change or align rule"`
+
+### 5. Drift by deletion
+
+Code removed that had spec:
+
+- Function / endpoint / module deleted
+
+**Action:**
+1. Mark the spec section as `~~deprecated~~` instead of deleting
+2. Add note: `> Removed on YYYY-MM-DD — see changelog`
+3. In `code-spec-matrix.md`, strikethrough the file line
 
 ---
 
-## Quando NÃO atualizar a spec
+## Confidence reclassification after drift
 
-- Mudança em arquivo de teste apenas (não afeta contrato — registre no changelog mas não toque spec)
-- Mudança em comentário / formatação / lint
-- Mudança em arquivo de build / CI / config sem impacto em runtime
-- Mudança em dependência sem impacto observável (atualização patch interna)
+Use the rules from `agents/aegis-reviewer/references/confidence-rules.md` as base. Additions specific to Keeper:
 
-Para esses casos: registre entrada de changelog mas com `**Specs afetadas:** Nenhuma — alteração interna sem impacto em contrato`.
+### Post-change — when to keep 🟢
+
+- Diff directly confirms the new statement (line visible, logic clear)
+- New automated test covers the behavior
+
+### Post-change — when to downgrade 🟢 → 🟡
+
+- Partial change — one part of contract confirmed by diff, other inferred
+- Spec describes large module, diff only touches a slice
+- Comment in diff suggests behavior but code isn't fully visible
+
+### Post-change — when to create 🔴 new
+
+- Diff removes implementation but spec still references functionality
+- Diff cites external configuration (env var, feature flag) that can't be inspected
+- Change contradicts state machine without clear transition path
 
 ---
 
-## Sinais de alerta — escalar pro Reviewer ou Archaeologist
+## When NOT to update spec
 
-Se durante o modo `after` você encontrar:
+- Change in test file only (doesn't affect contract — register in changelog but don't touch spec)
+- Change in comment / formatting / lint
+- Change in build / CI / config file without runtime impact
+- Change in dependency without observable impact (internal patch update)
 
-- Mudança que afeta **>5 specs** ao mesmo tempo → sugira rodar `/aegis-reviewer` depois
-- Refatoração arquitetural (move múltiplos módulos) → sugira rodar `/aegis-archaeologist` no(s) módulo(s) afetado(s)
-- Mudança em entry point ou DI container → sugira `/aegis-architect`
-- Mudança em schema de banco → sugira `/aegis-data-master`
-
-Adicione essas sugestões na mensagem final ao usuário.
+For these cases: register changelog entry but with `**Specs affected:** None — internal change without contract impact`.
 
 ---
 
-## Severidade por blast radius (v1.8.0+)
+## Alert signals — escalate to Reviewer or Archaeologist
 
-Quando o graph L0 (`aegis/runtime/context/graph.json`) está disponível, classifique a severidade de cada drift pela contagem de **reverse-deps diretas** do arquivo modificado:
+If during `after` mode you find:
 
-| Reverse-deps diretas | Severidade | Ação |
+- Change that affects **>5 specs** at the same time → suggest running `/aegis-reviewer` afterwards
+- Architectural refactoring (moves multiple modules) → suggest running `/aegis-archaeologist` on affected module(s)
+- Change in entry point or DI container → suggest `/aegis-architect`
+- Change in database schema → suggest `/aegis-data-master`
+
+Add these suggestions in final message to the user.
+
+---
+
+## Severity by blast radius (v1.8.0+)
+
+When the L0 graph (`aegis/runtime/context/graph.json`) is available, classify drift severity by **direct reverse-deps count** of the modified file:
+
+| Direct reverse-deps | Severity | Action |
 |---|---|---|
-| 0-1 | `LOW` | Atualizar spec normalmente; sem alerta |
-| 2-4 | `MEDIUM` | Atualizar spec; mencionar blast radius no changelog |
-| **5+** | **`HIGH`** | Atualizar spec; **sugerir `/aegis-reviewer`** + listar arquivos afetados em `drift.md` (campo `blast_radius`) |
+| 0-1 | `LOW` | Update spec normally; no alert |
+| 2-4 | `MEDIUM` | Update spec; mention blast radius in changelog |
+| **5+** | **`HIGH`** | Update spec; **suggest `/aegis-reviewer`** + list affected files in `drift.md` (field `blast_radius`) |
 
-Comandos de referência:
+Reference commands:
 
 ```bash
-npx aegis-spec graph reverse-deps <arquivo> --json    # 1 nível (severity)
-npx aegis-spec graph impact <arquivo> --json          # transitivo BFS (blast_radius)
+npx aegis-spec graph reverse-deps <file> --json    # 1 level (severity)
+npx aegis-spec graph impact <file> --json          # transitive BFS (blast_radius)
 ```
 
-A severidade vai para o campo `severity` no `drift.md`. Os arquivos afetados (top 20) vão para `blast_radius`. Acima de 20, anotar `+N more`.
+Severity goes to the `severity` field in `drift.md`. Affected files (top 20) go to `blast_radius`. Above 20, annotate `+N more`.
 
-> **Por quê 5:** abaixo disso, mudanças costumam ser refatorações localizadas. A partir de 5 reverse-deps, o risco de propagação cresce não-linearmente — cada arquivo afetado pode ter seus próprios reverse-deps.
+> **Why 5:** below that, changes tend to be localized refactorings. Starting at 5 reverse-deps, propagation risk grows non-linearly — each affected file may have its own reverse-deps.
 
-Se o graph não existir, sugira ao usuário rodar `npx aegis-spec graph build` antes do próximo `/aegis-keeper after`. Modo degradado: classifique tudo como `MEDIUM` por padrão.
+If the graph doesn't exist, suggest the user run `npx aegis-spec graph build` before the next `/aegis-keeper after`. Degraded mode: classify everything as `MEDIUM` by default.

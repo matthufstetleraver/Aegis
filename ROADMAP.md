@@ -1,92 +1,92 @@
 # Aegis Spec Roadmap — Control Plane v2.0
 
-Roadmap discriminado pra evoluir Aegis Spec de framework de spec generation pra **control plane completo** pra agentes de IA.
+Detailed roadmap to evolve Aegis Spec from spec generation framework to **complete control plane** for AI agents.
 
-## Visão geral
+## Overview
 
-3 pilares (Foundation):
+3 pillars (Foundation):
 
-| Pilar | Função |
+| Pillar | Role |
 |---|---|
-| **Aegis Spec** | Spec authority — features, contratos, invariantes, ADRs |
-| **Keeper** | Drift gate — sync entre spec e código |
-| **Graph** (próprio, MIT) | Codebase oracle — knowledge graph do código real |
+| **Aegis Spec** | Spec authority — features, contracts, invariants, ADRs |
+| **Keeper** | Drift gate — sync between spec and code |
+| **Graph** (proprietary, MIT) | Codebase oracle — knowledge graph of real code |
 
-Decisão arquitetural: **construir graph próprio**, não usar GitNexus (license PolyForm Noncommercial + scope mismatch). Mantém Aegis Spec MIT puro.
+Architectural decision: **build own graph**, don't use GitNexus (PolyForm Noncommercial license + scope mismatch). Keeps Aegis Spec MIT pure.
 
-## Pipeline (4 estágios)
+## Pipeline (4 stages)
 
 ```
 Stage 1 — Discovery     →  Scout, Archaeologist, Detective, Architect, Writer, Reviewer
-                            código legado → _aegis_sdd/ specs
+                            legacy code → _aegis_sdd/ specs
 
-Stage 2 — Migração      →  Paradigm Advisor, Curator, Strategist, Designer, Inspector
+Stage 2 — Migration     →  Paradigm Advisor, Curator, Strategist, Designer, Inspector
                             _aegis_sdd/ → _aegis_sdd/migration/ plan + parity tests
 
-Stage 3 — Build         →  agente codificador do user (Claude / Codex / Cursor / Gemini / Kimi)
-                            migration plan → código novo
+Stage 3 — Build         →  user's coding agent (Claude / Codex / Cursor / Gemini / Kimi)
+                            migration plan → new code
 
 Stage 4 — Control plane →  Keeper + Graph + Policy gate (file-level + signature diff)
-                            código novo → guardado contra drift, signature break, blast-radius edits
+                            new code → guarded against drift, signature break, blast-radius edits
 ```
 
-Stage 1 e 2 são produto upstream (Discovery v1.x, Migração v1.2.17). **Este roadmap cobre Stage 4** — o control plane que mantém código sob controle de AI agents continuamente.
+Stage 1 and 2 are upstream product (Discovery v1.x, Migration v1.2.17). **This roadmap covers Stage 4** — the control plane that keeps code under control of AI agents continuously.
 
-## Linguagens suportadas (full scope)
+## Supported Languages (full scope)
 
-L0 (file imports via regex) + L1 (AST symbols/calls via tree-sitter) pra:
+L0 (file imports via regex) + L1 (AST symbols/calls via tree-sitter) for:
 - JavaScript
-- TypeScript (cobre TSX/JSX)
+- TypeScript (covers TSX/JSX)
 - Python
 - Go
 - Java
 
-## Modos de operação
+## Operating Modes
 
-| Modo | Quem decide | Quando usar |
+| Mode | Who decides | When to use |
 |---|---|---|
-| **HITL** | Humano responde 3 Qs no Keeper | Specs críticas, contratos públicos |
-| **Auto** | LLM classifica + escreve via Claude API | Whitelist paths, mudanças triviais |
-| **Hybrid** (recomendado) | Auto whitelist + HITL blacklist | Default produção |
+| **HITL** | Human answers 3 Qs in Keeper | Critical specs, public contracts |
+| **Auto** | LLM classifies + writes via Claude API | Whitelist paths, trivial changes |
+| **Hybrid** (recommended) | Auto whitelist + HITL blacklist | Default production |
 
 ---
 
-## Fase 1 — Hooks leves → v1.7.0 (1-2 dias) ✅ shipped (PR #11)
+## Phase 1 — Light hooks → v1.7.0 (1-2 days) ✅ shipped (PR #11)
 
-**Objetivo:** parar de onerar sistema. Hook só anota, processa em batch.
+**Objective:** Stop burdening system. Hook only annotates, processes in batch.
 
 ### Deliverables
 
-| Item | Arquivo | O que muda |
+| Item | File | What changes |
 |---|---|---|
-| 1.1 | `lib/installer/hooks/runner.js` | Refactor: append-only JSONL em vez de full processing inline |
-| 1.2 | `lib/installer/hooks/claude.js` | Remove PreToolUse matcher; adiciona Stop hook |
-| 1.3 | `lib/installer/hooks/opencode.js` | Remove tool.execute.before pesado; mantém after leve + session.end |
-| 1.4 | `lib/installer/hooks/cursor.js` | afterFileEdit só append + debounce 30s timer no runner |
-| 1.5 | `lib/installer/hooks/kimi.js` | Pre→remove; Post leve; instala git pre-commit fallback |
-| 1.6 | `lib/installer/hooks/codex.js` | Mesmo padrão Kimi |
-| 1.7 | `agents/aegis-keeper/SKILL.md` | Lê `.aegis/keeper-queue.jsonl` em vez de `.json` snapshot; dedup por arquivo |
-| 1.8 | `agents/aegis-keeper/references/queue-schema.md` | Schema JSONL |
+| 1.1 | `lib/installer/hooks/runner.js` | Refactor: append-only JSONL instead of full processing inline |
+| 1.2 | `lib/installer/hooks/claude.js` | Remove PreToolUse matcher; add Stop hook |
+| 1.3 | `lib/installer/hooks/opencode.js` | Remove heavy tool.execute.before; keep light after + session.end |
+| 1.4 | `lib/installer/hooks/cursor.js` | afterFileEdit only append + debounce 30s timer in runner |
+| 1.5 | `lib/installer/hooks/kimi.js` | Pre→remove; Post light; install git pre-commit fallback |
+| 1.6 | `lib/installer/hooks/codex.js` | Same Kimi pattern |
+| 1.7 | `agents/aegis-keeper/SKILL.md` | Read `.aegis/keeper-queue.jsonl` instead of `.json` snapshot; dedup by file |
+| 1.8 | `agents/aegis-keeper/references/queue-schema.md` | JSONL Schema |
 
 ### Exit criteria
 
-- [ ] Task com 30 edits gera 30 linhas JSONL, ~300ms total (antes: ~9s)
-- [ ] Stop hook em Claude Code dispara batch Keeper
-- [ ] Cursor debounce funcional (30s sem edit → batch)
-- [ ] Pre-commit fallback instalado em engines sem Stop
+- [ ] Task with 30 edits generates 30 JSONL lines, ~300ms total (before: ~9s)
+- [ ] Stop hook in Claude Code triggers batch Keeper
+- [ ] Cursor debounce functional (30s without edit → batch)
+- [ ] Pre-commit fallback installed in engines without Stop
 
 ---
 
-## Fase 2 — Graph L0 universal → v1.8.0-alpha.1 (3-4 dias) ✅ shipped (PR #17)
+## Phase 2 — Universal L0 Graph → v1.8.0-alpha.1 (3-4 days) ✅ shipped (PR #17)
 
-**Objetivo:** blast radius file-level pra **todas** linguagens via regex.
+**Objective:** file-level blast radius for **all** languages via regex.
 
 ### Deliverables
 
-| Item | Arquivo | O que faz |
+| Item | File | What it does |
 |---|---|---|
-| 2.1 | `lib/graph/parsers-l0/javascript.js` | Detecta `import ... from 'X'`, `require('X')`, `import('X')` (dynamic) |
-| 2.2 | `lib/graph/parsers-l0/typescript.js` | Mesmo + `import type` |
+| 2.1 | `lib/graph/parsers-l0/javascript.js` | Detects `import ... from 'X'`, `require('X')`, `import('X')` (dynamic) |
+| 2.2 | `lib/graph/parsers-l0/typescript.js` | Same + `import type` |
 | 2.3 | `lib/graph/parsers-l0/python.js` | `import X`, `from X import`, `__import__('X')` |
 | 2.4 | `lib/graph/parsers-l0/go.js` | `import "X"`, `import (...)`, package decl |
 | 2.5 | `lib/graph/parsers-l0/java.js` | `import X.Y.Z;`, package qualifier |
@@ -94,7 +94,7 @@ L0 (file imports via regex) + L1 (AST symbols/calls via tree-sitter) pra:
 | 2.7 | `lib/graph/builder.js` | Walk repo → call parsers → produce nodes/edges |
 | 2.8 | `lib/graph/resolve.js` | Path resolution (relative imports, package roots, tsconfig paths, go.mod) |
 
-### Schema do graph
+### Graph schema
 
 ```json
 {
@@ -113,30 +113,30 @@ L0 (file imports via regex) + L1 (AST symbols/calls via tree-sitter) pra:
 
 ### Exit criteria
 
-- [ ] Roda em repo Aegis Spec próprio (TS/JS) → graph com >50 nodes
-- [ ] Roda em repo Python sample → resolve imports relativos + absolutos
+- [ ] Runs on Aegis Spec repo (TS/JS) → graph with >50 nodes
+- [ ] Runs on Python sample repo → resolve relative + absolute imports
 - [ ] Resolve tsconfig paths
-- [ ] Performance: 1000-file repo em <2s
+- [ ] Performance: 1000-file repo in <2s
 
 ---
 
-## Fase 3 — Storage + queries L0 + CLI → v1.8.0-alpha.2 (2-3 dias) ✅ shipped (PR #18)
+## Phase 3 — Storage + queries L0 + CLI → v1.8.0-alpha.2 (2-3 days) ✅ shipped (PR #18)
 
-**Objetivo:** persistir graph + expor queries básicas via CLI.
+**Objective:** persist graph + expose basic queries via CLI.
 
 ### Deliverables
 
-| Item | Arquivo | O que faz |
+| Item | File | What it does |
 |---|---|---|
 | 3.1 | `lib/graph/store.js` | Read/write `.aegis/context/graph.json`. Atomic writes. |
-| 3.2 | `lib/graph/queries/impact.js` | BFS: file → todos arquivos que dependem (transitive) |
-| 3.3 | `lib/graph/queries/deps.js` | Diretas: arquivos que `file` importa |
-| 3.4 | `lib/graph/queries/reverse-deps.js` | Inverse: quem importa `file` (1 nível) |
-| 3.5 | `lib/graph/incremental.js` | Update incremental: re-parse só `dirty_files` |
+| 3.2 | `lib/graph/queries/impact.js` | BFS: file → all files that depend (transitive) |
+| 3.3 | `lib/graph/queries/deps.js` | Direct: files that `file` imports |
+| 3.4 | `lib/graph/queries/reverse-deps.js` | Inverse: who imports `file` (1 level) |
+| 3.5 | `lib/graph/incremental.js` | Incremental update: re-parse only `dirty_files` |
 | 3.6 | `lib/commands/graph.js` | CLI: `aegis graph build|impact|deps|stats` |
-| 3.7 | `bin/aegis.js` | Registra comando `graph` |
+| 3.7 | `bin/aegis.js` | Registers `graph` command |
 
-### CLI exemplos
+### CLI examples
 
 ```bash
 npx aegis-spec graph build           # construct full graph
@@ -148,34 +148,34 @@ npx aegis-spec graph stats
 
 ### Exit criteria
 
-- [ ] `graph build` cria graph.json
-- [ ] `graph impact` retorna BFS correto
-- [ ] Incremental update <500ms pra 5 arquivos dirty
-- [ ] CLI tem help + exit codes consistentes
+- [ ] `graph build` creates graph.json
+- [ ] `graph impact` returns correct BFS
+- [ ] Incremental update <500ms for 5 dirty files
+- [ ] CLI has help + consistent exit codes
 
 ---
 
-## Fase 4 — Basic policy gate (file-level) → v1.8.0-alpha.3 (3-4 dias) ✅ shipped (PR #19)
+## Phase 4 — Basic policy gate (file-level) → v1.8.0-alpha.3 (3-4 days) ✅ shipped (PR #19)
 
-**Objetivo:** Keeper barra pre-edit baseado em path + spec metadata. Sem parsing diff.
+**Objective:** Keeper blocks pre-edit based on path + spec metadata. Without parsing diff.
 
 ### Deliverables
 
-| Item | Arquivo | O que faz |
+| Item | File | What it does |
 |---|---|---|
-| 4.1 | `lib/policy/index-builder.js` | Lê specs em `_aegis_sdd/sdd/`, extrai frontmatter `protected:` + `contracts:`, gera `.aegis/context/policy-index.json` |
+| 4.1 | `lib/policy/index-builder.js` | Read specs in `_aegis_sdd/sdd/`, extract frontmatter `protected:` + `contracts:`, generate `.aegis/context/policy-index.json` |
 | 4.2 | `lib/policy/check.js` | Decision engine: file path → spec → protected? + auto-policy.yaml blacklist |
-| 4.3 | `lib/policy/decisions.js` | 3 níveis: approve / approve+advisory / block |
+| 4.3 | `lib/policy/decisions.js` | 3 levels: approve / approve+advisory / block |
 | 4.4 | `lib/policy/adapters/claude.js` | Output `{ "decision": "block", "reason": "..." }` |
-| 4.5 | `lib/policy/adapters/codex.js` | Mesmo formato |
-| 4.6 | `lib/policy/adapters/kimi.js` | Mesmo formato |
-| 4.7 | `lib/policy/adapters/cursor.js` | Auto-revert + comment file (sem pre-block) |
-| 4.8 | `lib/policy/adapters/opencode.js` | Throw com message |
-| 4.9 | `lib/policy/overrides.js` | Detecta override: ADR existe, commit msg flag, CLI unprotect |
-| 4.10 | `lib/installer/hooks/runner.js` | Adiciona policy-check ANTES do queue append; se block, retorna decision |
+| 4.5 | `lib/policy/adapters/codex.js` | Same format |
+| 4.6 | `lib/policy/adapters/kimi.js` | Same format |
+| 4.7 | `lib/policy/adapters/cursor.js` | Auto-revert + comment file (without pre-block) |
+| 4.8 | `lib/policy/adapters/opencode.js` | Throw with message |
+| 4.9 | `lib/policy/overrides.js` | Detect override: ADR exists, commit msg flag, CLI unprotect |
+| 4.10 | `lib/installer/hooks/runner.js` | Add policy-check BEFORE queue append; if block, return decision |
 | 4.11 | `lib/commands/policy-index.js` | CLI: `aegis policy-index build` |
 
-### Spec frontmatter usado
+### Spec frontmatter used
 
 ```markdown
 ---
@@ -191,32 +191,32 @@ protected_files:
 
 ### Exit criteria
 
-- [ ] Edit em `src/api/public/foo.js` retorna block JSON com reason
-- [ ] Edit em arquivo sem spec → approve silent
-- [ ] Override via ADR funciona (cria ADR → próximo edit passa)
-- [ ] Latência pre-hook <30ms
+- [ ] Edit in `src/api/public/foo.js` returns block JSON with reason
+- [ ] Edit in file without spec → approve silent
+- [ ] Override via ADR works (create ADR → next edit passes)
+- [ ] Pre-hook latency <30ms
 
 ---
 
-## Fase 5 — Keeper integra L0 graph → v1.8.0 (2-3 dias) ✅ shipped (PR #20)
+## Phase 5 — Keeper integrates L0 graph → v1.8.0 (2-3 days) ✅ shipped (PR #20)
 
-**Objetivo:** Step 2 do Keeper usa graph em vez de só matrix.
+**Objective:** Step 2 of Keeper uses graph instead of just matrix.
 
 ### Deliverables
 
-| Item | Arquivo | O que muda |
+| Item | File | What changes |
 |---|---|---|
-| 5.1 | `agents/aegis-keeper/SKILL.md` | Step 2 atualizado: usa `aegis graph impact <file>` pra blast radius |
-| 5.2 | `agents/aegis-keeper/references/drift-rules.md` | Nova regra: "Mudança em arquivo com 5+ reverse-deps = severidade HIGH" |
-| 5.3 | `lib/commands/drift-check.js` | Adiciona campo `affected_files` no output JSON usando graph |
-| 5.4 | `lib/installer/hooks/runner.js` | Stop hook chama graph incremental update antes de Keeper |
+| 5.1 | `agents/aegis-keeper/SKILL.md` | Step 2 updated: uses `aegis graph impact <file>` for blast radius |
+| 5.2 | `agents/aegis-keeper/references/drift-rules.md` | New rule: "Change in file with 5+ reverse-deps = HIGH severity" |
+| 5.3 | `lib/commands/drift-check.js` | Add `affected_files` field in output JSON using graph |
+| 5.4 | `lib/installer/hooks/runner.js` | Stop hook calls incremental graph update before Keeper |
 | 5.5 | `docs/keeper-graph-integration.{md,pt.md,es.md}` | Doc 3 langs |
 
 ### Exit criteria
 
-- [ ] Edit em arquivo SEM entrada na matrix → graph encontra spec via reverse-deps
-- [ ] drift.md mostra blast radius por spec
-- [ ] PR comment lista arquivos afetados
+- [ ] Edit in file WITHOUT matrix entry → graph finds spec via reverse-deps
+- [ ] drift.md shows blast radius by spec
+- [ ] PR comment lists affected files
 
 ---
 
