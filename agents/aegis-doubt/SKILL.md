@@ -38,67 +38,67 @@ Você é o esclarecedor. Sua missão é descobrir o que falta saber antes do pla
 
 ### Prioritization taxonomy
 
-1. Escopo funcional e comportamento
-2. Modelo de domínio e dados
-3. Fluxo de interação e experiência
-4. Atributos não funcionais (desempenho, segurança, observabilidade)
-5. Integrações e dependências externas
-6. Permissões e autenticação
-7. Persistência e migração de dados
-8. Auditoria, log e telemetria
-9. Internacionalização e localização
-10. Falhas e recuperação
-11. Compatibilidade com o legado mapeado em `aegis/`
+1. Functional scope and behavior
+2. Domain and data model
+3. Interaction flow and experience
+4. Non-functional attributes (performance, security, observability)
+5. Integrations and external dependencies
+6. Permissions and authentication
+7. Data persistence and migration
+8. Audit, log, and telemetry
+9. Internationalization and localization
+10. Failures and recovery
+11. Compatibility with the legacy mapped in `aegis/`
 
 ## User presentation
 
-Apresente as perguntas no formato:
+Present the questions in this format:
 
 ```
-1. <pergunta>
-   a) <opção>
-   b) <opção>
-   c) <opção>
-   d) <opção>
-   e) Resposta livre
+1. <question>
+   a) <option>
+   b) <option>
+   c) <option>
+   d) <option>
+   e) Free response
 
 2. ...
 ```
 
-Se uma pergunta for de resposta curta, omita o bloco de opções e use formato `Resposta esperada: <hint do tipo de valor>`.
+If a question is short-answer, omit the options block and use the format `Expected answer: <value-type hint>`.
 
 Wait for the user to respond. If they answer only some, proceed only with the ones answered.
 
 ## requirements.md integration
 
-1. Locate or create the `## Esclarecimentos` section
-2. Within it, create or update `### Sessão YYYY-MM-DD`
+1. Locate or create the `## Clarifications` section
+2. Within it, create or update `### Session YYYY-MM-DD`
 3. For each answered question:
-   3.1. Adicione um item em formato `- **Q:** <pergunta>` mais `**R:** <resposta>`
-   3.2. Localize o trecho do requirements onde a dúvida vivia
-   3.3. Reescreva o trecho in-place, removendo o `[DÚVIDA]` correspondente
-       - Se `[DÚVIDA]` não existe mais (usuário removeu manualmente), pule rewrite e só registre em Esclarecimentos
-       - Se trecho foi editado substancialmente (>50% diff), pule rewrite e avise usuário via nota: "⚠️ Texto ao redor da dúvida foi editado manualmente — integração pulada"
-4. Atualize a seção `## Lacunas` removendo entradas resolvidas e mantendo as não resolvidas
+   3.1. Add an item in the format `- **Q:** <question>` plus `**A:** <answer>`
+   3.2. Locate the requirements excerpt where the doubt lived
+   3.3. Rewrite the excerpt in place, removing the corresponding `[DÚVIDA]`
+       - If `[DÚVIDA]` no longer exists (the user removed it manually), skip the rewrite and only record it in Clarifications
+       - If the surrounding text was edited substantially (>50% diff), skip the rewrite and warn the user with the note: "⚠️ Text around the doubt was edited manually — integration skipped"
+4. Update the `## Gaps` section, removing resolved entries and keeping the unresolved ones
 
 ## Persistence
 
-- Grave o `requirements.md` modificado de forma atômica
-- A seção `## Esclarecimentos` deve ficar logo antes de `## Lacunas`
+- Write the modified `requirements.md` atomically
+- The `## Clarifications` section must appear immediately before `## Gaps`
 
 ## Post-run hooks
 
-Aplique a regra padrão para `after-doubt` (mesma lógica do skill `aegis-requirements`).
+Apply the standard rule for `after-doubt` (same logic as the `aegis-requirements` skill).
 
 ## Final report
 
-1. Caminho absoluto do `requirements.md`
-2. Quantidade de dúvidas resolvidas nessa sessão
-3. Quantidade de marcadores `[DÚVIDA]` restantes
-4. Sugestão de próximo passo:
-   4.1. Se ainda houver `[DÚVIDA]`, sugerir nova execução de `/aegis-doubt`
-   4.2. Se zerou, sugerir `/aegis-plan`
+1. Absolute path of `requirements.md`
+2. Number of doubts resolved in this session
+3. Number of remaining `[DÚVIDA]` markers
+4. Suggested next step:
+   4.1. If any `[DÚVIDA]` remain, suggest running `/aegis-doubt` again
+   4.2. If none remain, suggest `/aegis-plan`
 
-Termine com:
+End with:
 
-> Digite **CONTINUAR** para prosseguir conforme a sugestão acima.
+> Type **CONTINUE** to proceed according to the suggestion above.
