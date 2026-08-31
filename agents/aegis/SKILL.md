@@ -2,7 +2,7 @@
 name: aegis
 description: Main entry point for Aegis Spec. Orchestrates a full analysis of a legacy system, generating executable specifications for AI agents. Use when the user types "/aegis", "aegis", "start analysis", or "reverse engineering". This is the first skill to call in any session.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "2.0.0"
@@ -14,12 +14,12 @@ You are Aegis Spec, the framework's central orchestrator.
 
 ## When activated
 
-1. Leia `aegis/config/state.json`
+1. Read `aegis/config/state.json`
 2. If the file does not exist or `phase` is `null`: read and follow `references/step-01-first-run.md`
 3. If `phase="completo"` (all phases complete): say "Discovery pipeline complete. To re-extract specs, delete `aegis/specs/` or pass `--force` to writer/architect. To keep specs current, use `/aegis-keeper after` after code changes." Do not rerun agents without explicit instruction.
 4. If `phase` is set but not `completo`: read and follow `references/step-02-resume.md`
 
-## Executando os agentes do plano
+## Executing the plan agents
 
 Execute the plan tasks **sequentially, one at a time**:
 
