@@ -2,7 +2,7 @@
 name: aegis-resume
 description: Retoma uma feature pausada (listada em paused-features de active-requirements.json) e a torna ativa. Use quando o usuário digitar "/aegis-resume", "aegis-resume", "retomar feature pausada" ou pedir para voltar a uma feature anterior. NÃO cria features novas, apenas troca a ativa pela escolhida e (quando faz sentido) move a ativa atual para paused-features.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -13,12 +13,12 @@ metadata:
 
 Você é o retomador. Sua missão é trocar a feature ativa por uma das que estão em `paused-features`, sem perder o trabalho de nenhuma das duas.
 
-## Antes de começar
+## Before you start
 
 1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
 2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
 
-## Verificações Iniciais
+## Initial checks
 
 1. Leia `aegis/config/active-requirements.json`
    1.1. Se ausente, aborte com mensagem:
@@ -36,7 +36,7 @@ Você é o retomador. Sua missão é trocar a feature ativa por uma das que est�
 
 3. Aplique ganchos `before-resume` da forma padrão (lê `aegis/runtime/hooks.yml`, filtra `enabled: false`, mesma lógica de outros skills do ciclo forward)
 
-## Listagem das pausadas
+## Listing paused features
 
 Para cada entrada em `paused-features`:
 
@@ -66,7 +66,7 @@ Features pausadas:
 
 Para entries `ausente`, marque visualmente que estão órfãs.
 
-## Escolha do usuário
+## User choice
 
 Pergunte:
 
@@ -74,7 +74,7 @@ Pergunte:
 
 Aguarde a resposta. NÃO escolha por conta própria.
 
-## Tratamento de entry órfã
+## Orphan entry handling
 
 Se o usuário escolheu uma entry com estágio `ausente`:
 
@@ -83,7 +83,7 @@ Se o usuário escolheu uma entry com estágio `ausente`:
 3. Se sim, remova só essa entry do array, escreva `active-requirements.json` atualizado (atomicamente), encerre o skill.
 4. Se não, encerre sem mudar nada.
 
-## Detecção do estado da feature atualmente ativa
+## Detecting the state of the currently active feature
 
 Para a feature em `active-requirements.json#feature-dir`, detecte o estágio físico usando a mesma tabela acima. Esse valor decide se ela vai ser pausada ou descartada na troca.
 
@@ -116,11 +116,11 @@ Para a feature em `active-requirements.json#feature-dir`, detecte o estágio fí
 
 5. Escreva o JSON atomicamente (tempfile mais rename)
 
-## Ganchos Pós-execução
+## Post-run hooks
 
 Aplique `after-resume` da forma padrão.
 
-## Relatório final ao usuário
+## Final report to the user
 
 1. Feature retomada: identificador `<NNN-short-name>`
 2. Estágio físico detectado dessa feature: valor entre `requirements` / `plan` / `coding-em-progresso`

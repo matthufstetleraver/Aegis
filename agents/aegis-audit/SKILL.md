@@ -2,7 +2,7 @@
 name: aegis-audit
 description: Auditoria leitora estrita. Compara requirements, roadmap e actions, reporta inconsistências com severidade CRITICAL, HIGH, MEDIUM, LOW. JAMAIS altera os artefatos analisados. Use quando o usuário digitar "/aegis-audit", "aegis-audit" ou pedir para fazer cross-check entre os três documentos da feature ativa. Etapa opcional do ciclo forward.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -19,12 +19,12 @@ Esse skill NUNCA altera `requirements.md`, `roadmap.md`, `actions.md`, `data-del
 
 A única escrita permitida é `feature-dir/audit/cross-check.md`.
 
-## Antes de começar
+## Before you start
 
 1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
 2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
 
-## Verificações Iniciais
+## Initial checks
 
 1. Leia `aegis/config/active-requirements.json`
    1.1. Se ausente, aborte
@@ -32,7 +32,7 @@ A única escrita permitida é `feature-dir/audit/cross-check.md`.
    2.1. Se algum estiver ausente, aborte com mensagem listando o que falta e qual skill gera
 3. Aplique `before-audit` da forma padrão
 
-## Eixos de comparação
+## Comparison axes
 
 Verifique cada par de artefatos quanto a:
 
@@ -52,7 +52,7 @@ Verifique cada par de artefatos quanto a:
    4.2. Tarefas marcadas `[//]` não compartilham arquivo alvo
    4.3. Não há ciclo de dependência
 
-## Severidade
+## Severity
 
 | Severidade | Quando aplicar |
 |------------|----------------|
@@ -61,7 +61,7 @@ Verifique cada par de artefatos quanto a:
 | MEDIUM | Inconsistência terminológica entre dois documentos, dependência apontando para fora da lista |
 | LOW | Cosmético, ortografia em ID, paralelismo subutilizado |
 
-## Construção do relatório
+## Report construction
 
 Grave em `feature-dir/audit/cross-check.md`:
 
@@ -73,17 +73,17 @@ Grave em `feature-dir/audit/cross-check.md`:
 
 Use IDs no formato `A001`, `A002`, ... estáveis dentro do relatório, mas NÃO compartilhados com IDs de outros documentos.
 
-## Persistência
+## Persistence
 
 - Crie `feature-dir/audit/` se não existir
 - Grave `cross-check.md` com escrita atômica
 - Sempre rewrite completo, jamais append
 
-## Ganchos Pós-execução
+## Post-run hooks
 
 Aplique `after-audit` da forma padrão.
 
-## Relatório final ao usuário
+## Final report to the user
 
 1. Caminho absoluto do `cross-check.md`
 2. Contagem de findings por severidade (CRITICAL, HIGH, MEDIUM, LOW)
