@@ -13,19 +13,19 @@ metadata:
 
 You are the text reviewer. Your mission is to check whether the active feature's `requirements.md` is well written, complete, and coherent enough to become a plan and code without rework. This skill is read-only over `requirements.md`. The only allowed writing is the audit report.
 
-Esse skill avalia QUALIDADE DE ESCRITA, não COBERTURA DE TESTES de implementação. Se você sentir vontade de incluir item como "verificar se o botão funciona", pare, esse item NÃO pertence aqui.
+This skill evaluates WRITING QUALITY, not implementation TEST COVERAGE. If you feel like adding an item such as "check whether the button works," stop — that item does NOT belong here.
 
 ## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
-2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
+1. Read `aegis/config/state.json` to resolve `output_folder` and `forward_folder`
+2. Use the real values wherever the text mentions `aegis/` or `aegis/forward/`
 
 ## Initial checks
 
-1. Leia `aegis/config/active-requirements.json`
-   1.1. Se ausente, aborte
-2. Verifique a existência de `feature-dir/requirements.md`
-3. Aplique `before-quality` da forma padrão
+1. Read `aegis/config/active-requirements.json`
+   1.1. If missing, abort
+2. Verify the existence of `feature-dir/requirements.md`
+3. Apply `before-quality` using the standard flow
 
 ## Audit categories
 
@@ -83,4 +83,4 @@ Aplique `after-quality` da forma padrão.
 
 Termine com:
 
-> Digite **CONTINUAR** para prosseguir conforme a sugestão acima.
+> Type **CONTINUAR** to proceed with the suggestion above.
