@@ -8,19 +8,19 @@ producedBy: orchestrator
 hash: "sha256:<hash do corpo abaixo do front-matter>"
 ---
 
-# Handoff para o Agente de Codificação
+# Handoff to the Coding Agent
 
-> Este documento é a porta de entrada para o agente de codificação (Claude Code, Codex, Cursor, Antigravity, etc.) que vai escrever o sistema novo a partir das specs.
+> This document is the entry point for the coding agent (Claude Code, Codex, Cursor, Antigravity, etc.) that will write the new system from the specs.
 
-## ⚠️ Leitura obrigatória primeiro
+## ⚠️ Mandatory reading first
 
-1. **`paradigm_decision.md`**, leitura inegociável. O paradigma alvo molda como toda a codificação deve acontecer.
-2. **`topology_decision.md`**, leitura inegociável. A topologia escolhida (preservar / modernizar / híbrido) define a árvore de pastas e a fronteira entre módulos.
+1. **`paradigm_decision.md`**, non-negotiable reading. The target paradigm shapes how all coding must happen.
+2. **`topology_decision.md`**, non-negotiable reading. The chosen topology (preserve / modernize / hybrid) defines the folder tree and the boundary between modules.
 
-## Ordem de leitura recomendada
+## Recommended reading order
 
-1. `paradigm_decision.md` (obrigatório, primeiro)
-2. `topology_decision.md` (obrigatório, segundo)
+1. `paradigm_decision.md` (mandatory, first)
+2. `topology_decision.md` (mandatory, second)
 3. `migration_brief.md`
 4. `target_business_rules.md`
 5. `migration_strategy.md`
@@ -30,51 +30,51 @@ hash: "sha256:<hash do corpo abaixo do front-matter>"
 9. `data_migration_plan.md`
 10. `parity_specs.md` + `parity_tests/`
 11. `risk_register.md` + `cutover_plan.md`
-12. `discard_log.md` (consultivo)
-13. `ambiguity_log.md` (consultivo)
+12. `discard_log.md` (advisory)
+13. `ambiguity_log.md` (advisory)
 
-## Lista de artefatos produzidos
+## List of produced artifacts
 
-| Artefato | Produzido por | Status |
+| Artifact | Produced by | Status |
 |---|---|---|
-| migration_brief.md | orchestrator | criado |
-| paradigm_decision.md | paradigm_advisor | criado |
-| target_business_rules.md | curator | criado |
-| discard_log.md | curator | criado |
-| migration_strategy.md | strategist | criado |
-| risk_register.md | strategist | criado |
-| cutover_plan.md | strategist | criado |
-| topology_decision.md | designer (Fase 1) | criado |
-| target_architecture.md | designer | criado |
-| target_domain_model.md | designer | criado |
-| target_data_model.md | designer | criado |
-| data_migration_plan.md | designer | criado |
-| parity_specs.md | inspector | criado |
-| parity_tests/*.feature | inspector | <N> arquivos |
-| ambiguity_log.md | orchestrator | consolidado |
+| migration_brief.md | orchestrator | created |
+| paradigm_decision.md | paradigm_advisor | created |
+| target_business_rules.md | curator | created |
+| discard_log.md | curator | created |
+| migration_strategy.md | strategist | created |
+| risk_register.md | strategist | created |
+| cutover_plan.md | strategist | created |
+| topology_decision.md | designer (Phase 1) | created |
+| target_architecture.md | designer | created |
+| target_domain_model.md | designer | created |
+| target_data_model.md | designer | created |
+| data_migration_plan.md | designer | created |
+| parity_specs.md | inspector | created |
+| parity_tests/*.feature | inspector | <N> files |
+| ambiguity_log.md | orchestrator | consolidated |
 
-## Bloqueadores para começar a implementação
-> Itens que precisam de decisão humana antes do agente de codificação começar.
+## Blockers to start implementation
+> Items that need human decision before the coding agent starts.
 
-- <AMB-XXX: descrição curta + onde decidir>
-- <ou: nenhum bloqueador, prosseguir>
+- <AMB-XXX: short description + where to decide>
+- <or: no blockers, proceed>
 
-## Próximos passos para o agente de codificação
+## Next steps for the coding agent
 
-1. **Ler `paradigm_decision.md` e internalizar**: o paradigma alvo é <do paradigm_decision>. Toda escolha de código deve honrar esse paradigma.
-2. **Ler `topology_decision.md` e internalizar**: a topologia escolhida é <preservar | modernizar | híbrido>. Use o esboço da árvore registrado nesse artefato como base para criar a estrutura de pastas do novo repositório.
-3. **Configurar o repositório novo** com a stack declarada em `migration_brief.md` e a topologia decidida.
-4. **Implementar bottom-up** seguindo `target_architecture.md` e `target_domain_model.md`:
-   - infraestrutura → dados → domínio → aplicação → bordas.
-5. **Escrever os testes** a partir de `parity_specs.md` e `parity_tests/*.feature` desde o início.
-6. **Para cada componente**, validar que respeita o paradigma escolhido (sinais explícitos em `target_architecture.md § Honra ao paradigma escolhido`) e a topologia escolhida (sinais explícitos em `target_architecture.md § Honra à topologia escolhida`).
-7. **Para a migração de dados**, seguir `data_migration_plan.md`.
-8. **Para o cutover**, seguir `cutover_plan.md` e os critérios go/no-go.
+1. **Read and internalize `paradigm_decision.md`**: the target paradigm is <from paradigm_decision>. Every code choice must honor this paradigm.
+2. **Read and internalize `topology_decision.md`**: the chosen topology is <preserve | modernize | hybrid>. Use the tree sketch recorded in this artifact as the basis for creating the folder structure of the new repository.
+3. **Set up the new repository** with the stack declared in `migration_brief.md` and the decided topology.
+4. **Implement bottom-up** following `target_architecture.md` and `target_domain_model.md`:
+   - infrastructure → data → domain → application → boundaries.
+5. **Write the tests** from `parity_specs.md` and `parity_tests/*.feature` from the start.
+6. **For each component**, validate that it respects the chosen paradigm (explicit signals in `target_architecture.md § Adherence to the chosen paradigm`) and the chosen topology (explicit signals in `target_architecture.md § Adherence to the chosen topology`).
+7. **For data migration**, follow `data_migration_plan.md`.
+8. **For cutover**, follow `cutover_plan.md` and the go/no-go criteria.
 
-## Itens auto-decididos (apenas se executado em --auto)
-> Listar aqui itens cujo default foi aplicado sem confirmação humana. Recomenda-se revisar antes do cutover.
+## Auto-decided items (only if run with --auto)
+> List here items whose default was applied without human confirmation. Reviewing them before cutover is recommended.
 
-- <ou: pipeline executado em modo interativo, nenhum item auto-decidido>
+- <or: pipeline ran in interactive mode, no auto-decided items>
 
-## Notas finais
-<Observações do orquestrador para o agente de codificação.>
+## Final notes
+<Orchestrator observations for the coding agent.>

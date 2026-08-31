@@ -1,29 +1,29 @@
-# Checklist do `handoff.md`
+# `handoff.md` checklist
 
-Antes de fechar o pipeline, o orquestrador valida que `handoff.md` cumpre todos os itens.
+Before closing the pipeline, the orchestrator validates that `handoff.md` satisfies all items.
 
-## Checklist obrigatório
+## Mandatory checklist
 
-- [ ] `paradigm_decision.md` aparece como **primeiro item** da seção "Leitura obrigatória" e da "Ordem de leitura recomendada".
-- [ ] Lista de artefatos produzidos é completa e refletindo o `aegis/migration/` real.
-- [ ] Itens REFERIDOS À CODIFICAÇÃO de `ambiguity_log.md` aparecem em seção dedicada de `handoff.md`.
-- [ ] Bloqueadores listados ou linha "nenhum bloqueador, prosseguir".
-- [ ] Próximos passos para o agente de codificação são específicos e acionáveis (não genéricos).
-- [ ] Em `--auto`: itens auto-decididos listados explicitamente.
-- [ ] Estilo coerente com a engine instalada (formato adaptado, ex: front-matter compatível).
+- [ ] `paradigm_decision.md` appears as the **first item** in the "Mandatory reading" section and in the "Recommended reading order".
+- [ ] The list of produced artifacts is complete and reflects the real `aegis/migration/`.
+- [ ] CODING-REFERRED items from `ambiguity_log.md` appear in a dedicated section of `handoff.md`.
+- [ ] Blockers are listed or the line "no blockers, proceed" is present.
+- [ ] Next steps for the coding agent are specific and actionable (not generic).
+- [ ] In `--auto`: auto-decided items are listed explicitly.
+- [ ] Style is consistent with the installed engine (adapted format, e.g. compatible front matter).
 
-## Estrutura mínima
+## Minimum structure
 
-1. Banner de leitura obrigatória do `paradigm_decision.md`.
-2. Ordem de leitura recomendada.
-3. Lista de artefatos.
-4. Bloqueadores.
-5. Próximos passos para o agente de codificação.
-6. Itens auto-decididos (apenas se `--auto`).
-7. Notas finais.
+1. `paradigm_decision.md` mandatory reading banner.
+2. Recommended reading order.
+3. Artifact list.
+4. Blockers.
+5. Next steps for the coding agent.
+6. Auto-decided items (only if `--auto`).
+7. Final notes.
 
-## Sinalização forte ao agente de codificação
+## Strong signaling to the coding agent
 
-A primeira frase de `handoff.md` deve transmitir clareza imediata. Padrão sugerido:
+The first sentence of `handoff.md` should provide immediate clarity. Suggested pattern:
 
-> "Sistema novo a ser construído em paradigma <X>. Antes de qualquer linha de código, leia `paradigm_decision.md`."
+> "New system to be built in paradigm <X>. Before writing any line of code, read `paradigm_decision.md`."

@@ -1,77 +1,77 @@
 # Reconstruction Plan — {{PROJECT_NAME}}
 
 **Stack:** {{STACK}}
-**Gerado em:** {{DATE}}
-**Status:** {{TOTAL}} tarefas | {{DONE}} concluídas | {{PENDING}} pendentes
+**Generated on:** {{DATE}}
+**Status:** {{TOTAL}} tasks | {{DONE}} completed | {{PENDING}} pending
 
 ---
 
-## Alertas de pré-voo
+## Preflight alerts
 
-> Revise estes pontos antes de iniciar. Gaps marcados com ⚠️ bloqueiam a tarefa associada.
+> Review these points before starting. Gaps marked with ⚠️ block the associated task.
 
 {{#each PREFLIGHT_ALERTS}}
-- ⚠️ **{{this.gap}}** — bloqueia Tarefa {{this.task_number}} ({{this.task_name}})
+- ⚠️ **{{this.gap}}** — blocks Task {{this.task_number}} ({{this.task_name}})
 {{/each}}
 
 {{#if NO_ALERTS}}
-Nenhum gap crítico identificado. Pode iniciar com segurança.
+No critical gap identified. You can start safely.
 {{/if}}
 
 ---
 
-## Tarefas
+## Tasks
 
-### Tarefa 01 — Schema do Banco de Dados
+### Task 01 — Database Schema
 **Status:** pending
-**Lê:** `aegis/architecture/erd-complete.md`, `aegis/reports/data-dictionary.md`
-**Constrói:** migrations, schema, modelos ORM (conforme stack detectada)
-**Pronto quando:** Todas as tabelas do ERD existem com tipos, constraints e foreign keys corretos
+**Reads:** `aegis/architecture/erd-complete.md`, `aegis/reports/data-dictionary.md`
+**Builds:** migrations, schema, ORM models (according to the detected stack)
+**Ready when:** All ERD tables exist with correct types, constraints, and foreign keys
 
 ---
 
-### Tarefa 02 — Entidades de Domínio
+### Task 02 — Domain Entities
 **Status:** pending
-**Lê:** `aegis/reports/domain.md`, `aegis/reports/data-dictionary.md`
-**Constrói:** entidades, value objects, validações de domínio
-**Pronto quando:** Todas as entidades implementadas com as regras de negócio descritas
+**Reads:** `aegis/reports/domain.md`, `aegis/reports/data-dictionary.md`
+**Builds:** entities, value objects, domain validations
+**Ready when:** All entities are implemented with the described business rules
 
 ---
 
-### Tarefa 03 — Máquinas de Estado
+### Task 03 — State Machines
 **Status:** pending
-**Lê:** `aegis/reports/state-machines.md`
-**Constrói:** implementação dos fluxos de estado de cada entidade
-**Pronto quando:** Todos os estados e transições documentados estão implementados
-**Obs:** Pular esta tarefa se `aegis/reports/state-machines.md` não existir
+**Reads:** `aegis/reports/state-machines.md`
+**Builds:** implementation of the state flows for each entity
+**Ready when:** All documented states and transitions are implemented
+**Note:** Skip this task if `aegis/reports/state-machines.md` does not exist
 
 ---
 
 <!-- COMPONENT_TASKS_START -->
-<!-- O Reconstructor insere aqui uma tarefa por unit, na ordem bottom-up determinada pelo dependencies.md -->
-<!-- Exemplo de tarefa de unit: -->
+<!-- The Reconstructor inserts one task per unit here, in the bottom-up order determined by dependencies.md -->
+<!-- Example unit task: -->
 
-### Tarefa 04 — [Nome da Unit]
+### Task 04 — [Unit Name]
 **Status:** pending
-**Lê:** `aegis/specs/sdd/[unit]/requirements.md`, `aegis/specs/sdd/[unit]/design.md`, `aegis/specs/sdd/[unit]/tasks.md`, `aegis/reports/dependencies.md`
-**Constrói:** [caminho do módulo conforme stack]
-**Pronto quando:** [critério de aceitação extraído de requirements.md, campo "Dado/Quando/Então"]
-**Alerta:** [se houver gap associado, descreva aqui]
+**Reads:** `aegis/specs/sdd/[unit]/requirements.md`, `aegis/specs/sdd/[unit]/design.md`, `aegis/specs/sdd/[unit]/tasks.md`, `aegis/reports/dependencies.md`
+**Builds:** [module path according to stack]
+**Ready when:** [acceptance criterion extracted from requirements.md, field "Given/When/Then"]
+**Alert:** [if there is an associated gap, describe it here]
 
 <!-- COMPONENT_TASKS_END -->
 
 ---
 
-### Tarefa {{API_N}} — Camada de API
+### Task {{API_N}} — API Layer
 **Status:** pending
-**Lê:** `aegis/specs/openapi/[lista de arquivos]`
-**Constrói:** endpoints, controllers, middlewares, autenticação
-**Pronto quando:** Todos os endpoints respondem conforme os contratos OpenAPI
+**Reads:** `aegis/specs/openapi/[list of files]`
+**Builds:** endpoints, controllers, middlewares, authentication
+**Ready when:** All endpoints respond according to the OpenAPI contracts
 
 ---
 
-### Tarefa {{STORIES_N}} — Fluxos de Usuário
+### Task {{STORIES_N}} — User Flows
 **Status:** pending
-**Lê:** `aegis/specs/user-stories/[lista de arquivos]`
-**Constrói:** integração end-to-end, fluxos completos de usuário
-**Pronto quando:** Todos os critérios de aceitação das user stories estão satisfeitos
+**Reads:** `aegis/specs/user-stories/[list of files]`
+**Builds:** end-to-end integration, complete user flows
+**Ready when:** All user story acceptance criteria are satisfied

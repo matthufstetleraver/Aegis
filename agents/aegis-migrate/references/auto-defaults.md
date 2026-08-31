@@ -1,43 +1,43 @@
-# Defaults de `--auto`
+# `--auto` defaults
 
-Quando o usuário invoca `/aegis-migrate --auto`, o orquestrador pula pausas humanas e aplica estes defaults. Antes de iniciar, o aviso ao usuário lista cada um deles. Cada item auto-aplicado é registrado em `ambiguity_log.md` com tag `auto-decidido` para revisão posterior.
+When the user invokes `/aegis-migrate --auto`, the orchestrator skips human pauses and applies these defaults. Before starting, the user warning lists each of them. Every auto-applied item is recorded in `ambiguity_log.md` with the `auto-decided` tag for later review.
 
 ## Paradigm Advisor
-- Escolha **opção 1: adotar paradigma natural da stack alvo**.
+- Choose **option 1: adopt the natural paradigm of the target stack**.
 - `derived_appetite` = `transformational`.
 
 ## Curator
-- Itens DECISÃO HUMANA são marcados como pendentes em `ambiguity_log.md` e não bloqueiam o pipeline.
-- Itens 🟡 INFERIDOS → MIGRAR (com nota "validar no agente de codificação").
-- Itens 🔴 LACUNA e ⚠️ AMBÍGUOS → DESCARTAR com nota explícita "auto-descartado, requer revisão".
+- HUMAN DECISION items are marked as pending in `ambiguity_log.md` and do not block the pipeline.
+- 🟡 INFERRED items → MIGRATE (with note "validate in coding agent").
+- 🔴 GAP and ⚠️ AMBIGUOUS items → DISCARD with explicit note "auto-discarded, requires review".
 
 ## Strategist
-- Adota a estratégia marcada como **recomendada**.
-- Riscos `crítico` que dependeriam de owner humano ficam com `owner = "a definir"` em `risk_register.md`.
+- Adopts the strategy marked as **recommended**.
+- `critical` risks that would depend on a human owner are left with `owner = "to be defined"` in `risk_register.md`.
 
 ## Designer
-- **Topologia (Fase 1)**: aceita a topologia moderna proposta (opção 2). Justificativa registrada em `topology_decision.md` é a do próprio Designer; no `ambiguity_log.md` fica a tag `auto-decidido` para revisão posterior. Rationale: `--auto` é para usuários que querem o caminho recomendado; refusing-to-decide pararia o pipeline e violaria o contrato de `--auto`.
-- **Arquitetura (Fase 2)**: aprova a primeira proposta sem iteração.
-- Bounded contexts, eventos e ADRs são aceitos como propostos.
+- **Topology (Phase 1)**: accepts the proposed modern topology (option 2). The justification recorded in `topology_decision.md` is the Designer's own; in `ambiguity_log.md` it gets the `auto-decided` tag for later review. Rationale: `--auto` is for users who want the recommended path; refusing to decide would stop the pipeline and violate the `--auto` contract.
+- **Architecture (Phase 2)**: approves the first proposal without iteration.
+- Bounded contexts, events, and ADRs are accepted as proposed.
 
 ## Inspector
-- Usa critérios de paridade derivados diretamente do paradigma escolhido (ver `parity-coverage-matrix.md` no agente).
-- Não negocia critério "paridade aceita" com o usuário.
+- Uses parity criteria derived directly from the chosen paradigm (see `parity-coverage-matrix.md` in the agent).
+- Does not negotiate the "accepted parity" criterion with the user.
 
-## Modificações manuais detectadas
-- Adota **opção (a)**: preservar a versão modificada manualmente e abortar regeneração desse artefato. Nunca destrói trabalho humano.
+## Manual modifications detected
+- Adopts **option (a)**: preserve the manually modified version and abort regeneration of that artifact. It never destroys human work.
 
-## Aviso obrigatório
+## Mandatory warning
 
-Sempre antes de iniciar `--auto`, apresentar:
+Always present before starting `--auto`:
 
-> "⚠️ Modo `--auto` ativado. Os defaults abaixo serão aplicados sem pausa para confirmação:
-> - Paradigm Advisor: adotar paradigma natural da stack (transformacional).
-> - Curator: itens ⚠️/🔴 serão DESCARTADOS com nota; 🟡 serão MIGRADOS com nota.
-> - Strategist: estratégia recomendada será adotada.
-> - Designer (topologia): topologia moderna proposta será adotada (opção 2).
-> - Designer (arquitetura): primeira proposta de arquitetura será aceita.
-> - Inspector: critérios de paridade derivados do paradigma sem ajuste interativo.
->
-> O `handoff.md` final destacará todos os itens auto-decididos para revisão posterior.
-> Confirma? (s/N)"
+> "⚠️ `--auto` mode enabled. The defaults below will be applied without pausing for confirmation:
+> - Paradigm Advisor: adopt the stack's natural paradigm (transformational).
+> - Curator: ⚠️/🔴 items will be DISCARDED with a note; 🟡 items will be MIGRATED with a note.
+> - Strategist: the recommended strategy will be adopted.
+> - Designer (topology): the proposed modern topology will be adopted (option 2).
+> - Designer (architecture): the first architecture proposal will be accepted.
+> - Inspector: parity criteria derived from the paradigm with no interactive adjustment.
+> 
+> The final `handoff.md` will highlight all auto-decided items for later review.
+> Confirm? (y/N)"
