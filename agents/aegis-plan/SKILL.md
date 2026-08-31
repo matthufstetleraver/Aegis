@@ -29,36 +29,36 @@ You are Aegis Spec's evolution architect. Your mission is to translate the activ
 
 ## Technical context collection
 
-Leia os artefatos da pipeline de descoberta nesta ordem, ignorando os que não existirem:
+Read the discovery pipeline artifacts in this order, skipping any that do not exist:
 
 1. `aegis/architecture/architecture.md` (componentes, dependências internas)
 2. `aegis/architecture/c4-context.md` (fronteiras externas)
 3. `aegis/reports/state-machines.md` (máquinas de estado afetadas)
-4. `aegis/reports/dependencies.md` (bibliotecas usadas)
+4. `aegis/reports/dependencies.md` (used libraries)
 5. `aegis/reports/code-analysis.md`, mas apenas as seções dos componentes citados no requirements
 6. `aegis/config/principles.md` (princípios obrigatórios)
 
-Anote quais arquivos serão tocados pela mudança proposta. Essa lista vai virar parte do `legacy-impact.md` quando o `/aegis-coding` rodar mais tarde, então registre-a em rascunho mental.
+Note which files will be touched by the proposed change. That list will become part of `legacy-impact.md` when `/aegis-coding` runs later, so keep it as a mental draft.
 
 ## Principle checks
 
-Para cada princípio em `principles.md`:
+For each principle in `principles.md`:
 
 1. Evaluate whether the feature respects the principle
-2. If there is a conflict, write it in a `## Princípios Aplicados` section of `roadmap.md`
+2. If there is a conflict, write it in a `## Applied Principles` section of `roadmap.md`
 3. NEVER rewrite or soften a principle here; that is the job of `/aegis-principles`
 
 ## Artifact generation
 
-Carregue o template em `aegis/runtime/templates/roadmap-template.md` e gere os arquivos abaixo na `feature-dir`:
+Load the template in `aegis/runtime/templates/roadmap-template.md` and generate the files below in `feature-dir`:
 
 | Arquivo | Conteúdo esperado |
 |---------|-------------------|
-| `roadmap.md` | resumo da abordagem, princípios aplicados, decisões técnicas, delta arquitetural, delta de dados, delta de contratos, plano de migração, riscos, critério de pronto |
-| `investigation.md` | pesquisa de fundo, alternativas avaliadas, links para fontes externas, padrões aplicáveis |
-| `data-delta.md` | diff conceitual sobre o modelo extraído em `aegis/`, novos campos, campos removidos, migrações necessárias |
-| `onboarding.md` | passo a passo executável para um humano que vai testar a feature pela primeira vez |
-| `interfaces/<nome>.md` | um arquivo por contrato externo afetado (HTTP, fila, gRPC, GraphQL), descreve request, response, erros, idempotência, timeouts |
+| `roadmap.md` | approach summary, applied principles, technical decisions, architectural delta, data delta, contract delta, migration plan, risks, done criteria |
+| `investigation.md` | background research, alternatives considered, links to external sources, applicable patterns |
+| `data-delta.md` | conceptual diff over the model extracted in `aegis/`, new fields, removed fields, required migrations |
+| `onboarding.md` | executable step-by-step guide for a human testing the feature for the first time |
+| `interfaces/<name>.md` | one file per affected external contract (HTTP, queue, gRPC, GraphQL), describing request, response, errors, idempotency, timeouts |
 
 When the feature does not touch external contracts, omit the `interfaces/` directory.
 
@@ -71,12 +71,12 @@ When the feature does not touch external contracts, omit the `interfaces/` direc
 
 ## Persistence
 
-- Grave todos os artefatos com escrita atômica
+- Write all artifacts atomically
 - Create `feature-dir/interfaces/` only if there is at least one file inside it
 
 ## Post-run hooks
 
-Aplique `after-plan` da forma padrão.
+Apply `after-plan` using the standard flow.
 
 ## Final report
 
@@ -85,6 +85,6 @@ Aplique `after-plan` da forma padrão.
 3. List of premises adopted from unresolved `[DÚVIDA]` markers
 4. Suggested next step: `/aegis-to-do` (or `/aegis-audit` if there is doubt)
 
-Termine com:
+End with:
 
-> Digite **CONTINUAR** para prosseguir conforme a sugestão acima.
+> Type **CONTINUE** to proceed according to the suggestion above.
