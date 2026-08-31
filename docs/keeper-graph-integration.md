@@ -1,6 +1,6 @@
 # Keeper × Graph integration
 
-Since v1.8.0, Keeper consults the L0 dependency graph (`aegis/runtime/context/graph.json`) on top of the `code-spec-matrix.md` to widen its blast radius and classify drift severity.
+Since v1.8.0, Keeper consults the L0 dependency graph (`aegis/runtime/context/graph.json`) on top of `code-spec-matrix.md` to widen its blast radius and classify drift severity.
 
 ## What changed in `/aegis-keeper after`
 
@@ -21,9 +21,9 @@ This means an edit in a file that has no spec can still trigger spec updates dow
 
 ## What changed at the hook layer
 
-The `Stop` hook (Claude Code) and `session.end` (Opencode) now do an **incremental graph update** for the dirty files at the end of every session, before the next `/aegis-keeper after` runs. Other engines (Cursor, Kimi, Codex) update the graph at commit-time via the git pre-commit fallback (Phase 1).
+The `Stop` hook (Claude Code) and `session.end` (Opencode) now do an **incremental graph update** for the dirty files at the end of every session, before the next `/aegis-keeper after` runs. Other engines (Cursor, Kimi, Codex) update the graph at commit time via the git pre-commit fallback (Phase 1).
 
-If `aegis/runtime/context/graph.json` doesn't exist, the update is skipped silently. Run `npx aegis-spec graph build` once to bootstrap.
+If `aegis/runtime/context/graph.json` does not exist, the update is skipped silently. Run `npx aegis-spec graph build` once to bootstrap.
 
 ## What changed in `drift-check`
 
@@ -49,7 +49,7 @@ If `aegis/runtime/context/graph.json` doesn't exist, the update is skipped silen
 
 PR comment integrations (e.g. CI bots) can lift this into the PR description so reviewers see the blast radius up front.
 
-If the graph doesn't exist or the matrix is missing, `affected_files` is `null` — drift-check still works in degraded mode.
+If the graph does not exist or the matrix is missing, `affected_files` is `null` — drift-check still works in degraded mode.
 
 ## Bootstrapping in an existing project
 
