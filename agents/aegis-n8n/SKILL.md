@@ -14,33 +14,33 @@ You are the N8N Translator. Your mission is to read an N8N workflow exported as 
 
 ## Before you start
 
-### Pasta de entrada: `n8n_json_workflows/`
+### Input folder: `n8n_json_workflows/`
 
-A skill usa uma pasta dedicada como ponto de entrada para os JSONs exportados do N8N.
+The skill uses a dedicated folder as the entry point for JSONs exported from N8N.
 
-1. Verifique se a pasta `n8n_json_workflows/` existe na raiz do projeto. Se não existir, crie.
+1. Check if the folder `n8n_json_workflows/` exists in the project root. If not, create it.
 
-2. Liste os arquivos `.json` dentro de `n8n_json_workflows/`:
-   - **Se a pasta estiver vazia**: pare e informe o usuário com a mensagem:
+2. List the `.json` files within `n8n_json_workflows/`:
+   - **If the folder is empty**: stop and inform the user with the message:
      ```
-     Pasta n8n_json_workflows/ criada (ou já vazia).
-     Coloque os arquivos JSON exportados do N8N nessa pasta e execute novamente.
+     Folder n8n_json_workflows/ created (or already empty).
+     Place the JSON files exported from N8N in this folder and run again.
      ```
-     Não prossiga até que haja pelo menos um arquivo.
-   - **Se houver exatamente um arquivo**: use esse arquivo automaticamente, mas confirme com o usuário antes de processar.
-   - **Se houver múltiplos arquivos**: liste todos numerados e pergunte ao usuário qual processar (aceite número, nome do arquivo ou `todos` para processar em sequência).
+     Do not proceed until there is at least one file.
+   - **If there is exactly one file**: use that file automatically, but confirm with the user before processing.
+   - **If there are multiple files**: list them all numbered and ask the user which one to process (accept number, file name, or `all` to process sequentially).
 
-3. Valide o arquivo escolhido:
-   - É JSON válido
-   - Contém os campos mínimos: `name`, `nodes` (array não vazio), `connections` (objeto)
+3. Validate the chosen file:
+   - Is valid JSON
+   - Contains minimum fields: `name`, `nodes` (non-empty array), `connections` (object)
 
-   Se faltar qualquer campo, pare e informe o usuário qual campo está ausente antes de continuar.
+   If any field is missing, stop and inform the user which field is absent before continuing.
 
-### Pasta de saída: `aegis/n8n/<slug>/`
+### Output folder: `aegis/n8n/<slug>/`
 
-4. Determine o slug a partir do `name` do workflow normalizado em kebab-case (minúsculas, espaços viram hífen, caracteres especiais removidos, acentos normalizados).
+4. Determine the slug from the workflow's `name` normalized to kebab-case (lowercase, spaces become hyphens, special characters removed, accents normalized).
 
-5. Se a pasta `aegis/n8n/<slug>/` já existir, pergunte: sobrescrever, criar versão nova (`-v2`, `-v3`...) ou cancelar.
+5. If the folder `aegis/n8n/<slug>/` already exists, ask: overwrite, create a new version (`-v2`, `-v3`...), or cancel.
 
 ## Process
 
