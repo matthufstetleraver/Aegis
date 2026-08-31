@@ -139,153 +139,153 @@ Severidade: 🔴 CRITICAL · 🟠 HIGH · 🟡 MEDIUM · 🔵 LOW
 | F-02 | 🟠 | `aegis-coding` exige `architecture.md` E `domain.md` "no diretório aegis/". V2 layout move pra `aegis/architecture/architecture.md` e `aegis/reports/domain.md` — **check pode falhar por path literal**. Precisa testar. |
 | F-03 | 🟡 | `aegis-audit` produz `feature-dir/audit/cross-check.md`. Sem feature ativa, dir nem existe. |
 | F-04 | 🟡 | `aegis-doubt` integra respostas no `requirements.md` original. Se usuário edita requirements entre runs, integração pode quebrar markdown. |
-| F-05 | 🟡 | `aegis-quality` puramente leitor — bom princípio. Mas relatório vai em `feature-dir/quality/`? SKILL não especifica path exato. |
-| F-06 | 🟡 | `aegis-coding` "atualiza checkboxes para [X]" no `actions.md` — depende de pattern de checkboxes consistente. Sem schema validado. |
-| F-07 | 🔵 | `aegis-resume` swap só funciona se `paused-features` tiver entries. Sem isso, abort claro. OK. |
+| F-05 | 🟡 | `aegis-quality` purely reader — good principle. But report goes in `feature-dir/quality/`? SKILL doesn't specify exact path. |
+| F-06 | 🟡 | `aegis-coding` "updates checkboxes to [X]" in `actions.md` — depends on consistent checkbox pattern. Without validated schema. |
+| F-07 | 🔵 | `aegis-resume` swap only works if `paused-features` has entries. Without it, clear abort. OK. |
 
 ### aegis-principles
 
 | # | Sev | Issue |
 |---|-----|-------|
-| P-01 | 🟡 | "Propaga sugestões nos templates dependentes" — não há mecanismo automático de propagation, só prompt pro LLM. Frágil. |
-| P-02 | 🔵 | Princípios em `aegis/config/principles.md`. Tem template em `runtime/templates/principles-template.md` mas keeper/writer não leem princípios por default. |
+| P-01 | 🟡 | "Propagates suggestions in dependent templates" — no automatic propagation mechanism, just LLM prompt. Fragile. |
+| P-02 | 🔵 | Principles in `aegis/config/principles.md`. Template exists in `runtime/templates/principles-template.md` but Keeper/Writer don't read principles by default. |
 
 ### aegis-n8n
 
 | # | Sev | Issue |
 |---|-----|-------|
-| N-01 | 🔵 | Único skill com input externo dedicado (`n8n_json_workflows/`). Convenção isolada, não integra com `aegis/specs/` naturalmente. |
+| N-01 | 🔵 | Only skill with dedicated external input (`n8n_json_workflows/`). Isolated convention, doesn't integrate naturally with `aegis/specs/`. |
 
 ### aegis-agents-help
 
 | # | Sev | Issue |
 |---|-----|-------|
-| H-01 | 🔵 | Texto estático apresentado verbatim ("sem alterações, sem resumir"). Pode ficar desatualizado vs lista real de agentes. |
+| H-01 | 🔵 | Static text presented verbatim ("unchanged, not summarized"). Can become outdated vs actual agent list. |
 
 ---
 
-## Recomendações de melhoria (estratégico)
+## Improvement Recommendations (strategic)
 
-### Tier 1 — bloqueadores
+### Tier 1 — blockers
 
-1. **Publicar `aegis-spec` no npm** ou trocar todas as menções por install path local (`./node_modules/.bin/aegis`, git URL install). X-02.
-2. **Corrigir invocação CLI** em SKILL.md: `aegis graph build` ao invés de `npx aegis-spec graph build`. X-01, K-02.
-3. **Gerar `graph.json` automaticamente** no fim do pipeline de descoberta (ou no Writer / Architect). Sem graph, Keeper não calcula severity. X-06.
-4. **Bootstrap `active-requirements.json`** quando instalador finaliza, com placeholder `null` — forward skills detectam null vs ausente e exibem onboarding claro. X-04, F-01.
+1. **Publish `aegis-spec` on npm** or replace all mentions with local install path (`./node_modules/.bin/aegis`, git URL install). X-02.
+2. **Fix CLI invocation** in SKILL.md: `aegis graph build` instead of `npx aegis-spec graph build`. X-01, K-02.
+3. **Generate `graph.json` automatically** at end of discovery pipeline (or in Writer / Architect). Without graph, Keeper can't calculate severity. X-06.
+4. **Bootstrap `active-requirements.json`** when installer finishes, with placeholder `null` — forward skills detect null vs absent and show clear onboarding. X-04, F-01.
 
-### Tier 2 — robustez
+### Tier 2 — robustness
 
-5. **Reconciliar `state.json` ↔ filesystem** ao iniciar qualquer skill. Stale checkpoint outputs = warning visível. X-03.
-6. **Atualizar `plan.md` automaticamente** após checkpoint (orquestrador). O-04.
-7. **Keeper lê reports/** (domain, state-machines, permissions) sempre, não só specs/sdd. K-04, K-07.
-8. **Force flag explícita** em writer/architect/detective pra rerun destrutivo controlado. W-01.
-9. **Hook git instalado opcionalmente** no `aegis install` (com prompt). Sem hook, queue só recebe via `git diff`. K-09, X-08.
+5. **Reconcile `state.json` ↔ filesystem** on any skill start. Stale checkpoint outputs = visible warning. X-03.
+6. **Auto-update `plan.md`** after checkpoint (orchestrator). O-04.
+7. **Keeper reads reports/** (domain, state-machines, permissions) always, not just specs/sdd. K-04, K-07.
+8. **Explicit force flag** in writer/architect/detective for controlled destructive rerun. W-01.
+9. **Git hook installed optionally** in `aegis install` (with prompt). Without hook, queue only receives via `git diff`. K-09, X-08.
 
 ### Tier 3 — DX/automation
 
-10. **Modo `--auto-approve`** pro migration team. M-02.
-11. **Validação AST** opcional em keeper pra detectar contradição código↔spec (e.g. regex string match). K-03.
-12. **Reconciliador entre extrações**: skill `aegis-sync` que pega diff de specs vs state.json e propõe merge. Não existe.
-13. **Naming convention única** em config files. X-12.
-14. **Mostrar onboarding pós-install**: usuário acaba `aegis install`, recebe checklist "próximo passo: rodar `/aegis` (descoberta) ou `/aegis-requirements` (nova feature)". Hoje o setup termina mudo.
+10. **`--auto-approve` mode** for migration team. M-02.
+11. **Optional AST validation** in Keeper to detect code↔spec contradiction (e.g. regex string match). K-03.
+12. **Reconciliation between extractions**: skill `aegis-sync` that takes diff of specs vs state.json and proposes merge. Doesn't exist.
+13. **Single naming convention** in config files. X-12.
+14. **Show post-install onboarding**: user finishes `aegis install`, gets checklist "next step: run `/aegis` (discovery) or `/aegis-requirements` (new feature)". Today setup ends silent.
 
 ---
 
-## Lista de tarefas (atacáveis em ordem)
+## Task List (actionable in order)
 
-Severidade + dependência considerada. IDs ligados aos issues acima.
+Severity + dependency considered. IDs linked to issues above.
 
-### Sprint 1 — CLI funcional (bloqueadores) — STATUS: parcial
+### Sprint 1 — Functional CLI (blockers) — STATUS: partial
 
-- [x] **T01** [X-02, K-02] Publish npm: workflow OIDC criado (`.github/workflows/publish.yml`). Aguarda primeiro publish manual (OTP).
-- [x] ~~**T02**~~ Cancelado — falso positivo (single-bin auto-resolution).
-- [x] **T03** [X-06] Hint adicionado no fim do installer ("Run `aegis graph build` once..."). Não auto-roda pra não travar install em repos grandes.
-- [x] **T04** [X-04, X-05, F-01] `lib/paths.js` ganha `FORWARD_DIR` + `ACTIVE_REQUIREMENTS_JSON`. `writer.js` cria diretório forward + bootstrap json `{active:null,paused-features:[]}`. 330 tests verdes.
+- [x] **T01** [X-02, K-02] Publish npm: OIDC workflow created (`.github/workflows/publish.yml`). Waiting for first manual publish (OTP).
+- [x] ~~**T02**~~ Canceled — false positive (single-bin auto-resolution).
+- [x] **T03** [X-06] Hint added at end of installer ("Run `aegis graph build` once..."). Doesn't auto-run to avoid blocking install on large repos.
+- [x] **T04** [X-04, X-05, F-01] `lib/paths.js` gains `FORWARD_DIR` + `ACTIVE_REQUIREMENTS_JSON`. `writer.js` creates forward directory + bootstrap json `{active:null,paused-features:[]}`. 330 tests passing.
 
-### Sprint 2 — Reconciliação de estado — STATUS: concluído (39cb646)
+### Sprint 2 — State Reconciliation — STATUS: completed (39cb646)
 
-- [x] **T05** [X-03] `reconcileState()` + `pruneStaleCheckpoints()` em `lib/state/reconcile.js`. CLI `aegis state reconcile [--prune] [--json]`. 8 unit tests.
-- [x] **T06** [O-04] `agents/aegis/SKILL.md` instrui orquestrador a espelhar `state.json.completed` em `plan.md` após cada checkpoint.
-- [x] **T07** [X-12, X-10] `templates/forward/setup.json` migrado kebab→snake_case. `migrateSetupJson()` roda em install e update (idempotente). 4 unit tests.
-- [x] **T08** [X-11] Confirmado: `buildManifest/saveManifest` já estava wired em install/update/uninstall. Gap era state de projeto específico, não código.
+- [x] **T05** [X-03] `reconcileState()` + `pruneStaleCheckpoints()` in `lib/state/reconcile.js`. CLI `aegis state reconcile [--prune] [--json]`. 8 unit tests.
+- [x] **T06** [O-04] `agents/aegis/SKILL.md` instructs orchestrator to mirror `state.json.completed` in `plan.md` after each checkpoint.
+- [x] **T07** [X-12, X-10] `templates/forward/setup.json` migrated kebab→snake_case. `migrateSetupJson()` runs on install and update (idempotent). 4 unit tests.
+- [x] **T08** [X-11] Confirmed: `buildManifest/saveManifest` already wired in install/update/uninstall. Gap was specific project state, not code.
 
-### Sprint 3 — Keeper robustez
+### Sprint 3 — Keeper Robustness
 
-- [x] **T09** [K-04, K-07] Keeper SKILL.md expande read path: `domain.md` (cruza RN-XX por linha), `state-machines.md`, `permissions.md`, `architecture/*.md` sempre lidos quando relevantes.
-- [x] **T10** [K-03] `lib/auto/literal-extractor.js`: extrai literais do diff, cruza com spec, injeta hint no prompt do spec-writer. 10 testes.
-- [x] **T11** [K-05] `lib/auto/spec-resolver.js`: fallback graph reverse-deps quando matrix não tem match para arquivo novo. 6 testes.
-- [x] **T12** [K-06] `lib/auto/deleted-ref-cleaner.js`: varre `aegis/specs/**/*.md`, encontra refs ao arquivo deletado, reescreve via LLM com hint de deleção. 5 testes.
-- [x] **T13** [K-09, X-08] Pre-commit hook opt-in no installer: `installGitHook()` wired em `install.js`, prompt `install_git_hook` em `prompts.js`. Roda `aegis policy-check --severity medium` no staged diff.
+- [x] **T09** [K-04, K-07] Keeper SKILL.md expands read path: `domain.md` (cross-references RN-XX by line), `state-machines.md`, `permissions.md`, `architecture/*.md` always read when relevant.
+- [x] **T10** [K-03] `lib/auto/literal-extractor.js`: extracts literals from diff, cross-references with spec, injects hint in spec-writer prompt. 10 tests.
+- [x] **T11** [K-05] `lib/auto/spec-resolver.js`: fallback graph reverse-deps when matrix has no match for new file. 6 tests.
+- [x] **T12** [K-06] `lib/auto/deleted-ref-cleaner.js`: scans `aegis/specs/**/*.md`, finds refs to deleted file, rewrites via LLM with deletion hint. 5 tests.
+- [x] **T13** [K-09, X-08] Pre-commit hook opt-in in installer: `installGitHook()` wired in `install.js`, prompt `install_git_hook` in `prompts.js`. Runs `aegis policy-check --severity medium` on staged diff.
 
-### Sprint 4 — Writer/Architect/Detective non-destructive controlado — STATUS: concluído (72e8e0d)
+### Sprint 4 — Writer/Architect/Detective Controlled Non-destructive — STATUS: completed (72e8e0d)
 
-- [x] **T14** [W-01, AR-01] SKILLs documentam `--force` (regenera tudo) e `--regenerate <file>` (regenera arquivo específico). Override controlado de non-destructive.
-- [x] **T15** [W-02] `state.json.redator_progress` adicionado. Writer salva `{"last_unit": "...", "last_file": "..."}` após cada arquivo. Resume oferece "continuar de onde parou".
-- [ ] **T16** [W-04] Skipped — confidence marker linter opcional, baixa prioridade.
-- [x] **T17** [R-02] Reviewer anexa nova run em `confidence-report.md` com delimiter `---\n## Run [ts]` em vez de sobrescrever. Histórico preservado.
+- [x] **T14** [W-01, AR-01] SKILLs document `--force` (regenerate all) and `--regenerate <file>` (regenerate specific file). Controlled override of non-destructive.
+- [x] **T15** [W-02] `state.json.redator_progress` added. Writer saves `{"last_unit": "...", "last_file": "..."}` after each file. Resume offers "continue from where left off".
+- [ ] **T16** [W-04] Skipped — confidence marker linter optional, low priority.
+- [x] **T17** [R-02] Reviewer appends new run in `confidence-report.md` with delimiter `---\n## Run [ts]` instead of overwriting. History preserved.
 
-### Sprint 5 — Forward bootstrap — STATUS: concluído (b29cc68)
+### Sprint 5 — Forward Bootstrap — STATUS: completed (b29cc68)
 
-- [x] **T18** [F-02] aegis-coding check line 40: `aegis/architecture/architecture.md` (full path) vs ambíguo `architecture.md`. Path correto para v2.
-- [x] **T19** [F-03, F-04, F-05, F-06] aegis-quality output movido de `feature-dir/audit/` para `feature-dir/quality/`. Demais agents já corretos.
-- [x] **T20** [F-04] aegis-doubt: guards adicionados — se `[DÚVIDA]` ausente ou texto editado >50%, pula patch e avisa usuário. Não sobrescreve edits manuais.
+- [x] **T18** [F-02] aegis-coding check line 40: `aegis/architecture/architecture.md` (full path) vs ambiguous `architecture.md`. Correct path for v2.
+- [x] **T19** [F-03, F-04, F-05, F-06] aegis-quality output moved from `feature-dir/audit/` to `feature-dir/quality/`. Other agents already correct.
+- [x] **T20** [F-04] aegis-doubt: guards added — if `[DOUBT]` absent or text edited >50%, skip patch and warn user. Doesn't overwrite manual edits.
 
-### Sprint 6 — UX/DX — STATUS: concluído (33d016c)
+### Sprint 6 — UX/DX — STATUS: completed (33d016c)
 
-- [x] **T21** [O-01] aegis SKILL.md: phase=completo agora informa "Pipeline complete. Delete aegis/specs/ ou --force para re-extração. Use /aegis-keeper after para drift."
-- [x] **T22** [O-02] aegis SKILL.md: version check tenta npm, fallback para `git tag | sort -V | tail -1`, se ambos falham skip silencioso.
-- [ ] **T23** [P-01] Skipped — principles propagation complexo, baixa prioridade.
-- [x] **T24** [DM-01, DS-01, V-01] data-master/design-system/visor: seção "Quando rodar" adicionada. Any-phase: merge quando artifacts existem, --force para full regen.
-- [x] **T25** [M-02] aegis-migrate SKILL.md: --auto / --auto-approve mode documentado. Aplica auto-defaults, loga em ambiguity_log.md, zero pauses.
-- [x] **T26** [S-01] aegis-scout: exclusões expandidas (.next, .turbo, .vercel, target, vendor, .gradle, .maven, out).
-- [x] **T27** [H-01] aegis-agents-help: geração dinâmica. Lê agents instalados de SKILL.md frontmatter, agrupa por role. Remove hard-code.
+- [x] **T21** [O-01] aegis SKILL.md: phase=complete now informs "Pipeline complete. Delete aegis/specs/ or --force for re-extraction. Use /aegis-keeper after for drift."
+- [x] **T22** [O-02] aegis SKILL.md: version check tries npm, fallback to `git tag | sort -V | tail -1`, if both fail skip silently.
+- [ ] **T23** [P-01] Skipped — principles propagation complex, low priority.
+- [x] **T24** [DM-01, DS-01, V-01] data-master/design-system/visor: "When to run" section added. Any-phase: merge when artifacts exist, --force for full regen.
+- [x] **T25** [M-02] aegis-migrate SKILL.md: --auto / --auto-approve mode documented. Applies auto-defaults, logs to ambiguity_log.md, zero pauses.
+- [x] **T26** [S-01] aegis-scout: exclusions expanded (.next, .turbo, .vercel, target, vendor, .gradle, .maven, out).
+- [x] **T27** [H-01] aegis-agents-help: dynamic generation. Reads installed agents from SKILL.md frontmatter, groups by role. Removes hard-code.
 
-### Sprint 7 — Validação fim-a-fim — STATUS: concluído (2cdab29)
+### Sprint 7 — End-to-End Validation — STATUS: completed (2cdab29)
 
-- [x] **T28** test/smoke-keeper.sh: smoke test keeper enhancements (T10-T12 unit tests). test/smoke.sh tentou full installer (skipped — installer precisa --non-interactive). test/fixtures/smoke-minimal criado para e2e futuro.
-- [x] **T29** lib/commands/coverage.js: CLI `aegis coverage [--json]`. Reports source file coverage (% in matrix) e spec freshness (% last_synced <30d). Wired em bin/aegis.js.
+- [x] **T28** test/smoke-keeper.sh: smoke test Keeper enhancements (T10-T12 unit tests). test/smoke.sh attempted full installer (skipped — installer needs --non-interactive). test/fixtures/smoke-minimal created for future e2e.
+- [x] **T29** lib/commands/coverage.js: CLI `aegis coverage [--json]`. Reports source file coverage (% in matrix) and spec freshness (% last_synced <30d). Wired in bin/aegis.js.
 
 ---
 
-## Apêndice — comportamento simulado por agente vs SIM-1/2/3
+## Appendix — Simulated agent behavior vs SIM-1/2/3
 
-| Agente | SIM-1 (mod regex) | SIM-2 (add helper) | SIM-3 (del test) |
-|--------|-------------------|--------------------|--------------------|
-| aegis (orquestrador) | noop (phase=completo) | noop | noop |
-| scout | rerun overwrite surface.json? non-destructive não claro | mesmo | mesmo |
-| archaeologist | rerun não detecta — manual | manual | manual |
-| detective | RN-01 invalidada — não detecta sem rerun manual | n/a | n/a |
-| architect | C4 não muda (sem novos containers) | adicionaria componente — não detecta | n/a |
-| writer | non-destructive — specs/sdd/search/* intactas | mesma — nova spec NÃO criada automaticamente | mesma |
-| reviewer | confidence pode estar stale — não rerun | mesmo | mesmo |
-| keeper after | **detecta via git diff**, atualiza spec/sdd/search se LLM nota regex; **não atualiza domain.md/RN-01 automaticamente** | matrix entry via heurística "dir pai" → search/. Spec NÃO criada. | matrix marca `~~deletado~~`; spec NÃO removida das referências |
-| data-master | n/a (sem DDL) | n/a | n/a |
-| design-system | n/a (sem CSS) | n/a | n/a |
-| visor | n/a (sem screenshots) | n/a | n/a |
-| migrate team | bloqueado sem brief | bloqueado | bloqueado |
-| forward team | bloqueado sem active-requirements | bloqueado | bloqueado |
+| Agent | SIM-1 (mod regex) | SIM-2 (add helper) | SIM-3 (del test) |
+|-------|-------------------|--------------------|--------------------|
+| aegis (orchestrator) | noop (phase=complete) | noop | noop |
+| scout | rerun overwrite surface.json? non-destructive unclear | same | same |
+| archaeologist | rerun doesn't detect — manual | manual | manual |
+| detective | RN-01 invalidated — doesn't detect without manual rerun | n/a | n/a |
+| architect | C4 doesn't change (no new containers) | would add component — doesn't detect | n/a |
+| writer | non-destructive — specs/sdd/search/* intact | same — new spec NOT created automatically | same |
+| reviewer | confidence may be stale — no rerun | same | same |
+| Keeper after | **detects via git diff**, updates spec/sdd/search if LLM notices regex; **doesn't auto-update domain.md/RN-01** | matrix entry via "parent dir" heuristic → search/. Spec NOT created. | matrix marks `~~deleted~~`; spec NOT removed from references |
+| data-master | n/a (no DDL) | n/a | n/a |
+| design-system | n/a (no CSS) | n/a | n/a |
+| visor | n/a (no screenshots) | n/a | n/a |
+| migrate team | blocked without brief | blocked | blocked |
+| forward team | blocked without active-requirements | blocked | blocked |
 | reconstructor | n/a | n/a | n/a |
 | n8n | n/a | n/a | n/a |
-| principles | n/a (sem mudança de princípio) | n/a | n/a |
+| principles | n/a (no principle change) | n/a | n/a |
 
-**Tradução**: dos 28 agentes, **apenas Keeper reage** ao diff simulado — e em modo degradado. Tudo mais é manual ou bloqueado.
-
----
-
-## Apêndice 2 — Inventário de gaps no poc-frame-ai
-
-Estado inicial após instalação (gaps esperados a fechar quando T1-T4 prontos):
-
-- [ ] `aegis/runtime/context/graph.json` — gerar via `aegis graph build`
-- [ ] `aegis/config/active-requirements.json` — template null
-- [ ] `aegis/forward/` — diretório
-- [ ] `aegis/reports/drift.md` — primeiro run do keeper bootstrap
-- [ ] `aegis/changelog/` — primeiro run do keeper bootstrap
-- [ ] `aegis/config/files-manifest.json` — re-gerar (está deleted no git status)
-- [ ] `aegis/runtime/session-summaries/` — popula em runs do orquestrador
-- [ ] state.json checkpoints reconciliados (ADRs com nomes reais)
-- [ ] plan.md checkboxes alinhados a state.json.completed
+**Translation**: of 28 agents, **only Keeper reacts** to simulated diff — and in degraded mode. Everything else is manual or blocked.
 
 ---
 
-> Próximo passo: priorizar T01-T04 (Sprint 1) e validar com smoke test (T28).
+## Appendix 2 — Inventory of gaps in poc-frame-ai
+
+Initial state after installation (expected gaps to close when T1-T4 ready):
+
+- [ ] `aegis/runtime/context/graph.json` — generate via `aegis graph build`
+- [ ] `aegis/config/active-requirements.json` — null template
+- [ ] `aegis/forward/` — directory
+- [ ] `aegis/reports/drift.md` — first Keeper run bootstraps
+- [ ] `aegis/changelog/` — first Keeper run bootstraps
+- [ ] `aegis/config/files-manifest.json` — regenerate (is deleted in git status)
+- [ ] `aegis/runtime/session-summaries/` — populates in orchestrator runs
+- [ ] state.json checkpoints reconciled (ADRs with real names)
+- [ ] plan.md checkboxes aligned to state.json.completed
+
+---
+
+> Next step: prioritize T01-T04 (Sprint 1) and validate with smoke test (T28).
