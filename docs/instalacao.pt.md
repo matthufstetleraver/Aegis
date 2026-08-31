@@ -21,7 +21,7 @@ O instalador faz tudo isso pra você:
 1. Detecta as engines de IA presentes no ambiente (Claude Code, Codex, Cursor, Gemini CLI, Windsurf)
 2. Pergunta quais agentes instalar (todos selecionados por padrão)
 3. Coleta nome do projeto, idioma e preferências
-4. Copia os agentes para `aegis/skills/` e `aegis/skills/` (para Claude Code)
+4. Copia os agentes para `aegis/skills/`
 5. Cria o arquivo de entrada da engine escolhida (`CLAUDE.md`, `AGENTS.md`, etc.)
 6. Cria a estrutura `aegis/` com estado, configuração e plano
 7. Gera o manifesto SHA-256 para atualizações seguras no futuro
@@ -35,8 +35,7 @@ O instalador faz tudo isso pra você:
 ```
 projeto-legado/
 ├── aegis/               ← estado, config e contexto da análise
-├── aegis/skills/         ← agentes universais (todas as engines)
-├── aegis/skills/         ← mirror para Claude Code
+├── aegis/skills/         ← agentes instalados
 ├── CLAUDE.md               ← ponto de entrada para Claude Code (se detectado)
 ├── AGENTS.md               ← ponto de entrada para Codex (se detectado)
 └── aegis/           ← onde as especificações serão geradas (vazio inicialmente)
