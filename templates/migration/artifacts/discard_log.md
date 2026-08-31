@@ -5,33 +5,33 @@ aegis:
   version: "x.y.z"
 kind: discard_log
 producedBy: curator
-hash: "sha256:<hash do corpo abaixo do front-matter>"
+hash: "sha256:<hash of the body below the front-matter>"
 ---
 
 # Discard Log
 
-> Registro completo do que foi descartado da migração e por quê. Cada item tem rastreabilidade para a origem no legado.
+> Complete record of what was discarded from the migration and why. Each item has traceability to the origin in the legacy system.
 
-## Itens descartados
+## Discarded items
 
-### BR-DESCARTAR-001
-- **Origem**: `aegis/specs/sdd/<unit>/{requirements,design}.md` § <seção>
-- **Descrição**: <regra ou comportamento descartado>
-- **Justificativa**: <texto>
-- **Vinculado a paradigma**: sim | não
-  - Se sim: <qual paradigma e como o paradigma alvo absorve o caso>
-- **Reposição no sistema novo**: <none | substituído por X>
-- **Risco de descartar**: baixo | médio | alto, com nota explicativa
+### BR-DISCARD-001
+- **Source**: `aegis/specs/sdd/<unit>/{requirements,design}.md` § <section>
+- **Description**: <rule or discarded behavior>
+- **Justification**: <text>
+- **Linked to paradigm**: yes | no
+  - If yes: <which paradigm and how the target paradigm absorbs the case>
+- **Replacement in the new system**: <none | replaced by X>
+- **Risk of discarding**: low | medium | high, with explanatory note
 
-<repetir por item>
+<repeat per item>
 
-## Itens descartados por mudança de paradigma (subseção dedicada)
+## Items discarded due to paradigm shift (dedicated subsection)
 
-> Lista apenas dos itens cujo `Vinculado a paradigma = sim`. Auditoria explícita para o agente de codificação.
+> Lists only items where `Linked to paradigm = yes`. Explicit audit for the coding agent.
 
-| ID | Origem | Paradigma legado | Substituto no paradigma alvo |
+| ID | Source | Legacy paradigm | Replacement in target paradigm |
 |---|---|---|---|
-| BR-DESCARTAR-XXX | <ref> | <ex: lock pessimista síncrono> | <ex: idempotência via event ID> |
+| BR-DISCARD-XXX | <ref> | <e.g., pessimistic synchronous locking> | <e.g., idempotency via event ID> |
 
-## Notas
-<Observações finais do Curator sobre o conjunto descartado.>
+## Notes
+<Final observations from the Curator about the discarded set.>
