@@ -1,101 +1,101 @@
 ---
 schemaVersion: 1
 kind: migration_strategies
-description: Catálogo consultivo de estratégias de migração com critérios de aplicabilidade. Usado pelo Strategist.
+description: Advisory catalog of migration strategies with applicability criteria. Used by Strategist.
 ---
 
 # Migration Strategies
 
-> Catálogo das estratégias canônicas de migração com critérios de aplicabilidade, custo, risco, tempo, exemplo e referências.
-> Atualizar este catálogo é tarefa de manutenção independente do agente Strategist.
+> Catalog of canonical migration strategies with applicability criteria, cost, risk, time, example, and references.
+> Updating this catalog is an independent maintenance task of the Strategist agent.
 
-## Estratégias
+## Strategies
 
 ### Strangler Fig
-- **Descrição**: Sistema novo cresce ao redor do legado, capturando funcionalidades incrementalmente até o legado poder ser desligado.
-- **Quando aplica**:
-  - Sistema em produção que não pode parar.
-  - Necessidade de incrementalidade.
-  - Possibilidade de roteamento entre velho e novo (proxy / API gateway).
-- **Custo**: médio.
-- **Risco**: baixo (rollback parcial é viável).
-- **Tempo**: longo (meses a anos em sistemas grandes).
-- **Apetite favorecido**: conservative, balanced.
-- **Exemplo**: API gateway redireciona endpoints `/v2/orders/*` para o sistema novo enquanto `/orders/*` continua no legado.
-- **Referências**: Martin Fowler, "StranglerFigApplication"; Sam Newman, "Monolith to Microservices".
+- **Description**: New system grows around legacy, capturing functionality incrementally until legacy can be shut down.
+- **When to apply**:
+  - Production system that cannot stop.
+  - Need for incrementality.
+  - Possibility of routing between old and new (proxy / API gateway).
+- **Cost**: medium.
+- **Risk**: low (partial rollback is viable).
+- **Time**: long (months to years in large systems).
+- **Favorable appetite**: conservative, balanced.
+- **Example**: API gateway redirects `/v2/orders/*` endpoints to new system while `/orders/*` continues in legacy.
+- **References**: Martin Fowler, "StranglerFigApplication"; Sam Newman, "Monolith to Microservices".
 
 ### Big Bang
-- **Descrição**: Substituição completa em uma única janela de cutover.
-- **Quando aplica**:
-  - Sistema pequeno.
-  - Janela de manutenção tolerada.
-  - Apetite transformacional alto.
-  - Baixa quantidade de integrações externas vivas.
-- **Custo**: baixo (sem manutenção de duas versões).
-- **Risco**: alto (rollback completo é caro; falha derruba o serviço).
-- **Tempo**: curto.
-- **Apetite favorecido**: transformational (em sistemas pequenos).
-- **Exemplo**: ferramenta interna usada por 50 pessoas migrada em uma noite com rollback documentado.
-- **Referências**: descrita em vários frameworks de migração; alta correlação com falhas históricas em sistemas grandes.
+- **Description**: Complete replacement in a single cutover window.
+- **When to apply**:
+  - Small system.
+  - Maintenance window tolerated.
+  - High transformational appetite.
+  - Low number of live external integrations.
+- **Cost**: low (no maintenance of two versions).
+- **Risk**: high (complete rollback is expensive; failure takes down service).
+- **Time**: short.
+- **Favorable appetite**: transformational (in small systems).
+- **Example**: internal tool used by 50 people migrated in one night with documented rollback.
+- **References**: described in various migration frameworks; high correlation with historical failures in large systems.
 
 ### Parallel Run
-- **Descrição**: Legado e novo rodam em paralelo recebendo o mesmo input; output é comparado para detectar divergências.
-- **Quando aplica**:
-  - Lógica crítica (financeiro, fiscal, regulatório).
-  - Necessidade de prova de equivalência por longo período.
-  - Mudança grande de paradigma + apetite transformacional (alto risco operacional).
-- **Custo**: alto (duas pilhas operando simultaneamente; comparação de outputs).
-- **Risco**: médio (riscos vêm da operação dupla, não do corte).
-- **Tempo**: médio.
-- **Apetite favorecido**: balanced.
-- **Exemplo**: cálculo de imposto rodando no legado e no novo por 60 dias; cutover só após divergência < 0,01%.
-- **Referências**: Michael Nygard, "Release It!"; comum em sistemas bancários e fiscais.
+- **Description**: Legacy and new run in parallel receiving same input; output compared to detect divergences.
+- **When to apply**:
+  - Critical logic (financial, fiscal, regulatory).
+  - Need for proof of equivalence over long period.
+  - Large paradigm shift + high transformational appetite (high operational risk).
+- **Cost**: high (two stacks operating simultaneously; output comparison).
+- **Risk**: medium (risks come from dual operation, not from cutover).
+- **Time**: medium.
+- **Favorable appetite**: balanced.
+- **Example**: tax calculation running in legacy and new for 60 days; cutover only after divergence < 0.01%.
+- **References**: Michael Nygard, "Release It!"; common in banking and fiscal systems.
 
 ### Branch by Abstraction
-- **Descrição**: Refatoração interna do legado para introduzir uma abstração que permite trocar a implementação por baixo, depois substituir.
-- **Quando aplica**:
-  - Migração interna (linguagem ou framework muda, mas o domínio fica).
-  - Apetite conservador.
-  - Time já dentro do legado, com domínio do código.
-- **Custo**: baixo.
-- **Risco**: baixo.
-- **Tempo**: médio.
-- **Apetite favorecido**: conservative.
-- **Exemplo**: extrair interface `OrderRepository` no legado, deixar implementação antiga e nova escolhidas por flag, depois remover a antiga.
-- **Referências**: Paul Hammant, "Branch By Abstraction".
+- **Description**: Internal refactoring of legacy to introduce abstraction that allows swapping implementation underneath, then replace.
+- **When to apply**:
+  - Internal migration (language or framework changes, but domain stays).
+  - Conservative appetite.
+  - Team already inside legacy, with code domain knowledge.
+- **Cost**: low.
+- **Risk**: low.
+- **Time**: medium.
+- **Favorable appetite**: conservative.
+- **Example**: extract `OrderRepository` interface in legacy, leave old and new implementations chosen by flag, then remove old one.
+- **References**: Paul Hammant, "Branch By Abstraction".
 
-## Comparativo rápido
+## Quick Comparison
 
-| Estratégia | Quando aplica | Custo | Risco | Tempo |
+| Strategy | When to apply | Cost | Risk | Time |
 |---|---|---|---|---|
-| Strangler Fig | sistema em produção, não pode parar | médio | baixo | longo |
-| Big Bang | sistema pequeno, janela controlada, apetite transformacional | baixo | alto | curto |
-| Parallel Run | lógica crítica (financeiro / fiscal) | alto | médio | médio |
-| Branch by Abstraction | refatoração interna antes da migração | baixo | baixo | médio |
+| Strangler Fig | production system, cannot stop | medium | low | long |
+| Big Bang | small system, controlled window, transformational appetite | low | high | short |
+| Parallel Run | critical logic (financial / fiscal) | high | medium | medium |
+| Branch by Abstraction | internal refactoring before migration | low | low | medium |
 
-## Influência do paradigma na escolha
+## Paradigm Influence on Choice
 
-- **Apetite `conservative`** → favorece Branch by Abstraction e Strangler Fig.
-- **Apetite `balanced`** → favorece Strangler Fig e Parallel Run.
-- **Apetite `transformational`** → permite Big Bang em sistemas pequenos, Strangler Fig com bordas profundas em sistemas maiores.
-- **Mudança grande de paradigma + apetite transformacional** → sinalizar `risco de divergência operacional alto` e recomendar Parallel Run para validação.
+- **`conservative` appetite** → favors Branch by Abstraction and Strangler Fig.
+- **`balanced` appetite** → favors Strangler Fig and Parallel Run.
+- **`transformational` appetite** → allows Big Bang in small systems, Strangler Fig with deep edges in larger systems.
+- **Large paradigm shift + transformational appetite** → signal `high operational divergence risk` and recommend Parallel Run for validation.
 
-## Função utilitária (uso pelo Strategist)
+## Utility Function (use by Strategist)
 
-Pseudo-procedimento que o agente segue ao consultar o catálogo:
+Pseudo-procedure that the agent follows when consulting the catalog:
 
-1. Receber `migration_brief` (escopo, prazo, restrições) + `derived_appetite` + `gap de paradigma`.
-2. Filtrar estratégias por aplicabilidade (drop-out das que claramente não cabem).
-3. Pontuar cada estratégia restante por aderência ao apetite e ao gap.
-4. Selecionar as 2 a 3 melhores candidatas.
-5. Marcar uma como `recomendada` com justificativa explícita.
-6. Para cada estratégia restante, listar contras como motivos de não-recomendação.
+1. Receive `migration_brief` (scope, timeline, constraints) + `derived_appetite` + `paradigm gap`.
+2. Filter strategies by applicability (drop-out those that clearly don't fit).
+3. Score each remaining strategy by adherence to appetite and gap.
+4. Select the 2 to 3 best candidates.
+5. Mark one as `recommended` with explicit justification.
+6. For each remaining strategy, list drawbacks as reasons for non-recommendation.
 
-## Cenários de teste do catálogo
+## Catalog Test Scenarios
 
-1. brief = sistema bancário em produção, apetite conservative → recomendar Strangler Fig + Branch by Abstraction.
-2. brief = ferramenta interna 50 usuários, apetite transformational → recomendar Big Bang.
-3. brief = sistema fiscal, apetite balanced, mudança de paradigma alta → recomendar Parallel Run + Strangler Fig.
-4. brief = monolito Rails para microsserviços Go, apetite transformational, mudança grande de paradigma → recomendar Strangler Fig com bordas profundas, sinalizar risco operacional, sugerir Parallel Run para domínios críticos.
-5. brief = .NET WebForms para Blazor, apetite balanced, sem mudança grande de paradigma → recomendar Strangler Fig.
-6. brief = sistema legacy com poucas integrações, janela de manutenção tolerada, apetite balanced → recomendar Big Bang com plano de rollback robusto, alternativa Strangler Fig.
+1. brief = banking system in production, conservative appetite → recommend Strangler Fig + Branch by Abstraction.
+2. brief = internal tool 50 users, transformational appetite → recommend Big Bang.
+3. brief = fiscal system, balanced appetite, high paradigm shift → recommend Parallel Run + Strangler Fig.
+4. brief = monolithic Rails to Go microservices, transformational appetite, large paradigm shift → recommend Strangler Fig with deep edges, signal operational risk, suggest Parallel Run for critical domains.
+5. brief = .NET WebForms to Blazor, balanced appetite, no large paradigm shift → recommend Strangler Fig.
+6. brief = legacy system with few integrations, tolerated maintenance window, balanced appetite → recommend Big Bang with robust rollback plan, alternative Strangler Fig.

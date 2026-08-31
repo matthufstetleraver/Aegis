@@ -48,54 +48,54 @@ description: Advisory catalog of programming paradigms, stack mapping to natural
 
 ## Stack → Natural Paradigm Mapping
 
-| Stack alvo | Paradigma natural | Alternativas viáveis | Notas |
+| Target Stack | Natural Paradigm | Viable Alternatives | Notes |
 |---|---|---|---|
-| Node.js 20 (Fastify, Express, NestJS) | event-driven assíncrono | OO com DI (NestJS), funcional leve | runtime async-first; bloqueio CPU pesado vai para worker threads |
-| Go (net/http, Echo, Fiber) | CSP / goroutines (event-driven leve) | procedural estruturado | concorrência via channels; OO simulada via interfaces |
-| Rust (axum, Actix, tokio) | ownership / async funcional | event-driven | imutabilidade por default, segurança via tipos |
-| Elixir / Phoenix | actor model (BEAM) | funcional | supervisão via OTP |
-| Python moderno (FastAPI, Django 5) | OO com DI ou procedural rico | event-driven (Celery, asyncio) | escolha depende do framework |
-| Kotlin (Spring Boot, Ktor) | OO com DI | event-driven (Reactor) | corrotinas habilitam async ergonômico |
-| .NET 8 (ASP.NET Core, Minimal API) | OO com DI | event-driven (Channels, MediatR) | tradição OO + assincronismo first-class |
-| Java moderno (Spring Boot 3, Quarkus) | OO com DI | event-driven (Project Reactor) | bibliotecas funcionais possíveis mas não dominantes |
-| Ruby moderno (Rails 7, Hanami) | OO clássico (Rails) ou OO com DI (Hanami) | funcional leve (dry-rb) | Rails dita Active Record; Hanami é DI-heavy |
-| TypeScript serverless (AWS Lambda, Cloudflare Workers) | event-driven | funcional | invocação por evento; cold start influencia design |
+| Node.js 20 (Fastify, Express, NestJS) | async event-driven | OO with DI (NestJS), light functional | runtime async-first; heavy CPU blocking goes to worker threads |
+| Go (net/http, Echo, Fiber) | CSP / goroutines (light event-driven) | structured procedural | concurrency via channels; OO simulated via interfaces |
+| Rust (axum, Actix, tokio) | ownership / async functional | event-driven | immutability by default, safety via types |
+| Elixir / Phoenix | actor model (BEAM) | functional | supervision via OTP |
+| Modern Python (FastAPI, Django 5) | OO with DI or rich procedural | event-driven (Celery, asyncio) | choice depends on framework |
+| Kotlin (Spring Boot, Ktor) | OO with DI | event-driven (Reactor) | coroutines enable ergonomic async |
+| .NET 8 (ASP.NET Core, Minimal API) | OO with DI | event-driven (Channels, MediatR) | OO tradition + first-class asynchrony |
+| Modern Java (Spring Boot 3, Quarkus) | OO with DI | event-driven (Project Reactor) | functional libraries possible but not dominant |
+| Modern Ruby (Rails 7, Hanami) | Classic OO (Rails) or OO with DI (Hanami) | light functional (dry-rb) | Rails dictates Active Record; Hanami is DI-heavy |
+| TypeScript serverless (AWS Lambda, Cloudflare Workers) | event-driven | functional | event invocation; cold start influences design |
 
-## Tabela de gaps típicos por par
+## Typical Gaps by Pair Table
 
-| De → Para | Gap principal | Implicações concretas |
+| From → To | Main Gap | Concrete Implications |
 |---|---|---|
-| procedural → event-driven | sincronia → assincronismo | resposta deixa de ser imediata; tratamento de erro vira retry/DLQ; idempotência obrigatória; ordem de eventos passa a importar |
-| procedural → OO com DI | dados como dict → aggregates | invariantes ficam dentro de aggregates; lógica deixa de viver em controllers; dependências via interfaces |
-| procedural → funcional | side effects abertos → puros + isolados | mutabilidade vira exceção; composição substitui sequência; tipos algébricos para estados |
-| OO clássico → event-driven | fluxo síncrono → coreografia | ações deixam de ser atômicas; transações distribuídas viram sagas; consistência forte → eventual |
-| OO clássico → OO com DI | herança → composição via interfaces | Active Record desaparece; persistência vira repositório; testes ganham mocks naturais |
-| OO clássico → funcional | encapsulamento mutável → imutabilidade | métodos com efeito viram funções puras + atualização explícita; estado expresso como sequência de transformações |
-| OO com DI → event-driven | comando síncrono → evento | retorno deixa de ser imediato; orquestração vira coreografia; ordem por chave |
-| OO com DI → funcional | mocks → composição testável | DI deixa de ser por interface, vira por argumento de função |
-| funcional → event-driven | composição síncrona → mensageria | latência aumenta; falha vira mensagem em DLQ; estado distribuído |
-| event-driven → procedural síncrono | desnatural; só faz sentido para sistemas pequenos | colapsar handlers em chamadas diretas; perda de desacoplamento; consistência forte volta |
-| dataflow → event-driven | DAG declarativa → coreografia mutável | controle fica menos previsível; ordem precisa ser garantida por chave |
-| actor model → OO com DI | mensagens entre atores → chamadas síncronas | perda de isolamento de falha; supervisão precisa virar try/catch ou retry orquestrado |
+| procedural → event-driven | sync → async | response no longer immediate; error handling becomes retry/DLQ; idempotency mandatory; event order starts to matter |
+| procedural → OO with DI | dict data → aggregates | invariants stay inside aggregates; logic stops living in controllers; dependencies via interfaces |
+| procedural → functional | open side effects → pure + isolated | mutability becomes exception; composition replaces sequence; algebraic types for states |
+| classic OO → event-driven | sync flow → choreography | actions stop being atomic; distributed transactions become sagas; strong consistency → eventual |
+| classic OO → OO with DI | inheritance → composition via interfaces | Active Record disappears; persistence becomes repository; tests gain natural mocks |
+| classic OO → functional | mutable encapsulation → immutability | effect methods become pure functions + explicit update; state expressed as transformation sequence |
+| OO with DI → event-driven | sync command → event | return no longer immediate; orchestration becomes choreography; order by key |
+| OO with DI → functional | mocks → testable composition | DI stops being via interface, becomes via function argument |
+| functional → event-driven | sync composition → messaging | latency increases; failure becomes message in DLQ; distributed state |
+| event-driven → sync procedural | unnatural; only makes sense for small systems | collapse handlers into direct calls; lose decoupling; strong consistency returns |
+| dataflow → event-driven | declarative DAG → mutable choreography | control becomes less predictable; order must be guaranteed by key |
+| actor model → OO with DI | messages between actors → sync calls | loss of failure isolation; supervision must become try/catch or orchestrated retry |
 
-## Função utilitária (uso pelo Paradigm Advisor)
+## Utility Function (use by Paradigm Advisor)
 
-Pseudo-procedimento que o agente segue ao consultar o catálogo:
+Pseudo-procedure that the agent follows when consulting the catalog:
 
-1. Receber `paradigma_legado` (detectado) e `stack_alvo` (do brief).
-2. Olhar `Mapeamento stack → paradigma natural`, registrar `paradigma_alvo` e `alternativas`.
-3. Comparar `paradigma_legado` com `paradigma_alvo`:
-   - Se iguais: retornar `gap = nenhum`, `implicações = []`.
-   - Se diferentes: olhar `Tabela de gaps típicos por par` e retornar `implicações`.
-4. Se híbrido no legado: aplicar passo 3 para cada componente e retornar lista combinada.
+1. Receive `legacy_paradigm` (detected) and `target_stack` (from brief).
+2. Look at `Stack → Natural Paradigm Mapping`, record `target_paradigm` and `alternatives`.
+3. Compare `legacy_paradigm` with `target_paradigm`:
+   - If equal: return `gap = none`, `implications = []`.
+   - If different: look at `Typical Gaps by Pair Table` and return `implications`.
+4. If hybrid in legacy: apply step 3 for each component and return combined list.
 
-## Cenários de teste do catálogo (para validação)
+## Catalog Test Scenarios (for validation)
 
-1. legado procedural + stack Node → gap = procedural → event-driven, implicações = [sincronia/assincronismo, idempotência, retry/DLQ, ordem]
-2. legado OO clássico + stack .NET 8 → gap = OO clássico → OO com DI, implicações = [herança/composição, repository, mocks]
-3. legado OO clássico + stack Go → gap = OO clássico → CSP, implicações = [interfaces idiomáticas, channels para coordenação, perda de herança]
-4. legado funcional + stack Elixir → gap = funcional → actor model, implicações = [estado distribuído, supervisão, mensagens]
-5. legado event-driven + stack Node → gap = nenhum
-6. legado COBOL batch + stack TypeScript serverless → gap extremo, implicações múltiplas: batch → event-driven, procedural → tipagem rica, ausência de loops longos → invocações curtas
-7. legado Rails monolítico + stack Hanami → gap = OO clássico (Active Record) → OO com DI, implicações = [repository, dry-monads opcional]
+1. legacy procedural + Node stack → gap = procedural → event-driven, implications = [sync/async, idempotency, retry/DLQ, order]
+2. legacy classic OO + .NET 8 stack → gap = classic OO → OO with DI, implications = [inheritance/composition, repository, mocks]
+3. legacy classic OO + Go stack → gap = classic OO → CSP, implications = [idiomatic interfaces, channels for coordination, loss of inheritance]
+4. legacy functional + Elixir stack → gap = functional → actor model, implications = [distributed state, supervision, messages]
+5. legacy event-driven + Node stack → gap = none
+6. legacy COBOL batch + TypeScript serverless stack → extreme gap, multiple implications: batch → event-driven, procedural → rich typing, absence of long loops → short invocations
+7. legacy monolithic Rails + Hanami stack → gap = classic OO (Active Record) → OO with DI, implications = [repository, optional dry-monads]
 8. legado híbrido (Rails + Sidekiq) + stack Node → híbrido decomposto: parte síncrona Rails → Node sync; parte async Sidekiq → Node fila moderna
