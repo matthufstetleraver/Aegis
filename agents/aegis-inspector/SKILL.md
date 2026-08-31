@@ -41,11 +41,11 @@ The artifacts produced are **parity specs**, not executable tests. The user's co
 
 ## Procedure
 
-### 1. Ler `paradigm_decision.md`
+### 1. Read `paradigm_decision.md`
 
 Identifique a transição de paradigma (se houver). A transição define quais dimensões adicionais de paridade são necessárias.
 
-### 2. Definir estratégia geral em `parity_specs.md`
+### 2. Define the overall strategy in `parity_specs.md`
 
 Selecione e marque os modos de validação aplicáveis:
 
@@ -60,7 +60,7 @@ Critérios de "paridade aceita" obrigatórios:
 - Janela de observação.
 - Critério de bloqueio do cutover.
 
-### 3. Adaptar cobertura ao paradigma alvo
+### 3. Adapt coverage to the target paradigm
 
 Use a tabela abaixo para definir cobertura mínima:
 
@@ -75,7 +75,7 @@ Use a tabela abaixo para definir cobertura mínima:
 
 Documente a cobertura adaptada na seção "Cobertura adaptada ao paradigma" de `parity_specs.md`.
 
-### 4. Identificar fluxos críticos
+### 4. Identify critical flows
 
 Liste fluxos que precisam de cobertura Gherkin:
 
@@ -92,7 +92,7 @@ Cada `.feature` deve:
 - Usar tags consistentes (`@paridade`, `@critico`, `@idempotencia`, `@ordem`, `@regulatorio` quando aplicável).
 - Estar em **Gherkin válido** (Funcionalidade / Cenário / Dado / Quando / Então).
 
-### 5. Reusar characterization_specs
+### 5. Reuse characterization_specs
 
 Se `aegis/characterization_specs/` existir, leia e reuse como base. Adapte:
 
@@ -100,7 +100,7 @@ Se `aegis/characterization_specs/` existir, leia e reuse como base. Adapte:
 - Critérios de aceitação ao paradigma alvo.
 - Mantenha rastreabilidade explícita ao spec original.
 
-### 6. Resumir e devolver controle
+### 6. Summarize and return control
 
 > "Inspector concluiu.
 > - Estratégia de paridade: <modos selecionados>
@@ -110,18 +110,18 @@ Se `aegis/characterization_specs/` existir, leia e reuse como base. Adapte:
 >
 > Pipeline de migração concluído. Próximo passo: orquestrador gera `handoff.md`."
 
-## Casos de borda
+## Edge cases
 
 - **Sem `characterization_specs/`**: derivar cenários a partir de `code-analysis.md` e `sequences/`. Sinalizar lacuna em `parity_specs.md`.
 - **Paradigma alvo é o mesmo do legado**: `parity_specs.md` usa equivalência funcional padrão sem dimensões adicionais.
 - **Paradigma alvo event-driven com fluxos do legado puramente síncronos**: cada fluxo gera ao menos 3 cenários (`@paridade`, `@idempotencia`, `@ordem`).
 - **Estratégia Parallel Run**: detalhar em `parity_specs.md` que comparação é online; especificar campos de divergência aceitável.
 
-## Layout de saída (transversal)
+## Output layout (cross-cutting)
 
 Este agente faz parte do Time de Migração e escreve exclusivamente em `aegis/migration/`. Essa pasta é transversal à organização escolhida em `[specs]` do `config.toml`, fora das pastas de unit (feature folders) do Time de Descoberta. Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
 
-## Regras absolutas
+## Absolute rules
 
 - Não escrever fora de `aegis/migration/`.
 - Arquivos `.feature` são **specs**, não testes executáveis. Não introduza chamadas a frameworks.
