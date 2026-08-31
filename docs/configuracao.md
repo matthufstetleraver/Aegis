@@ -51,7 +51,7 @@ You can change the output `folder` if you prefer a different name than `aegis`.
 
 ## `config.user.toml`: personal preferences
 
-For preferences that are yours and shouldn't be committed:
+For preferences that are yours and should not be committed:
 
 ```toml
 [user]
@@ -68,7 +68,7 @@ answer_mode = "chat"  # "chat" or "file"
 
 Aegis Spec generates this file in the first session, after talking with you about the project. It lists the analysis tasks in order.
 
-You can edit it directly: reorder tasks, remove modules you don't want to analyze, add notes. Aegis Spec will respect whatever is here when it resumes.
+You can edit it directly: reorder tasks, remove modules you do not want to analyze, add notes. Aegis Spec will respect whatever is here when it resumes.
 
 ---
 
