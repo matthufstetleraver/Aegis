@@ -1,121 +1,121 @@
 <!--
-Template de corpo do requirements.md
-Carregado por /aegis-requirements e atualizado por /aegis-doubt.
+Requirements.md body template
+Loaded by /aegis-requirements and updated by /aegis-doubt.
 
-REGRAS DE PREENCHIMENTO:
-- Mantenha a ordem das seções obrigatórias.
-- Não apague seções marcadas como obrigatórias, mesmo quando vazias (use "n/a" se necessário).
-- Comentários inline (entre <!-- -->) só devem ser removidos quando a seção correspondente estiver totalmente preenchida.
-- Use 🟢 / 🟡 / 🔴 conforme a confidência da fonte do aegis/ que sustenta a afirmação.
-- Marque com [DÚVIDA] qualquer ponto onde a informação faltar; máximo de três marcadores no documento inicial.
+FILLING RULES:
+- Maintain the order of required sections.
+- Do not delete sections marked as required, even when empty (use "n/a" if necessary).
+- Inline comments (between <!-- -->) should only be removed when the corresponding section is fully completed.
+- Use 🟢 / 🟡 / 🔴 according to the confidence level of the aegis/ source supporting the statement.
+- Mark with [DOUBT] any point where information is missing; maximum of three markers in the initial document.
 -->
 
-# Requirements: <NOME DA FEATURE>
+# Requirements: <FEATURE NAME>
 
-> Identificador: `<NNN>-<short-name>`
-> Data: `YYYY-MM-DD`
-> Pasta da extração aegis: `aegis/`
-> Confidência: 🟢 CONFIRMADO, 🟡 INFERIDO, 🔴 LACUNA / DÚVIDA
+> Identifier: `<NNN>-<short-name>`
+> Date: `YYYY-MM-DD`
+> aegis extraction folder: `aegis/`
+> Confidence: 🟢 CONFIRMED, 🟡 INFERRED, 🔴 GAP / DOUBT
 
-## 1. Resumo executivo
+## 1. Executive Summary
 
 <!--
-Até cinco linhas. Diga o quê a feature entrega, para quem, e qual problema do legado ela resolve.
-NÃO descreva como será implementada.
+Up to five lines. Say what the feature delivers, for whom, and what legacy problem it resolves.
+DO NOT describe how it will be implemented.
 -->
 
-## 2. Contexto a partir do legado
+## 2. Context from legacy
 
 <!--
-Liste os artefatos da pipeline reversa que sustentam essa feature.
-Cada citação no formato aegis/<arquivo>#<seção>.
-Use confidência herdada da fonte original.
+List artifacts from the reverse pipeline that support this feature.
+Each citation in the format aegis/<file>#<section>.
+Use confidence inherited from the original source.
 -->
 
-| Fonte | Trecho relevante | Confidência |
+| Source | Relevant excerpt | Confidence |
 |-------|------------------|-------------|
-| `aegis/architecture/architecture.md#<seção>` | <resumo> | 🟢 |
-| `aegis/reports/domain.md#<seção>` | <resumo> | 🟢 |
-| `aegis/reports/code-analysis.md#<componente>` | <resumo> | 🟡 |
+| `aegis/architecture/architecture.md#<section>` | <summary> | 🟢 |
+| `aegis/reports/domain.md#<section>` | <summary> | 🟢 |
+| `aegis/reports/code-analysis.md#<component>` | <summary> | 🟡 |
 
-## 3. Personas e cenários de uso
+## 3. Personas and Use Cases
 
-<!-- Quem usa, com qual objetivo, em qual frequência. -->
+<!-- Who uses it, for what objective, and in what frequency. -->
 
-| Persona | Objetivo | Cenário-chave |
+| Persona | Objective | Key Scenario |
 |---------|----------|---------------|
-| <persona> | <objetivo> | <descrição em uma frase> |
+| <persona> | <objective> | <description in one sentence> |
 
-## 4. Regras de negócio novas ou alteradas
+## 4. New or modified business rules
 
 <!--
-Cada regra como item numerado. Para regras que ALTERAM regra confirmada do legado,
-referencie a regra original via `aegis/reports/domain.md#<id>`.
-Marque cada regra com 🟢 / 🟡 / 🔴.
+Each rule as a numbered item. For rules that ALTER a confirmed legacy rule,
+reference the original rule via `aegis/reports/domain.md#<id>`.
+Mark each rule with 🟢 / 🟡 / 🔴.
 -->
 
-1. **RN-01:** <descrição> 🟢
-   - Origem no legado: `aegis/reports/domain.md#<id>` (se aplicável)
-   - Tipo: nova | alterada | removida
+1. **RN-01:** <description> 🟢
+   - Origin in legacy: `aegis/reports/domain.md#<id>` (if applicable)
+   - Type: new | modified | removed
 2. **RN-02:** ...
 
-## 5. Requisitos Funcionais
+## 5. Functional Requirements
 
-| ID | Requisito | Prioridade | Critério de aceite | Confidência |
+| ID | Requirement | Priority | Acceptance Criterion | Confidence |
 |----|-----------|------------|--------------------|-------------|
-| RF-01 | <descrição> | Must | <critério verificável> | 🟢 |
-| RF-02 | <descrição> | Should | <critério verificável> | 🟡 |
+| RF-01 | <description> | Must | <verifiable criterion> | 🟢 |
+| RF-02 | <description> | Should | <verifiable criterion> | 🟡 |
 
-## 6. Requisitos Não Funcionais
+## 6. Non-Functional Requirements
 
-| Tipo | Requisito | Evidência ou justificativa | Confidência |
+| Type | Requirement | Evidence or justification | Confidence |
 |------|-----------|----------------------------|-------------|
-| Desempenho | <requisito> | <fonte ou rationale> | 🟢 |
-| Segurança | <requisito> | <fonte ou rationale> | 🟡 |
-| Observabilidade | <requisito> | <fonte ou rationale> | 🟡 |
+| Performance | <requirement> | <source or rationale> | 🟢 |
+| Security | <requirement> | <source or rationale> | 🟡 |
+| Observability | <requirement> | <source or rationale> | 🟡 |
 
-## 7. Critérios de Aceitação
+## 7. Acceptance Criteria
 
 ```gherkin
-Cenário: <título>
-  Dado <pré-condição>
-  Quando <ação do ator>
-  Então <resultado observável>
+Scenario: <title>
+  Given <pre-condition>
+  When <actor action>
+  Then <observable result>
 
-Cenário: <título do caso negativo>
-  Dado <pré-condição>
-  Quando <ação inválida>
-  Então <comportamento esperado de falha>
+Scenario: <negative case title>
+  Given <pre-condition>
+  When <invalid action>
+  Then <expected failure behavior>
 ```
 
-## 8. Prioridade MoSCoW
+## 8. MoSCoW Priority
 
-| Item | MoSCoW | Justificativa |
+| Item | MoSCoW | Justification |
 |------|--------|---------------|
-| RF-01 | Must | <razão> |
-| RF-02 | Should | <razão> |
-| RNF de desempenho | Should | <razão> |
+| RF-01 | Must | <reason> |
+| RF-02 | Should | <reason> |
+| Performance RNF | Should | <reason> |
 
-## 9. Esclarecimentos
-
-<!--
-Esta seção é preenchida APENAS por /aegis-doubt.
-Antes da primeira sessão de dúvidas, mantenha a seção com o aviso abaixo.
--->
-
-> Nenhuma sessão de dúvidas registrada ainda. Rode `/aegis-doubt` quando houver `[DÚVIDA]` pendente.
-
-## 10. Lacunas
+## 9. Clarifications
 
 <!--
-Liste pontos sem resposta. Lacunas resolvidas pelo /aegis-doubt saem daqui e ficam registradas no histórico.
+This section is filled ONLY by /aegis-doubt.
+Before the first doubt session, keep the section with the warning below.
 -->
 
-- 🔴 [DÚVIDA] <ponto sem resposta>
-- 🔴 [DÚVIDA] <ponto sem resposta>
+> No doubt sessions recorded yet. Run `/aegis-doubt` when there are pending `[DOUBT]` markers.
 
-## 11. Histórico de alterações
+## 10. Gaps
 
-| Data | Alteração | Autor |
+<!--
+List unanswered points. Gaps resolved by /aegis-doubt are moved out of here and recorded in the history.
+-->
+
+- 🔴 [DOUBT] <unanswered point>
+- 🔴 [DOUBT] <unanswered point>
+
+## 11. Change History
+
+| Date | Change | Author |
 |------|-----------|-------|
-| YYYY-MM-DD | Versão inicial gerada por `/aegis-requirements` | reversa |
+| YYYY-MM-DD | Initial version generated by `/aegis-requirements` | reverse |
