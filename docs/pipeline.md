@@ -39,7 +39,7 @@ This is also when Aegis Spec presents the Scout summary and asks for the **docum
 
 **Agent:** Archaeologist
 
-The Archaeologist digs through the code module by module. With patience and precision, it catalogs every artifact: functions, algorithms, data structures, control flows. No interpretation or judgment. Just a precise description of what's there.
+The Archaeologist digs through the code module by module. With patience and precision, it catalogs every artifact: functions, algorithms, data structures, control flows. No interpretation or judgment. Just a precise description of what is there.
 
 **Important:** the Archaeologist runs one module per session, intentionally. Large projects have many modules, and trying to analyze everything at once burns context and reduces analysis quality.
 

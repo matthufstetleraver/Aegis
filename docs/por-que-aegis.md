@@ -28,7 +28,7 @@ The result is not documentation for humans to read on a quiet afternoon. These a
 
 ---
 
-## Who it's for
+## Who it is for
 
 - **Companies with legacy systems** that want to modernize without rewriting everything from scratch
 - **Teams that use vibe coding** and never wrote formal specs (no judgment)

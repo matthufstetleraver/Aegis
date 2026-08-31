@@ -47,7 +47,7 @@ The field exists, the pattern is well-known, but nowhere in the code is it expli
 
 > Could not determine the system's behavior when payment fails due to gateway timeout.
 
-The code calls the gateway, but there is no timeout error handling. The actual behavior may exist at the infrastructure layer, in a database that wasn't analyzed, or may never have been implemented. Someone who knows the system needs to answer this.
+The code calls the gateway, but there is no timeout error handling. The actual behavior may exist at the infrastructure layer, in a database that was not analyzed, or may never have been implemented. Someone who knows the system needs to answer this.
 
 ---
 
