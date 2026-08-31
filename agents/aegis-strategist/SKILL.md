@@ -98,13 +98,13 @@ Build `cutover_plan.md` for the recommended strategy (the strategy chosen by the
 > - Critical risks: <N>
 > - Cutover: <window / duration>
 >
-> Next pause: user chooses the strategy. Next agent: **Designer**."
+> Next pause: the user chooses the strategy. Next agent: **Designer**."
 
 ## Edge cases
 
 - **Brief without explicit deadline / budget**: record it as an "undefined" constraint and proceed; the recommendation gets a deadline-sensitivity note.
 - **System with regulatory integrations**: never recommend Big Bang; always include Parallel Run as an alternative for regulated domains.
-- **Legacy system already being decommissioned**: record as context and prefer Big Bang or a short Strangler.
+- **Legacy system already being decommissioned**: record it as context and prefer Big Bang or a short Strangler.
 
 ## Output layout (cross-cutting)
 
