@@ -18,50 +18,50 @@ Migration is a **next step** after the main Aegis Spec flow. The user first runs
 ## Pipeline
 
 ```
-Time de Descoberta:    Scout → Archaeologist → Detective → Architect → Writer → Reviewer
+Discovery Team:        Scout → Archaeologist → Detective → Architect → Writer → Reviewer
                                               │
                                               ▼
                                        aegis/
                                               │
                                               ▼
-Time de Migração:      Paradigm Advisor → Curator → Strategist → Designer → Inspector
+Migration Team:        Paradigm Advisor → Curator → Strategist → Designer → Inspector
                                               │
                                               ▼
                                   aegis/migration/
                                               │
                                               ▼
-                          Agente de codificação do usuário escreve código
+                          User coding agent writes code
 ```
 
 O orquestrador **não** toca em código legado, **não** faz parsing de schemas, **não** faz arqueologia. Opera 100% no nível das specs já produzidas.
 
-## Comportamento ao ser ativado
+## Behavior when activated
 
 Execute estritamente nesta ordem:
 
-### Passo 1: Pré-condições
+### Step 1: Preconditions
 
 1. Verifique que `aegis/` existe.
-   - Se não: encerre com a mensagem:
-     > "Não encontrei `aegis/`. Execute `/aegis` primeiro para gerar as specs do sistema legado."
-2. Carregue a lista de artefatos esperados em `references/expected_legacy_artifacts.yaml` (cópia local da skill).
-3. Para cada artefato `required: true`, verifique presença em `aegis/` (considere também aliases declarados).
-   - Se algum faltar: liste todos os faltantes, informe que o pipeline está bloqueado, peça ao usuário rodar `/aegis` novamente, e encerre.
+   - If not: stop with the message:
+     > "I couldn't find `aegis/`. Run `/aegis` first to generate the legacy system specs."
+2. Load the expected artifacts list from `references/expected_legacy_artifacts.yaml` (local copy of the skill).
+3. For each artifact with `required: true`, verify its presence in `aegis/` (consider declared aliases too).
+   - If any are missing: list all missing items, say the pipeline is blocked, ask the user to run `/aegis` again, and stop.
 
-### Passo 2: Estado e modo
+### Step 2: State and mode
 
-1. Se `aegis/migration/.state.json` **não existir**: este é primeiro run; siga para o passo 3.
-2. Se existir: leia. Identifique `currentAgent.agent`, `currentAgent.phase`, `currentAgent.status`, `completedAgents`.
-   - **Caso especial: pausa intra-agente pendente.** Se `currentAgent.status == "awaiting_user_approval"` (típico após Designer Fase 1, sessão fechada antes da aprovação): releia o artefato em pausa (`topology_decision.md` quando `phase == "topology"`), reconstrua o resumo de 3 a 8 linhas usando o template do passo correspondente do agente, e re-execute a pausa humana antes de prosseguir. Não ofereça menu de opções até resolver a pausa.
-   - **Caso normal**, pergunte ao usuário:
-     > "Encontrei uma migração em andamento. Concluído: <agentes>. Pendente: <agentes>.
-     > 1. Continuar de onde parou (`--resume`)
-     > 2. Recriar tudo (`--regenerate=paradigm_advisor`)
-     > 3. Recriar a partir de um agente específico
-     > 4. Cancelar"
-3. **Modo `--auto`**: se o usuário invocou explicitamente `--auto`, exiba aviso listando todos os defaults que serão aplicados (ver `references/auto-defaults.md`) e peça confirmação antes de prosseguir.
+1. If `aegis/migration/.state.json` does **not** exist: this is the first run; continue to step 3.
+2. If it exists: read it. Identify `currentAgent.agent`, `currentAgent.phase`, `currentAgent.status`, `completedAgents`.
+   - **Special case: pending intra-agent pause.** If `currentAgent.status == "awaiting_user_approval"` (typical after Designer Phase 1, session closed before approval): reread the paused artifact (`topology_decision.md` when `phase == "topology"`), reconstruct the 3-to-8-line summary using that agent's step template, and re-run the human pause before proceeding. Do not offer the option menu until the pause is resolved.
+   - **Normal case**, ask the user:
+     > "I found an ongoing migration. Completed: <agents>. Pending: <agents>.
+     > 1. Continue from where it stopped (`--resume`)
+     > 2. Recreate everything (`--regenerate=paradigm_advisor`)
+     > 3. Recreate from a specific agent
+     > 4. Cancel"
+3. **`--auto` mode**: if the user explicitly invoked `--auto`, show a warning listing all defaults that will be applied (see `references/auto-defaults.md`) and ask for confirmation before proceeding.
 
-### Passo 3: Coleta do brief (entrevista)
+### Step 3: Brief collection (interview)
 
 Se `aegis/migration/migration_brief.md` **não existir**, conduza a entrevista; caso contrário, ofereça `revisar / manter / recriar`.
 

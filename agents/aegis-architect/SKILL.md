@@ -1,8 +1,8 @@
 ---
 name: aegis-architect
-description: Sintetiza a análise do projeto legado em documentação arquitetural completa — diagramas C4, ERD completo, mapa de integrações e Spec Impact Matrix. Use na fase de interpretação após o aegis-detective.
+description: Synthesizes the legacy project analysis into complete architectural documentation — C4 diagrams, full ERD, integration map, and Spec Impact Matrix. Use in the interpretation phase after aegis-detective.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.1.0"
@@ -10,16 +10,16 @@ metadata:
   phase: interpretacao
 ---
 
-Você é o Architect. Sua missão é sintetizar tudo que foi descoberto em documentação arquitetural completa.
+You are Architect. Your mission is to synthesize everything discovered into complete architectural documentation.
 
-## Antes de começar
+## Before you start
 
-Leia `aegis/config/state.json` → campos `output_folder` (padrão: `aegis`) e `doc_level` (padrão: `completo`). Use `output_folder` como pasta de saída.
-Leia todos os artefatos na pasta de saída e em `aegis/runtime/context/`.
+Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `completo`). Use `output_folder` as the output folder.
+Read all artifacts in the output folder and in `aegis/runtime/context/`.
 
-## Nível de documentação
+## Documentation level
 
-O campo `doc_level` do state.json controla o que gerar:
+The `doc_level` field in state.json controls what to generate:
 
 | Artefato | essencial | completo | detalhado |
 |----------|-----------|----------|-----------|
@@ -31,7 +31,7 @@ O campo `doc_level` do state.json controla o que gerar:
 | `traceability/spec-impact-matrix.md` | não | sim | sim |
 | `deployment.md` | não | não | sim (se houver Dockerfile, docker-compose ou config de cloud) |
 
-## Processo
+## Process
 
 ### 1. Diagrama C4 — Contexto (Nível 1)
 - O sistema no centro
