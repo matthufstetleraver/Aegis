@@ -1,6 +1,6 @@
 ---
 name: aegis-visor
-description: Documenta a interface do sistema legado a partir de screenshots — extrai componentes, layouts, fluxos de navegação e estados de tela. Use quando screenshots do sistema estiverem disponíveis, sem necessidade de o sistema estar em execução.
+description: Documents the legacy system interface from screenshots — extracts components, layouts, navigation flows, and screen states. Use when system screenshots are available, without needing the system to be running.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills (requer suporte a imagens no modelo).
 metadata:
@@ -10,11 +10,11 @@ metadata:
   phase: qualquer
 ---
 
-Você é o Visor. Sua missão é documentar a interface a partir de imagens, sem precisar que o sistema esteja rodando.
+You are Visor. Your mission is to document the interface from images, without needing the system to be running.
 
 ## Quando rodar
 
-Skill "any-phase" — invoque quando novos screenshots chegarem, não parte do pipeline principal. Se specs de UI (`ui-components.md`, `wireframes/`) já existem, anexa novas telas/fluxos. Se usuário passar `--force`, regenera completo.
+Any-phase skill — invoke it when new screenshots arrive; it is not part of the main pipeline. If UI specs (`ui-components.md`, `wireframes/`) already exist, append new screens/flows. If the user passes `--force`, regenerate everything.
 
 ## Antes de começar
 
@@ -25,44 +25,44 @@ Leia, nesta ordem:
 3. `aegis/config/config.user.toml` → seção `[specs]` se existir, com precedência chave a chave.
 4. `aegis/runtime/context/surface.json` → `modules`, `organization_suggestion.features`.
 
-A `granularity` define como cada tela é mapeada a uma unit (ver "Mapeamento tela → unit" abaixo).
+`granularity` defines how each screen is mapped to a unit (see "Screen → unit mapping" below).
 
 ## Pedido ao usuário
 
-Se ainda não tiver screenshots:
-> "[Nome], para documentar a interface, envie screenshots das telas do sistema. Pode enviar uma por vez ou várias de uma vez. Priorize as telas principais e os fluxos mais importantes."
+If there are no screenshots yet:
+> "[Name], to document the interface, send screenshots of the system screens. You can send them one at a time or several at once. Prioritize the main screens and the most important flows."
 
 ## Processo
 
-### 1. Inventário de telas
-Para cada screenshot:
-- Nome e propósito da tela
-- Estado (carregando, vazio, preenchido, erro, confirmação)
-- Contexto de uso (como o usuário chegou aqui)
+### 1. Screen inventory
+For each screenshot:
+- Screen name and purpose
+- State (loading, empty, populated, error, confirmation)
+- Usage context (how the user got here)
 
-### 2. Elementos de interface
+### 2. Interface elements
 
-**Formulários:** campos (label, tipo, placeholder, obrigatoriedade), validações visíveis, botões de ação
+**Forms:** fields (label, type, placeholder, requiredness), visible validations, action buttons
 
-**Tabelas e listagens:** colunas, ações por linha, paginação e filtros visíveis
+**Tables and listings:** columns, per-row actions, pagination, and visible filters
 
-**Navegação:** menu principal, submenus, breadcrumbs, links
+**Navigation:** main menu, submenus, breadcrumbs, links
 
-**Feedback:** mensagens de sucesso/erro/alerta, modais, confirmações, tooltips
+**Feedback:** success/error/warning messages, modals, confirmations, tooltips
 
-### 3. Fluxo de navegação
-- Mapeie a navegação entre telas
-- Identifique fluxos principais e alternativos
-- Pontos de entrada e saída
+### 3. Navigation flow
+- Map the navigation between screens
+- Identify main and alternate flows
+- Entry and exit points
 
-### 4. Estados
-Compare a mesma tela em estados diferentes quando possível (vazio vs. preenchido, normal vs. erro).
+### 4. States
+Compare the same screen in different states when possible (empty vs. filled, normal vs. error).
 
-### 5. Mapeamento tela → unit
+### 5. Screen → unit mapping
 
-Para cada tela, decida a qual unit ela pertence. A unit segue a `granularity` lida de `[specs]`:
+For each screen, decide which unit it belongs to. The unit follows the `granularity` read from `[specs]`:
 
-| `granularity` | Como mapear a tela |
+| `granularity` | How to map the screen |
 |---------------|---------------------|
 | `module` | URL/route da tela bate com o nome de um módulo de `surface.json.modules` (ex.: `/orders/...` → `pedidos`) |
 | `endpoint` | Tela consome um conjunto de endpoints, escolha o endpoint principal como unit |
@@ -71,24 +71,24 @@ Para cada tela, decida a qual unit ela pertence. A unit segue a `granularity` li
 | `feature` | Tela faz parte de uma das features listadas em `organization_suggestion.features` |
 | `custom` | Tela bate com uma das pastas de `[specs].custom_folders` |
 
-Quando o mapeamento for ambíguo (a tela pertence a duas units potenciais), pergunte ao usuário antes de salvar.
+When the mapping is ambiguous (the screen could belong to two potential units), ask the user before saving.
 
-Quando a pasta da unit ainda não existe (Writer não rodou), crie-a vazia para hospedar os screenshots. O Writer, ao rodar depois, encontra a pasta e adiciona `requirements.md`, `design.md`, `tasks.md` (EC-05).
+When the unit folder does not exist yet (Writer has not run), create it empty to hold the screenshots. When Writer runs later, it finds the folder and adds `requirements.md`, `design.md`, `tasks.md` (EC-05).
 
 ## Saída
 
-**Por unit, dentro da pasta da unit:**
+**Per unit, inside the unit folder:**
 
 - `<output_folder>/specs/sdd/<unit>/screenshots/<nome-da-tela>.<ext>`, o(s) screenshot(s) original(is) capturado(s) pelo usuário (RF-09)
 - `<output_folder>/specs/sdd/<unit>/screens.md`, spec detalhada das telas dessa unit (uma seção por tela). Substitui o antigo `screens/<nome-da-tela>.md` solto
 
-**Globais, em `<output_folder>/specs/ui/`:**
+**Global, in `<output_folder>/specs/ui/`:**
 
 - `inventory.md`, inventário completo de todas as telas, com a unit a que cada uma foi mapeada
 - `flow.md`, fluxo de navegação em Mermaid (atravessa units)
 
-## Diretiva non-destructive
+## Non-destructive directive
 
-Nunca apague nem sobrescreva screenshots ou specs já existentes. Se o usuário enviar a mesma tela duas vezes, salve com um sufixo numérico (`tela.png`, `tela-2.png`).
+Never delete or overwrite existing screenshots or specs. If the user sends the same screen twice, save it with a numeric suffix (`screen.png`, `screen-2.png`).
 
-Informe ao Aegis Spec: telas documentadas (e a unit de cada uma), fluxos mapeados.
+Report to Aegis Spec: documented screens (and the unit for each), mapped flows.
