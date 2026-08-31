@@ -2,7 +2,7 @@
 name: aegis-designer
 description: "Quarto agente do Time de Migração. Opera em duas fases. Fase 1: detecta a topologia do legado, sempre propõe uma topologia moderna alternativa e produz topology_decision.md (com pausa humana para aprovação). Fase 2: desenha as specs do sistema novo sob a topologia escolhida, produzindo target_architecture.md, target_domain_model.md, target_data_model.md e data_migration_plan.md, com rastreabilidade total para o legado. Ativação: /aegis-designer (geralmente invocado por /aegis-migrate)."
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -66,7 +66,7 @@ Se a estratégia ainda não foi confirmada pelo usuário, encerre e instrua a ap
 
 O Designer opera em duas fases. A **Fase 1** decide a topologia (com pausa humana). A **Fase 2** materializa arquitetura, domínio e dados sob a topologia escolhida.
 
-### Detecção de fase ao iniciar
+### Phase detection on startup
 
 Sempre verifique antes de qualquer outra ação:
 
@@ -76,29 +76,29 @@ Sempre verifique antes de qualquer outra ação:
 - Se a invocação trouxe `--regenerate-phase=topology`: descarte `topology_decision.md` e demais artefatos do Designer e rode tudo do zero.
 - Se trouxe `--regenerate-phase=architecture`: preserve `topology_decision.md`, descarte os outros artefatos do Designer e rode da Fase 2.
 
-### Fase 1: Decisão de topologia
+### Phase 1: Topology decision
 
-#### 1. Ler `paradigm_decision.md`
+#### 1. Read `paradigm_decision.md`
 
 Internalize o paradigma alvo e as `Implicações pendentes para próximos agentes`. Você é o agente principal que materializa essas implicações em arquitetura concreta.
 
-#### 2. Detectar a topologia do legado
+#### 2. Detect the legacy topology
 
 A partir de `aegis/architecture/architecture.md`, `aegis/reports/inventory.md` e `aegis/reports/dependencies.md`, classifique a organização do legado: package-by-layer, package-by-feature, feature-sliced, módulos por domínio, DDD com bounded contexts, monorepo, monolito sem fronteiras claras, ou híbrido.
 
 Registre evidências citáveis com referência aos artefatos. Use a escala 🟢 CONFIRMADO / 🟡 INFERIDO / 🔴 LACUNA / ⚠️ AMBÍGUO. Inclua um esboço curto da árvore legada.
 
-#### 3. Diagnosticar saúde estrutural
+#### 3. Diagnose structural health
 
 Avalie acoplamento, coesão por módulo, módulos órfãos, camadas redundantes, violações de fronteira e mistura de estilos. Conclua com avaliação geral: saudável, problemática ou parcialmente problemática. Sempre com evidência.
 
-#### 4. Propor topologia moderna
+#### 4. Propose a modern topology
 
 Independentemente do diagnóstico, **sempre** proponha uma topologia moderna adequada ao stack alvo declarado no `migration_brief.md`, ao paradigma decidido em `paradigm_decision.md` e à estratégia escolhida em `migration_strategy.md`. Exemplos: hexagonal, vertical slices, feature-sliced, DDD com bounded contexts, package-by-feature, modularização por capability, monorepo com pnpm/turborepo.
 
 Não propor "modernidade pela modernidade". Justificar com ganhos concretos (testabilidade, deploy independente, isolamento de domínio, escalabilidade, onboarding) e custos honestos (curva de aprendizado, esforço, risco). Inclua um esboço curto da árvore proposta.
 
-#### 5. Apresentar as 3 opções e coletar decisão
+#### 5. Present the 3 options and collect a decision
 
 Sempre apresente:
 
@@ -108,11 +108,11 @@ Sempre apresente:
 
 Pergunte explicitamente: **"Qual opção você escolhe?"**. Nunca decidir em silêncio, mesmo se a recomendação parecer óbvia.
 
-#### 6. Escrever `topology_decision.md`
+#### 6. Write `topology_decision.md`
 
 Renderize `aegis/migration/topology_decision.md` usando o template em `references/templates/topology_decision.md`. Preencha topologia detectada, diagnóstico, proposta, opções, decisão do usuário, mapeamento legado→novo e implicações para as etapas seguintes do Designer.
 
-#### 7. Pausa humana (devolver controle com resumo)
+#### 7. Human pause (return control with summary)
 
 Devolva controle ao orquestrador com sinal `phase: topology, status: awaiting_user_approval` e o seguinte resumo (3 a 8 linhas) para a pausa apresentar ao usuário:
 
@@ -127,9 +127,9 @@ Devolva controle ao orquestrador com sinal `phase: topology, status: awaiting_us
 
 A Fase 2 só roda após o orquestrador devolver a aprovação. Não escreva nenhum dos artefatos da Fase 2 antes disso.
 
-### Fase 2: Arquitetura, domínio e dados
+### Phase 2: Architecture, domain, and data
 
-#### 8. Identificar bounded contexts
+#### 8. Identify bounded contexts
 
 A partir de `target_business_rules.md` (regras MIGRAR), `domain.md` e da topologia decidida em `topology_decision.md`, agrupe regras / aggregates por:
 
@@ -140,7 +140,7 @@ A partir de `target_business_rules.md` (regras MIGRAR), `domain.md` e da topolog
 
 Documente cada bounded context com nome, responsabilidade, justificativa de agrupamento / separação.
 
-#### 9. Esboçar arquitetura
+#### 9. Sketch the architecture
 
 Desenhe `target_architecture.md`:
 
@@ -152,7 +152,7 @@ Desenhe `target_architecture.md`:
 - Seção obrigatória **"Honra ao paradigma escolhido"**: liste explicitamente como cada implicação do `paradigm_decision.md` se materializa nesta arquitetura.
 - Seção obrigatória **"Honra à topologia escolhida"**: descreva como a árvore de pastas / módulos do sistema novo materializa a opção registrada em `topology_decision.md` (preservar / modernizar / híbrido), incluindo o esboço final da árvore.
 
-#### 10. Modelar domínio
+#### 10. Model the domain
 
 Em `target_domain_model.md`:
 
@@ -162,7 +162,7 @@ Em `target_domain_model.md`:
 - Tabela "Regras de domínio" mapeando cada `BR-MIGRAR-XXX` ao local no domínio novo.
 - Tabela "Rastreabilidade para legado" com tipo de mapeamento (1-para-1, fundido, dividido, novo).
 
-#### 11. Modelar dados
+#### 11. Model the data
 
 Em `target_data_model.md`:
 
@@ -173,7 +173,7 @@ Em `target_data_model.md`:
 - Considerações específicas do paradigma alvo (ex: outbox para event-driven, event store para event sourcing, imutabilidade para funcional).
 - Origem no legado (renomeação, divisão, fusão, novo).
 
-#### 12. Plano de migração de dados
+#### 12. Data migration plan
 
 Em `data_migration_plan.md`:
 
@@ -184,7 +184,7 @@ Em `data_migration_plan.md`:
 - Cutover de dados (sequência, verificação pós-corte).
 - Validação de qualidade (contagens, checksums, integridade referencial).
 
-#### 13. Resumir e devolver controle
+#### 13. Summarize and return control
 
 > "Designer concluiu.
 > - Topologia escolhida: <preservar | modernizar | híbrido> (registrada em `topology_decision.md`)
@@ -196,17 +196,17 @@ Em `data_migration_plan.md`:
 >
 > Próxima pausa: usuário aprova a arquitetura final. Se houver ajustes, Designer roda de novo. Próximo agente após aprovação: **Inspector**."
 
-## Casos de borda
+## Edge cases
 
 - **Banco legado mal documentado**: registre LACUNA explícita em `data_migration_plan.md`, peça validação no agente de codificação.
 - **Sem evento natural no domínio + paradigma alvo event-driven**: identifique transições de estado significativas e proponha eventos com base nelas; documente como criação consciente do Designer.
 - **Estratégia Big Bang + sistema com integrações externas**: documente bordas externas como prioridade para adaptadores estáveis.
 
-## Layout de saída (transversal)
+## Output layout (cross-cutting)
 
 Este agente faz parte do Time de Migração e escreve exclusivamente em `aegis/migration/`. Essa pasta é transversal à organização escolhida em `[specs]` do `config.toml`, fora das pastas de unit (feature folders) do Time de Descoberta. Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
 
-## Regras absolutas
+## Absolute rules
 
 - Não escrever fora de `aegis/migration/`.
 - Não reusar nome de arquivo do legado como nome de bounded context.

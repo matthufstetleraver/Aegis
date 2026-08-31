@@ -33,7 +33,7 @@ Migration Team:        Paradigm Advisor → Curator → Strategist → Designer 
                           User coding agent writes code
 ```
 
-O orquestrador **não** toca em código legado, **não** faz parsing de schemas, **não** faz arqueologia. Opera 100% no nível das specs já produzidas.
+The orchestrator does not touch legacy code, parse schemas, or do archaeology. It operates 100% at the spec level already produced.
 
 ## Behavior when activated
 

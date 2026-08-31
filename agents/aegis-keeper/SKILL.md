@@ -38,23 +38,23 @@ Received as an invocation argument (`/aegis-keeper before`, `/aegis-keeper after
 
 ---
 
-## Modo `before <descrição-ou-arquivos>`
+## Mode `before <description-or-files>`
 
 Apresenta os contratos e invariantes que o usuário precisa respeitar antes de fazer uma mudança. **Read-only — não escreve nada.**
 
-### Passo 1 — Identificar arquivos alvo
+### Step 1 — Identify target files
 
 - Se o argumento for caminho de arquivo: use direto
 - Se for descrição em linguagem natural ("vou mexer no login"): pergunte ao usuário quais arquivos serão tocados, ou tente inferir a partir de `aegis/traceability/code-spec-matrix.md`
 
-### Passo 2 — Mapear specs impactadas
+### Step 2 — Map impacted specs
 
 Leia `aegis/traceability/code-spec-matrix.md`. Para cada arquivo alvo, identifique a coluna "Spec correspondente". Liste as specs únicas.
 
 Se a `code-spec-matrix.md` não existir, encerre:
 > "Matriz de rastreabilidade ausente. Rode `/aegis-architect` ou `/aegis-writer` primeiro."
 
-### Passo 3 — Extrair contratos das specs
+### Step 3 — Extract contracts from specs
 
 Leia **apenas** as specs identificadas (não todas — preserve tokens). Para cada uma, extraia:
 
@@ -66,7 +66,7 @@ Leia **apenas** as specs identificadas (não todas — preserve tokens). Para ca
 - Permissões — leia `aegis/reports/permissions.md` quando há mudança em arquivo de auth/RBAC/middleware
 - Architecture — quando mudança envolve container/componente declarado, leia `aegis/architecture/architecture.md`, `c4-containers.md`, `c4-components.md`
 
-### Passo 4 — Apresentar briefing
+### Step 4 — Present the briefing
 
 Mostre ao usuário:
 
@@ -94,11 +94,11 @@ Aguarde resposta. **Não escreva nada — modo informativo apenas.**
 
 ---
 
-## Modo `after`
+## Mode `after`
 
 Atualiza specs, changelog e dashboard de drift após uma mudança de código.
 
-### Passo 1 — Coletar arquivos alterados
+### Step 1 — Collect changed files
 
 Combine duas fontes:
 
@@ -127,7 +127,7 @@ Execute `git diff --name-only HEAD` para listar modificações não commitadas. 
 Se vazia em ambas: encerre.
 > "Nenhuma mudança detectada (queue vazia e git diff limpo). Nada a documentar."
 
-### Passo 2 — Mapear specs impactadas (matrix + graph)
+### Step 2 — Map impacted specs (matrix + graph)
 
 **Fonte primária — matrix**: leia `aegis/traceability/code-spec-matrix.md`. Para cada arquivo alterado:
 - Se tem spec correspondente: marque para atualização
@@ -141,11 +141,11 @@ npx aegis-spec graph impact <arquivo> --json
 
 O comando retorna lista de arquivos transitivamente afetados. Para cada arquivo no resultado:
 - Se algum tem spec na matrix → essa spec também precisa de revisão (mesmo que o arquivo editado não esteja diretamente nela). Marque como "afetada via graph" e inclua na lista de specs a verificar.
-- Anote a contagem de reverse-deps (`npx aegis-spec graph reverse-deps <arquivo> --json`) — usada na Passo 7 para classificar severidade do drift.
+- Record the reverse-deps count (`npx aegis-spec graph reverse-deps <arquivo> --json`) — used in Step 7 to classify drift severity.
 
 Se `aegis/runtime/context/graph.json` não existir, sugira ao usuário rodar `npx aegis-spec graph build` antes de prosseguir, ou siga somente com a matrix (modo degradado).
 
-### Passo 3 — Fazer as 3 perguntas
+### Step 3 — Ask the 3 questions
 
 Apresente o resumo do que mudou e pergunte:
 
@@ -158,7 +158,7 @@ Apresente o resumo do que mudou e pergunte:
 > 2. Há **quebra de compatibilidade** ou efeito colateral?
 > 3. Tem **contexto extra** importante? *(pode pular)*"
 
-### Passo 4 — Atualizar cada spec impactada
+### Step 4 — Update each impacted spec
 
 Para cada spec na lista:
 
@@ -178,19 +178,19 @@ Para cada spec na lista:
 | YYYY-MM-DD HH:MM | [descrição curta] | [changelog/YYYY-MM-DD.md] |
 ```
 
-### Passo 5 — Append no changelog do dia
+### Step 5 — Append to today's changelog
 
 Crie ou atualize `<output_folder>/changelog/YYYY-MM-DD.md` (data de hoje em UTC). **Nunca sobrescreva entradas anteriores — sempre append.**
 
 Use o template em `references/changelog-template.md`.
 
-### Passo 6 — Atualizar `code-spec-matrix.md`
+### Step 6 — Update `code-spec-matrix.md`
 
 Para arquivos novos (sem entrada na matriz): adicione linha com a spec mais provável (heurística: spec do diretório pai, ou spec marcada para atualização nesta sessão).
 
 Para arquivos deletados: marque a linha como `~~deletado~~` (não remova histórico).
 
-### Passo 7 — Atualizar `drift.md`
+### Step 7 — Update `drift.md`
 
 Crie ou atualize `<output_folder>/reports/drift.md` seguindo `references/drift-dashboard-schema.md`.
 
@@ -209,13 +209,13 @@ Para specs marcadas como `pending` por hooks anteriores que foram resolvidas: mu
 
 Para specs que esta sessão **não tocou** mas que estão `pending` há mais de 7 dias: mude `status` para `🟡 stale` com `suggested_action: "Rodar /aegis-archaeologist"`.
 
-### Passo 8 — Limpar a queue
+### Step 8 — Clear the queue
 
 Se `aegis/runtime/queue/keeper-queue.processing.jsonl` foi consumida com sucesso: delete o arquivo. Próxima invocação encontra apenas linhas novas em `aegis/runtime/queue/keeper-queue.jsonl` (escritas pelos hooks após o rename).
 
 Em caso de erro durante o processamento: **não** delete `processing.jsonl`. Logue o erro em `aegis/runtime/audit/keeper-errors.log` e encerre — próxima invocação retoma do mesmo arquivo.
 
-### Passo 9 — Salvar checkpoint
+### Step 9 — Save checkpoint
 
 Atualize `aegis/config/state.json`:
 ```json
@@ -228,7 +228,7 @@ Atualize `aegis/config/state.json`:
 }
 ```
 
-### Passo 10 — Encerrar
+### Step 10 — Wrap up
 
 > "✅ Keeper concluído.
 > - [N] specs atualizadas: [lista]
