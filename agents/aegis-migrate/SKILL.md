@@ -37,11 +37,11 @@ The orchestrator does not touch legacy code, parse schemas, or do archaeology. I
 
 ## Behavior when activated
 
-Execute estritamente nesta ordem:
+Execute strictly in this order:
 
 ### Step 1: Preconditions
 
-1. Verifique que `aegis/` existe.
+1. Verify that `aegis/` exists.
    - If not: stop with the message:
      > "I couldn't find `aegis/`. Run `/aegis` first to generate the legacy system specs."
 2. Load the expected artifacts list from `references/expected_legacy_artifacts.yaml` (local copy of the skill).
@@ -63,9 +63,9 @@ Execute estritamente nesta ordem:
 
 ### Step 3: Brief collection (interview)
 
-Se `aegis/migration/migration_brief.md` **não existir**, conduza a entrevista; caso contrário, ofereça `revisar / manter / recriar`.
+If `aegis/migration/migration_brief.md` does **not** exist, conduct the interview; otherwise, offer `review / keep / recreate`.
 
-Perguntas mínimas (uma por vez ou agrupadas, conforme a engine):
+Minimum questions (one at a time or grouped, depending on the engine):
 
 1. **Objetivo da migração**: por que estamos migrando?
 2. **Métricas de sucesso**: como saberemos que deu certo?
@@ -79,7 +79,7 @@ Perguntas mínimas (uma por vez ou agrupadas, conforme a engine):
 
 Renderize `aegis/migration/migration_brief.md` usando o template em `references/templates/migration_brief.md`.
 
-### Passo 4: Inicializar `.state.json`
+### Step 4: Initialize `.state.json`
 
 Crie `aegis/migration/.state.json` a partir do template `references/state.json`. Preencha `startedAt`, `engine`, `aegisVersion`. Marque `currentAgent.agent = "paradigm_advisor"`, `currentAgent.phase = null`, `currentAgent.status = "running"`, `currentAgent.topologyApproved = false`.
 
@@ -91,7 +91,7 @@ Crie `aegis/migration/.state.json` a partir do template `references/state.json`.
 
 Ao transicionar para o próximo agente, **reescreva o objeto inteiro**, não atribua uma string. Ao mover um agente para `completedAgents`, defina `currentAgent.agent` para o próximo da fila (ou `null` ao final), reset `phase` e `status`, e **preserve** `topologyApproved` (ele não pertence à transição de agente).
 
-### Passo 5: Executar os 5 agentes em sequência
+### Step 5: Execute the 5 agents in sequence
 
 Para cada agente, faça:
 
@@ -107,38 +107,38 @@ Alguns agentes operam em fases com pausa humana entre elas. Atualmente, apenas o
 
 Fluxo:
 
-1. Designer roda Fase 1, escreve `topology_decision.md` e devolve controle ao orquestrador com sinal `phase: topology, status: awaiting_user_approval`.
-2. Orquestrador grava em `.state.json` o campo `currentAgent.phase = "topology"` e `currentAgent.status = "awaiting_user_approval"`. **Não** move Designer para `completedAgents`.
-3. Orquestrador executa a pausa humana descrita no passo 6 (linha "Designer (Fase 1)" da tabela).
-4. Após aprovação do usuário, orquestrador registra em `.state.json` `currentAgent.topologyApproved = true`. Esta é a fonte única de verdade da aprovação; **não** duplicar no front-matter de `topology_decision.md`.
-5. Orquestrador **re-ativa o mesmo agente Designer**. O agente, ao iniciar, detecta que `topology_decision.md` existe e está aprovado e pula direto para a Fase 2 (passo 8 do procedimento do Designer).
-6. Ao concluir a Fase 2, Designer devolve controle com `status: complete`. Orquestrador então roda a pausa "Designer (Fase 2)" da tabela.
-7. Se o usuário pedir ajustes em **qualquer** das duas fases, orquestrador re-ativa Designer apontando explicitamente qual fase deve ser refeita (`--regenerate-phase=topology` ou `--regenerate-phase=architecture`); o agente respeita e descarta artefatos da fase em diante.
+1. Designer runs Phase 1, writes `topology_decision.md`, and returns control to the orchestrator with signal `phase: topology, status: awaiting_user_approval`.
+2. The orchestrator writes `currentAgent.phase = "topology"` and `currentAgent.status = "awaiting_user_approval"` into `.state.json`. It does **not** move Designer to `completedAgents`.
+3. The orchestrator runs the human pause described in step 6 (row "Designer (Phase 1)" in the table).
+4. After user approval, the orchestrator records `currentAgent.topologyApproved = true` in `.state.json`. This is the single source of truth for approval; do **not** duplicate it in the front matter of `topology_decision.md`.
+5. The orchestrator **re-activates the same Designer agent**. When starting, the agent detects that `topology_decision.md` exists and is approved and jumps directly to Phase 2 (step 8 of the Designer procedure).
+6. When Phase 2 completes, Designer returns control with `status: complete`. The orchestrator then runs the "Designer (Phase 2)" pause from the table.
+7. If the user requests adjustments in **either** phase, the orchestrator re-activates Designer and explicitly states which phase must be redone (`--regenerate-phase=topology` or `--regenerate-phase=architecture`); the agent respects that and discards artifacts from that point onward.
 
-Esse mecanismo é genérico: outros agentes podem adotá-lo no futuro, declarando seus checkpoints na seção "Fases" do próprio SKILL.md.
+This mechanism is generic: other agents can adopt it in the future by declaring their checkpoints in the "Fases" section of their own SKILL.md.
 
-| Após o agente | Pausa para |
+| After the agent | Pause for |
 |---|---|
-| Paradigm Advisor | Confirmar paradigma e gap |
-| Curator | Revisar itens DECISÃO HUMANA |
-| Strategist | Escolher estratégia |
-| Designer (Fase 1) | Aprovar `topology_decision.md` (preservar / modernizar / híbrido) antes de detalhar arquitetura |
-| Designer (Fase 2) | Aprovar arquitetura (se ajustes, Designer roda novamente) |
-| Inspector | (sem pausa; segue para handoff) |
+| Paradigm Advisor | Confirm paradigm and gap |
+| Curator | Review HUMAN DECISION items |
+| Strategist | Choose strategy |
+| Designer (Phase 1) | Approve `topology_decision.md` (preserve / modernize / hybrid) before detailing architecture |
+| Designer (Phase 2) | Approve architecture (if adjustments are needed, Designer runs again) |
+| Inspector | (no pause; proceeds to handoff) |
 
-### Passo 6: Pausa humana (`human_decision_gate`)
+### Step 6: Human pause (`human_decision_gate`)
 
-Em cada pausa:
+In each pause:
 
-1. Apresente um resumo claro do que o agente anterior produziu (3 a 8 linhas).
-2. Liste explicitamente o que precisa de decisão.
-3. Aguarde resposta do usuário.
+1. Present a clear summary of what the previous agent produced (3 to 8 lines).
+2. List explicitly what needs a decision.
+3. Wait for the user's response.
 
-Comportamento por engine:
+Behavior by engine:
 
-- **Engines com chat interativo (Claude Code, Cursor, Codex, etc.)**: pergunte direto no chat e aguarde.
-- **Engines sem TTY interativo**: escreva `aegis/migration/pending_decisions.md` com as decisões abertas, instrua o usuário a editar e sinalizar conclusão; releia o arquivo após sinalização.
-- **Modo `--auto` / `--auto-approve`**: aplique os defaults documentados em `references/auto-defaults.md`. Marque cada decisão auto-aplicada em `ambiguity_log.md` para revisão posterior. Não solicite aprovação humana — pipeline completo sem paradas.
+- **Interactive-chat engines (Claude Code, Cursor, Codex, etc.)**: ask directly in chat and wait.
+- **Engines without interactive TTY**: write `aegis/migration/pending_decisions.md` with the open decisions, instruct the user to edit it and signal completion; reread the file after the signal.
+- **`--auto` / `--auto-approve` mode**: apply the defaults documented in `references/auto-defaults.md`. Mark each auto-applied decision in `ambiguity_log.md` for later review. Do not request human approval — the pipeline runs end to end without pauses.
 
 ### Passo 7: Consolidar `ambiguity_log.md`
 
@@ -177,39 +177,39 @@ Grave log completo em `aegis/migration/.logs/<timestamp>-migrate.log` com timest
 
 ### `--resume`
 
-1. Leia `.state.json`.
-2. Identifique `currentAgent.agent`, `currentAgent.phase` e `currentAgent.status`.
-3. Se `currentAgent.status == "awaiting_user_approval"`, siga o caso especial do passo 2 (re-executa a pausa pendente). Caso contrário, confirme com o usuário antes de retomar.
-4. Continue do agente seguinte (ou do próprio se ele estava `failed`, ou da próxima fase se ele estava `awaiting_user_approval` e foi resolvido).
+1. Read `.state.json`.
+2. Identify `currentAgent.agent`, `currentAgent.phase`, and `currentAgent.status`.
+3. If `currentAgent.status == "awaiting_user_approval"`, follow the special case from step 2 (rerun the pending pause). Otherwise, confirm with the user before resuming.
+4. Continue from the next agent (or from the same one if it had `failed`, or from the next phase if it had been `awaiting_user_approval` and was resolved).
 
 ### `--regenerate=<agent>` ou `--regenerate=designer:<phase>`
 
-1. Confirme com o usuário (operação destrutiva no escopo de `aegis/migration/`).
-2. Faça backup em `aegis/migration/.backup-<timestamp>/`.
-3. Apague artefatos:
-   - `--regenerate=<agent>`: artefatos do agente especificado **e de todos os agentes posteriores** na ordem do pipeline. Para o Designer, isso inclui `topology_decision.md` e reseta `currentAgent.topologyApproved = false`.
-   - `--regenerate=designer:topology`: apaga **todos** os artefatos do Designer (incluindo `topology_decision.md`) e reseta `currentAgent.topologyApproved = false`. Equivalente a `--regenerate=designer` mas explícito sobre voltar à Fase 1.
-   - `--regenerate=designer:architecture`: apaga apenas os artefatos da Fase 2 (`target_architecture.md`, `target_domain_model.md`, `target_data_model.md`, `data_migration_plan.md`). **Preserva** `topology_decision.md` e `currentAgent.topologyApproved`. Designer é re-ativado e detecta que deve pular para a Fase 2.
-4. Atualize `.state.json` removendo agentes do `completedAgents` (quando aplicável) e ajustando `currentAgent`.
-5. Re-ative o Designer (ou o agente especificado) com a flag de fase, se aplicável.
+1. Confirm with the user (destructive operation within the `aegis/migration/` scope).
+2. Back up to `aegis/migration/.backup-<timestamp>/`.
+3. Delete artifacts:
+   - `--regenerate=<agent>`: artifacts for the specified agent **and all later agents** in pipeline order. For Designer, this includes `topology_decision.md` and resets `currentAgent.topologyApproved = false`.
+   - `--regenerate=designer:topology`: deletes **all** Designer artifacts (including `topology_decision.md`) and resets `currentAgent.topologyApproved = false`. Equivalent to `--regenerate=designer` but explicit about returning to Phase 1.
+   - `--regenerate=designer:architecture`: deletes only Phase 2 artifacts (`target_architecture.md`, `target_domain_model.md`, `target_data_model.md`, `data_migration_plan.md`). **Preserves** `topology_decision.md` and `currentAgent.topologyApproved`. Designer is re-activated and detects that it should jump to Phase 2.
+4. Update `.state.json` by removing agents from `completedAgents` (when applicable) and adjusting `currentAgent`.
+5. Re-activate Designer (or the specified agent) with the phase flag, if applicable.
 
 ### `--auto`
 
-Aplica defaults sem pausas humanas. Ver `references/auto-defaults.md`.
+Apply defaults without human pauses. See `references/auto-defaults.md`.
 
-Sempre exibir aviso explícito antes de iniciar listando todos os defaults aplicados.
+Always display an explicit warning before starting and list all applied defaults.
 
 ## Casos de borda
 
-- **`aegis/` incompleto**: lista artefatos faltantes e aborta.
-- **Brief presente mas mudanças no sistema legado**: ofereça revisar / recriar antes de prosseguir.
-- **Modificação manual de artefato gerado** (hash em `.state.json` divergente): pause, apresente diff resumido e ofereça (a) preservar versão modificada e abortar regeneração, (b) sobrescrever com backup, (c) abortar pipeline. `--auto` adota (a) por default.
-- **Falha de LLM no meio do agente**: estado preservado, agente marcado como `failed`. `--resume` reexecuta esse agente.
-- **Agente Designer pediu ajustes** após revisão da arquitetura: rerodar Designer no mesmo passo, sem avançar para Inspector.
+- **Incomplete `aegis/`**: list missing artifacts and abort.
+- **Brief present but legacy system changed**: offer to review / recreate before proceeding.
+- **Manual modification of a generated artifact** (hash divergence in `.state.json`): pause, present a summarized diff, and offer (a) preserve the modified version and abort regeneration, (b) overwrite with backup, or (c) abort the pipeline. `--auto` chooses (a) by default.
+- **LLM failure mid-agent**: state preserved, agent marked as `failed`. `--resume` reruns that agent.
+- **Designer requested adjustments** after architecture review: rerun Designer in the same step without advancing to Inspector.
 
 ## Layout de saída (transversal)
 
-Este agente faz parte do Time de Migração e escreve exclusivamente em `aegis/migration/`. Essa pasta é transversal à organização escolhida em `[specs]` do `config.toml`, fora das pastas de unit (feature folders) do Time de Descoberta. Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
+This agent is part of the Migration Team and writes exclusively to `aegis/migration/`. That folder is cross-cutting relative to the organization chosen in `[specs]` in `config.toml`, outside the Discovery Team's unit folders (feature folders). Do not apply the `<unit>/requirements.md|design.md|tasks.md` structure here; it belongs to Writer.
 
 ## Regras absolutas
 
