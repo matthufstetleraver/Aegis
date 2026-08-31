@@ -96,9 +96,9 @@ Wait for the response. Do NOT choose on your own, and do NOT interpret silence a
 
 ### Option 2, create a new one in parallel
 
-1. Leia o `active-requirements.json` atual e o campo `paused-features`
-   1.1. Se o campo não existir, considere `paused-features: []`
-2. Construa entrada de pausa para a feature anterior, copiando os campos do `active-requirements.json` atual e acrescentando os dois campos de pausa:
+1. Read the current `active-requirements.json` and the `paused-features` field
+   1.1. If the field does not exist, treat it as `paused-features: []`
+2. Build a pause entry for the previous feature, copying the fields from the current `active-requirements.json` and adding the two pause fields:
 
 ```json
 {
@@ -113,28 +113,28 @@ Wait for the response. Do NOT choose on your own, and do NOT interpret silence a
 }
 ```
 
-   2.1. Os campos `started-at`, `current-stage` e `stages-completed` permitem que `/aegis-resume` retome essa feature depois sem perder dados originais
-3. Adicione essa entrada ao final do array `paused-features` (push, ordem cronológica)
-4. Siga normalmente para "Resolução do diretório da feature". Ao escrever o `active-requirements.json` novo (passo 5 daquela seção), INCLUA o array `paused-features` atualizado no JSON
+   2.1. The `started-at`, `current-stage`, and `stages-completed` fields allow `/aegis-resume` to resume that feature later without losing original data
+3. Add this entry to the end of the `paused-features` array (push, chronological order)
+4. Continue normally to "Resolving the feature directory". When writing the new `active-requirements.json` (step 5 in that section), INCLUDE the updated `paused-features` array in the JSON
 
 ### Option 3, abandon the previous one
 
-1. Leia o `active-requirements.json` atual e o campo `paused-features`
-   1.1. Se o campo não existir, considere `paused-features: []`
-2. NÃO adicione a feature recém-abandonada ao array `paused-features` (ela fica órfã na pasta `aegis/forward/`, sem registro ativo, recuperável apenas por listagem manual)
-3. Siga normalmente. Ao escrever o `active-requirements.json` novo, preserve o array `paused-features` herdado do JSON anterior (sem adicionar a abandonada)
+1. Read the current `active-requirements.json` and the `paused-features` field
+   1.1. If the field does not exist, treat it as `paused-features: []`
+2. Do NOT add the newly abandoned feature to the `paused-features` array (it becomes orphaned in `aegis/forward/`, with no active record, recoverable only by manual listing)
+3. Continue normally. When writing the new `active-requirements.json`, preserve the `paused-features` array inherited from the previous JSON (without adding the abandoned one)
 
-A diretriz **non-destructive** vale aqui: em nenhuma das três opções a pasta da feature anterior em `aegis/forward/` é apagada ou modificada. Apenas o `active-requirements.json` (gerenciado pelo Aegis Spec) é reescrito.
+The **non-destructive** rule applies here: in none of the three options is the previous feature folder in `aegis/forward/` deleted or modified. Only `active-requirements.json` (managed by Aegis Spec) is rewritten.
 
 ## Resolving the feature directory
 
-1. Leia `aegis/config/setup.json`
-   1.1. Se `prefix-format` estiver ausente ou for `sequencial`, calcule o próximo `NNN` listando subpastas de `aegis/forward/` no formato `NNN-*` e somando 1 ao maior
-   1.2. Se `prefix-format` for `timestamp`, use `YYYYMMDD-HHMMSS` da hora corrente
-2. Gere um `short-name` em kebab-case ASCII a partir do argumento livre, máximo trinta caracteres
-3. Defina `feature-dir = aegis/forward/<NNN>-<short-name>` (ou `aegis/forward/<TIMESTAMP>-<short-name>`)
-4. Crie `feature-dir` se não existir
-5. Atualize `aegis/config/active-requirements.json` com o conteúdo abaixo, usando escrita atômica (tempfile mais rename):
+1. Read `aegis/config/setup.json`
+   1.1. If `prefix-format` is missing or `sequencial`, calculate the next `NNN` by listing `aegis/forward/` subfolders in the format `NNN-*` and adding 1 to the highest one
+   1.2. If `prefix-format` is `timestamp`, use the current time as `YYYYMMDD-HHMMSS`
+2. Generate a kebab-case ASCII `short-name` from the freeform argument, maximum thirty characters
+3. Set `feature-dir = aegis/forward/<NNN>-<short-name>` (or `aegis/forward/<TIMESTAMP>-<short-name>`)
+4. Create `feature-dir` if it does not exist
+5. Update `aegis/config/active-requirements.json` with the content below, using atomic write (tempfile plus rename):
 
 ```json
 {
@@ -149,40 +149,40 @@ A diretriz **non-destructive** vale aqui: em nenhuma das três opções a pasta 
 }
 ```
 
-   5.1. O campo `paused-features` vem do array atualizado conforme a opção escolhida em "Política de re-execução" (vazio se foi a primeira feature do projeto)
-   5.2. Os campos `current-stage` e `stages-completed` são metadado informativo, não autoritativo, a detecção real do estágio é feita por artefatos físicos
+   5.1. The `paused-features` field comes from the updated array according to the option chosen in "Re-execution policy" (empty if this is the project's first feature)
+   5.2. The `current-stage` and `stages-completed` fields are informational metadata, not authoritative; real stage detection is done by physical artifacts
 
-Política de re-execução: se `active-requirements.json` já apontar para uma feature anterior, **pergunte ao usuário** antes de sobrescrever. Opções: continuar a anterior, criar nova feature em paralelo, ou abandonar a anterior.
+Re-execution policy: if `active-requirements.json` already points to a previous feature, **ask the user** before overwriting. Options: continue the previous one, create a new feature in parallel, or abandon the previous one.
 
-## Coleta de contexto a partir da extração de especificações
+## Context gathering from spec extraction
 
-Antes de escrever o requirements, leia, na ordem (pulando o que não existir):
+Before writing requirements, read the following, in order (skipping what does not exist):
 
-1. `aegis/architecture/architecture.md` (panorama dos componentes)
-2. `aegis/reports/domain.md` (regras de negócio confirmadas)
-3. `aegis/reports/inventory.md` (superfície do código)
-4. `aegis/reports/code-analysis.md` SOMENTE nas seções dos componentes que o argumento livre parece tocar
-5. `aegis/config/principles.md` (princípios do projeto, se existir)
+1. `aegis/architecture/architecture.md` (component overview)
+2. `aegis/reports/domain.md` (confirmed business rules)
+3. `aegis/reports/inventory.md` (code surface)
+4. `aegis/reports/code-analysis.md` ONLY in the sections for components the freeform input seems to touch
+5. `aegis/config/principles.md` (project principles, if any)
 
-Identifique os arquivos relevantes. Cada citação dentro do requirements precisa apontar para essas fontes no formato `aegis/<arquivo>#<seção>`.
+Identify the relevant files. Every citation inside requirements must point to these sources in the format `aegis/<file>#<section>`.
 
-## Construção do requirements.md
+## Building requirements.md
 
-1. Carregue o template em `aegis/runtime/templates/requirements-template.md`
-2. Preserve a ordem das seções obrigatórias
-3. Preencha cada seção respeitando o comentário inline orientador
-4. Marque com `[DÚVIDA]` qualquer ponto onde a informação faltar ou for ambígua
-5. Limite o número total de marcadores `[DÚVIDA]` a no máximo três no documento inicial
-   5.1. Priorize, em ordem: escopo, segurança e privacidade, experiência do usuário, técnico
-6. Use a marcação 🟢 / 🟡 / 🔴 nos itens conforme a confidência da fonte original
+1. Load the template in `aegis/runtime/templates/requirements-template.md`
+2. Preserve the order of the required sections
+3. Fill in each section while respecting the inline guidance comment
+4. Mark any missing or ambiguous information with `[DÚVIDA]`
+5. Limit the total number of `[DÚVIDA]` markers to at most three in the initial document
+   5.1. Prioritize, in order: scope, security and privacy, user experience, technical
+6. Use 🟢 / 🟡 / 🔴 markers in items according to the original source confidence
 
-## Auto-validação iterativa
+## Iterative self-validation
 
-1. Após escrever o `requirements.md`, leia o template `quality-template.md`
-2. Aplique mentalmente a checklist
-3. Se houver itens reprovados, reescreva as seções afetadas
-4. Repita esse ciclo no máximo três vezes
-5. Persistindo problemas após três iterações, registre-os em uma seção final `## Pendências de Qualidade` e siga em frente
+1. After writing `requirements.md`, read the `quality-template.md` template
+2. Apply the checklist mentally
+3. If there are rejected items, rewrite the affected sections
+4. Repeat this cycle at most three times
+5. If problems persist after three iterations, record them in a final `## Quality Pending Items` section and move on
 
 ## Persistência
 
