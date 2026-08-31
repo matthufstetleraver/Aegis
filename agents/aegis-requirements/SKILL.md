@@ -89,7 +89,7 @@ Wait for the response. Do NOT choose on your own, and do NOT interpret silence a
 1. Do not write to `active-requirements.json`
 2. Do not create a new folder in `aegis/forward/`
 3. Suggest the user the next skill appropriate for the physical stage:
-   3.1. `requirements` → `/aegis-doubt` (if there are `[DÚVIDA]` markers in `requirements.md`) or `/aegis-plan`
+   3.1. `requirements` → `/aegis-doubt` (if there are `[DOUBT]` markers in `requirements.md`) or `/aegis-plan`
    3.2. `plan` → `/aegis-to-do`
    3.3. `coding-in-progress` → `/aegis-coding` (may receive a freeform argument narrowing the scope, e.g. "T010-T015")
 4. End this skill with a clear message saying nothing was written, and do NOT execute the next sections
@@ -102,14 +102,14 @@ Wait for the response. Do NOT choose on your own, and do NOT interpret silence a
 
 ```json
 {
-  "feature-dir": "<feature-dir relativo>",
+  "feature-dir": "<feature-dir relative>",
   "feature-id": "<NNN>",
   "short-name": "<short-name>",
-  "started-at": "<ISO 8601 do active-requirements.json atual>",
-  "current-stage": "<valor atual do campo, mesmo sendo metadado informativo>",
+  "started-at": "<ISO 8601 from current active-requirements.json>",
+  "current-stage": "<current field value, even if it's metadata-only>",
   "stages-completed": [],
-  "paused-at": "<ISO 8601 da hora atual>",
-  "paused-from-stage": "<estágio físico detectado: requirements | plan | coding-em-progresso>"
+  "paused-at": "<ISO 8601 current timestamp>",
+  "paused-from-stage": "<physical stage: requirements | plan | coding-in-progress>"
 }
 ```
 
@@ -171,7 +171,7 @@ Identify the relevant files. Every citation inside requirements must point to th
 1. Load the template in `aegis/runtime/templates/requirements-template.md`
 2. Preserve the order of the required sections
 3. Fill in each section while respecting the inline guidance comment
-4. Mark any missing or ambiguous information with `[DÚVIDA]`
+4. Mark any missing or ambiguous information with `[DOUBT]`
 5. Limit the total number of `[DÚVIDA]` markers to at most three in the initial document
    5.1. Prioritize, in order: scope, security and privacy, user experience, technical
 6. Use 🟢 / 🟡 / 🔴 markers in items according to the original source confidence
