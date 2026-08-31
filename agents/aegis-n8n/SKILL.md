@@ -12,7 +12,7 @@ metadata:
 
 You are the N8N Translator. Your mission is to read an N8N workflow exported as JSON and produce an SDD spec that describes the system independently of N8N, sufficient for re-implementation in Python (or any other language).
 
-## Antes de começar
+## Before you start
 
 ### Pasta de entrada: `n8n_json_workflows/`
 
@@ -42,100 +42,100 @@ A skill usa uma pasta dedicada como ponto de entrada para os JSONs exportados do
 
 5. Se a pasta `aegis/n8n/<slug>/` já existir, pergunte: sobrescrever, criar versão nova (`-v2`, `-v3`...) ou cancelar.
 
-## Processo
+## Process
 
-### 1. Parse do JSON
+### 1. JSON Parse
 
-Extraia e mantenha em memória:
+Extract and keep in memory:
 - `name`, `active`, `id`, `versionId`
-- `nodes[]`: para cada nó capture `id`, `name`, `type`, `typeVersion`, `parameters`, `credentials`, `position`, `disabled` (se houver)
-- `connections{}`: grafo direcionado entre nós (estrutura `connections[source][main][index] = [{node, type, index}]`)
-- `settings`, `staticData`, `pinData` (se relevantes)
+- `nodes[]`: for each node capture `id`, `name`, `type`, `typeVersion`, `parameters`, `credentials`, `position`, `disabled` (if present)
+- `connections{}`: directed graph between nodes (structure `connections[source][main][index] = [{node, type, index}]`)
+- `settings`, `staticData`, `pinData` (if relevant)
 
-### 2. Identificação de triggers e fluxo
+### 2. Trigger identification and flow
 
-Triggers comuns (consulte `references/node-catalog.md` para a lista completa):
+Common triggers (see `references/node-catalog.md` for the complete list):
 - `n8n-nodes-base.webhook`
 - `n8n-nodes-base.scheduleTrigger`, `n8n-nodes-base.cron`
 - `n8n-nodes-base.manualTrigger`
 - `n8n-nodes-base.emailReadImap`
 - `n8n-nodes-base.intervalTrigger`
-- Triggers de serviços (`n8n-nodes-base.slackTrigger`, `n8n-nodes-base.googleSheetsTrigger`, etc.)
+- Service triggers (`n8n-nodes-base.slackTrigger`, `n8n-nodes-base.googleSheetsTrigger`, etc.)
 
-A partir do trigger, percorra `connections` e construa:
-- Grafo direcionado completo
-- Nós terminais (sem saída)
-- Ramificações (`if`, `switch`)
-- Pontos de junção (`merge`)
-- Loops e iterações (`splitInBatches`, `itemLists`)
-- Sub-workflows referenciados (`executeWorkflow`)
+From the trigger, traverse `connections` and build:
+- Complete directed graph
+- Terminal nodes (no output)
+- Branching (`if`, `switch`)
+- Junction points (`merge`)
+- Loops and iterations (`splitInBatches`, `itemLists`)
+- Referenced sub-workflows (`executeWorkflow`)
 
-### 3. Análise semântica nó a nó
+### 3. Node-by-node semantic analysis
 
-Para cada nó, descreva em linguagem natural:
-- Propósito no contexto do negócio (não apenas o tipo técnico)
-- Entradas esperadas (do nó anterior)
-- Saídas produzidas (para o próximo nó)
-- Dependências externas (APIs, bancos, serviços)
-- Transformações ou regras aplicadas
+For each node, describe in natural language:
+- Purpose in business context (not just technical type)
+- Expected inputs (from previous node)
+- Outputs produced (to next node)
+- External dependencies (APIs, databases, services)
+- Transformations or rules applied
 
-Para nós `Function`, `FunctionItem` ou `Code`: leia o JS/Python embutido em `parameters.functionCode` (ou equivalente) e descreva a lógica em pseudocódigo. Não copie o código original na spec, descreva o que ele faz.
+For `Function`, `FunctionItem`, or `Code` nodes: read the JS/Python embedded in `parameters.functionCode` (or equivalent) and describe the logic in pseudocode. Do not copy the original code in the spec, describe what it does.
 
-Para nós `IF` e `Switch`: descreva cada condição em linguagem natural ("se o status do pedido for igual a aprovado").
+For `IF` and `Switch` nodes: describe each condition in natural language ("if the order status equals approved").
 
-Para nós `HTTP Request`: registre método, URL (com placeholders), headers relevantes, body schema.
+For `HTTP Request` nodes: record method, URL (with placeholders), relevant headers, body schema.
 
-Consulte `references/node-catalog.md` ao mapear tipos de nó para conceitos.
+Consult `references/node-catalog.md` when mapping node types to concepts.
 
-### 4. Detecção de credenciais e segredos
+### 4. Credential and secret detection
 
-Liste credenciais referenciadas em `node.credentials` sem expor valores:
-- Nome lógico da credencial (como aparece no N8N)
-- Tipo (`oAuth2Api`, `httpHeaderAuth`, `slackApi`, `googleApi`, etc.)
-- Serviço associado (Slack, Google, OpenAI, Postgres, etc.)
-- Como deve ser injetada em Python (variável de ambiente sugerida, secret manager)
+List credentials referenced in `node.credentials` without exposing values:
+- Logical credential name (as it appears in N8N)
+- Type (`oAuth2Api`, `httpHeaderAuth`, `slackApi`, `googleApi`, etc.)
+- Associated service (Slack, Google, OpenAI, Postgres, etc.)
+- How it should be injected in Python (suggested environment variable, secret manager)
 
-### 5. Mapeamento para Python
+### 5. Mapping to Python
 
-Para cada nó, sugira:
-- Biblioteca Python equivalente (consulte `references/node-catalog.md`)
-- Padrão de implementação (síncrono vs assíncrono, função pura vs classe)
+For each node, suggest:
+- Equivalent Python library (consult `references/node-catalog.md`)
+- Implementation pattern (synchronous vs asynchronous, pure function vs class)
 
-Para o workflow inteiro, sugira a arquitetura adequada:
-- Trigger webhook: aplicação FastAPI ou Flask
-- Trigger schedule/cron: script standalone com APScheduler ou systemd timer
-- Trigger manual: script CLI (Typer ou argparse)
-- Workflow longo com batches: worker assíncrono (asyncio, Celery, RQ)
+For the whole workflow, suggest the appropriate architecture:
+- Webhook trigger: FastAPI or Flask application
+- Schedule/cron trigger: standalone script with APScheduler or systemd timer
+- Manual trigger: CLI script (Typer or argparse)
+- Long workflow with batches: asynchronous worker (asyncio, Celery, RQ)
 
 ### 6. Generation of artifacts
 
 Generate three files following the SDD pattern:
 
 **`workflow-overview.md`** (source analysis)
-- Cabeçalho com metadados do workflow (nome, ativo, total de nós, total de conexões)
-- Diagrama Mermaid `flowchart TD` representando o grafo
-- Tabela com todos os nós: `| ID | Nome | Tipo | Propósito |`
-- Lista de credenciais e dependências externas
-- Seção `## Ambiguidades` no final, se houver
+- Header with workflow metadata (name, active, total nodes, total connections)
+- Mermaid `flowchart TD` diagram representing the graph
+- Table with all nodes: `| ID | Name | Type | Purpose |`
+- List of credentials and external dependencies
+- Section `## Ambiguities` at the end, if any
 
-**`requirements.md`** (o que o sistema deve fazer)
-- Visão geral: o que o workflow automatiza no negócio (1 a 3 parágrafos)
-- Trigger: como o sistema é acionado (webhook, schedule, manual)
-- Requisitos funcionais numerados (`RF-01`, `RF-02`...) derivados de cada ramo do fluxo. Use o formato: "O sistema deve [ação] quando [condição]."
-- Requisitos não-funcionais (`RNF-01`...): latência esperada, frequência (do schedule), retries observados, idempotência, observabilidade
-- Critérios de aceitação por requisito ou por ramo principal
+**`requirements.md`** (what the system should do)
+- Overview: what the workflow automates in the business (1 to 3 paragraphs)
+- Trigger: how the system is triggered (webhook, schedule, manual)
+- Numbered functional requirements (`RF-01`, `RF-02`...) derived from each branch of the flow. Use the format: "The system must [action] when [condition]."
+- Non-functional requirements (`RNF-01`...): expected latency, frequency (of the schedule), observed retries, idempotence, observability
+- Acceptance criteria per requirement or per main branch
 
-**`design.md`** (como construir em Python)
-- Arquitetura sugerida (script, FastAPI, worker, etc.) com justificativa
-- Componentes e responsabilidades: agrupe nós relacionados em módulos Python
-- Bibliotecas Python recomendadas (lista com versões majors sugeridas)
-- Estrutura de pastas sugerida
-- Schema de dados: entrada, saídas intermediárias, saída final
-- Tratamento de erros e retries (espelhe o que o N8N faz quando aplicável)
-- Configuração: variáveis de ambiente e secrets necessários
-- Testes recomendados: unitários por módulo, integração nos pontos com APIs externas
+**`design.md`** (how to build in Python)
+- Suggested architecture (script, FastAPI, worker, etc.) with justification
+- Components and responsibilities: group related nodes into Python modules
+- Recommended Python libraries (list with suggested major versions)
+- Suggested folder structure
+- Data schema: input, intermediate outputs, final output
+- Error handling and retries (mirror what N8N does when applicable)
+- Configuration: environment variables and secrets needed
+- Recommended tests: unit tests per module, integration tests at external API points
 
-### 7. Handoff para o pipeline Aegis Spec
+### 7. Handoff to Aegis Spec pipeline
 
 After generating the three spec artifacts, prepare the state so that `/aegis` can orchestrate the following agents (Scout, Archaeologist, Detective, Architect, Writer, Reviewer) on the result.
 
@@ -187,41 +187,41 @@ After creating the files, show:
 To continue with the full pipeline (Scout, Archaeologist, etc.), type /aegis.
 ```
 
-## Escala de confiança
+## Confidence scale
 
-Use estes marcadores ao afirmar algo na spec:
-- 🟢 CONFIRMADO: derivado diretamente do JSON
-- 🟡 INFERIDO: deduzido por contexto (nome do nó, parâmetros, código embutido)
-- 🔴 LACUNA: ambíguo ou não detectável a partir do JSON
+Use these markers when asserting something in the spec:
+- 🟢 CONFIRMED: derived directly from JSON
+- 🟡 INFERRED: deduced from context (node name, parameters, embedded code)
+- 🔴 GAP: ambiguous or not detectable from JSON
 
-Aplique principalmente em `requirements.md` e `design.md`.
+Apply mainly in `requirements.md` and `design.md`.
 
-## Ambiguidades
+## Ambiguities
 
-Se durante a análise encontrar qualquer um destes casos, pare e pergunte ao usuário antes de seguir:
-- Function node com lógica obscura, variáveis sem nome ou efeitos colaterais externos não declarados
-- Credenciais sem rótulo claro de serviço
-- Webhooks com payload não documentado e sem exemplo no `pinData`
-- Loops com condições de saída implícitas
-- Sub-workflows referenciados que não estão disponíveis
+If during analysis you encounter any of these cases, stop and ask the user before proceeding:
+- Function node with obscure logic, unnamed variables, or undeclared external side effects
+- Credentials without a clear service label
+- Webhooks with undocumented payload and no example in `pinData`
+- Loops with implicit exit conditions
+- Referenced sub-workflows that are not available
 
-Registre cada ambiguidade no `workflow-overview.md` em `## Ambiguidades`, com formato:
+Record each ambiguity in `workflow-overview.md` under `## Ambiguities`, with format:
 ```
-- 🔴 [tipo] [descrição curta]. Pergunta ao usuário: [pergunta direta].
+- 🔴 [type] [short description]. Question for user: [direct question].
 ```
 
-## Saída
+## Output
 
 ```
-n8n_json_workflows/                  (entrada, criada se não existir)
-└── <arquivo>.json
+n8n_json_workflows/                  (input, created if missing)
+└── <file>.json
 
-aegis/n8n/<slug-do-workflow>/     (spec gerada da fonte)
+aegis/n8n/<workflow-slug>/     (spec generated from source)
 ├── workflow-overview.md
 ├── requirements.md
 └── design.md
 
-aegis/                            (estado para handoff ao /aegis)
+aegis/                            (state for handoff to /aegis)
 ├── state.json
 └── plan.md
 ```
@@ -237,19 +237,19 @@ When complete, inform the user:
 - Summary: number of nodes, number of external integrations, main architectural decision
 - Pending ambiguities (if any)
 
-Sugira ao usuário:
-1. Revisar a spec em `aegis/n8n/<slug>/`
-2. Digitar `/aegis` para acionar o pipeline completo (Scout em diante) sobre a pré-análise N8N
-3. Ou processar outro workflow direto, se houver mais arquivos em `n8n_json_workflows/`
+Suggest to the user:
+1. Review the spec in `aegis/n8n/<slug>/`
+2. Type `/aegis` to trigger the full pipeline (Scout onwards) on the N8N pre-analysis
+3. Or process another workflow directly, if there are more files in `n8n_json_workflows/`
 
-Termine com: `Digite CONTINUAR para processar outro workflow, ou /aegis para iniciar o pipeline principal.`
+End with: `Type CONTINUE to process another workflow, or /aegis to start the main pipeline.`
 
-## Regras absolutas
+## Absolute rules
 
-- Nunca modificar o arquivo JSON original em `n8n_json_workflows/`
-- Escrever apenas em `n8n_json_workflows/` (criar a pasta), `aegis/n8n/` e `aegis/`
-- Nunca sobrescrever `aegis/config/state.json` se já existir, apenas atualizar os campos `source` e `source_artifacts`
-- Nunca expor credenciais, tokens ou secrets em nenhum artefato (registrar apenas o tipo e o serviço)
-- Nunca inventar funcionalidades não presentes no workflow
-- Marcar com 🔴 LACUNA tudo que não puder ser confirmado pela leitura do JSON
-- Manter compatibilidade multi-engine: a skill deve rodar em Claude Code, Codex, Cursor e Gemini CLI sem dependência de tools específicas
+- Never modify the original JSON file in `n8n_json_workflows/`
+- Write only to `n8n_json_workflows/` (create the folder), `aegis/n8n/`, and `aegis/`
+- Never overwrite `aegis/config/state.json` if it already exists, only update the `source` and `source_artifacts` fields
+- Never expose credentials, tokens, or secrets in any artifact (record only the type and service)
+- Never invent functionality not present in the workflow
+- Mark with 🔴 GAP everything that cannot be confirmed by reading the JSON
+- Maintain multi-engine compatibility: the skill should run on Claude Code, Codex, Cursor, and Gemini CLI without tool-specific dependencies
