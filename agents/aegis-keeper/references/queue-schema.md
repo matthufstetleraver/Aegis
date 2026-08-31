@@ -1,17 +1,17 @@
-# Schema do `aegis/runtime/queue/keeper-queue.jsonl`
+# Schema of `aegis/runtime/queue/keeper-queue.jsonl`
 
-Arquivo de comunicação entre os hooks de engine e o agente Keeper. **Formato JSONL** (uma entrada JSON por linha) — append-only, atomic em filesystems POSIX.
+Communication file between engine hooks and Keeper agent. **JSONL format** (one JSON entry per line) — append-only, atomic on POSIX filesystems.
 
-- **Hooks escrevem** uma linha por evento de edição (modo append)
-- **Keeper lê** todas as linhas no modo `after`, deduplica por arquivo, processa e limpa o arquivo
+- **Hooks write** one line per edit event (append mode)
+- **Keeper reads** all lines in `after` mode, deduplicates by file, processes and clears the file
 
-Modo manual (sem hooks instalados): este arquivo pode não existir. Keeper usa `git diff HEAD` como fonte alternativa.
+Manual mode (without installed hooks): this file may not exist. Keeper uses `git diff HEAD` as alternative source.
 
-> **Histórico:** versões anteriores (≤ v1.6) usavam `aegis/keeper-queue.json` como snapshot único com locking. Trocado em v1.7 por JSONL append-only para reduzir overhead dos hooks de ~150-300ms por edit para ~10ms.
+> **History:** previous versions (≤ v1.6) used `aegis/keeper-queue.json` as single snapshot with locking. Changed in v1.7 to JSONL append-only to reduce hook overhead from ~150-300ms per edit to ~10ms.
 
 ---
 
-## Schema (uma linha JSON por entrada)
+## Schema (one JSON line per entry)
 
 ```jsonl
 {"id":"uuid","ts":"2026-05-01T15:40:12.000Z","phase":"post","engine":"claude-code","tool":"Edit","files":["src/auth/login.js"]}
@@ -21,55 +21,55 @@ Modo manual (sem hooks instalados): este arquivo pode não existir. Keeper usa `
 
 ---
 
-## Campos
+## Fields
 
-| Campo | Tipo | Obrigatório | Descrição |
+| Field | Type | Required | Description |
 |---|---|---|---|
-| `id` | string (UUID v4) | sim | Identificador único da entrada |
-| `ts` | string ISO 8601 (UTC) | sim | Momento do evento |
-| `phase` | `"post"` ou `"stop"` | sim | `post` = após edit; `stop` = fim de sessão (advisory only) |
-| `engine` | string | sim | `claude-code` / `cursor` / `kimi-cli` / `codex` / `opencode` |
-| `tool` | string | sim | Nome do tool/evento (`Edit`, `Write`, `MultiEdit`, `apply_patch`, `afterFileEdit`, etc.) |
-| `files` | array de string | sim | Caminhos relativos ao project root. Vazio em entradas `phase: "stop"` |
+| `id` | string (UUID v4) | yes | Unique identifier for entry |
+| `ts` | string ISO 8601 (UTC) | yes | Event timestamp |
+| `phase` | `"post"` or `"stop"` | yes | `post` = after edit; `stop` = end of session (advisory only) |
+| `engine` | string | yes | `claude-code` / `cursor` / `kimi-cli` / `codex` / `opencode` |
+| `tool` | string | yes | Tool/event name (`Edit`, `Write`, `MultiEdit`, `apply_patch`, `afterFileEdit`, etc.) |
+| `files` | array of string | yes | Paths relative to project root. Empty in `phase: "stop"` entries |
 
-> **Removido em v1.7+:**
-> - `phase: "pre"` — pre-hooks foram retirados na Fase 1 do roadmap (oneravam o sistema). Retornam na Fase 4 com policy gate, mas via canal separado (não pela queue).
-> - `diff_summary`, `affected_specs` — Keeper agora deriva ambos no batch end-of-task, não pelo hook.
-
----
-
-## Concorrência
-
-Append-only JSONL é seguro sem lockfile:
-
-- Writes < `PIPE_BUF` (~4KB no Linux, 512B mínimo POSIX) são atomic
-- Cada linha cabe folgada (~150 bytes média)
-- Múltiplos processos podem escrever em paralelo sem corrupção
-
-Hooks **não** precisam adquirir lock. Apenas `appendFileSync` direto.
-
-Keeper, ao consumir, lê o arquivo inteiro, processa, depois trunca/deleta. Pode haver race com hooks ainda escrevendo durante o processamento — solução: rename `keeper-queue.jsonl` → `keeper-queue.processing.jsonl` (atomic), processa, deleta.
+> **Removed in v1.7+:**
+> - `phase: "pre"` — pre-hooks were removed in Phase 1 of roadmap (were burdensome). Return in Phase 4 with policy gate, but via separate channel (not via queue).
+> - `diff_summary`, `affected_specs` — Keeper now derives both at batch end-of-task, not by hook.
 
 ---
 
-## Limpeza pelo Keeper
+## Concurrency
 
-Após processar todas as entradas no modo `after`:
+Append-only JSONL is safe without lockfile:
+
+- Writes < `PIPE_BUF` (~4KB on Linux, 512B minimum POSIX) are atomic
+- Each line fits easily (~150 bytes average)
+- Multiple processes can write in parallel without corruption
+
+Hooks **don't** need to acquire lock. Just `appendFileSync` directly.
+
+Keeper, when consuming, reads the entire file, processes it, then truncates/deletes. May race with hooks still writing during processing — solution: rename `keeper-queue.jsonl` → `keeper-queue.processing.jsonl` (atomic), process, delete.
+
+---
+
+## Cleanup by Keeper
+
+After processing all entries in `after` mode:
 
 1. Rename `keeper-queue.jsonl` → `keeper-queue.processing.jsonl` (atomic)
-2. Ler todas linhas do arquivo `processing`
-3. Deduplicar por `files` (último entry por arquivo ganha)
-4. Processar (atualizar specs, drift.md, changelog)
-5. Deletar `keeper-processing.jsonl`
-6. Salvar timestamp em `aegis/config/state.json.checkpoints.keeper.last_run`
+2. Read all lines from `processing` file
+3. Deduplicate by `files` (last entry per file wins)
+4. Process (update specs, drift.md, changelog)
+5. Delete `keeper-processing.jsonl`
+6. Save timestamp in `aegis/config/state.json.checkpoints.keeper.last_run`
 
-Se houver erro: deixar `processing.jsonl` no lugar e logar em `aegis/keeper-errors.log`. Próxima invocação retoma.
+If error: leave `processing.jsonl` in place and log to `aegis/keeper-errors.log`. Next invocation resumes.
 
 ---
 
-## Deduplicação
+## Deduplication
 
-Mesmo arquivo editado N vezes durante uma task → N linhas na queue. Keeper deduplica:
+Same file edited N times during a task → N lines in queue. Keeper deduplicates:
 
 ```js
 const lastByFile = new Map();
@@ -81,18 +81,18 @@ for (const line of lines) {
 const uniqueFiles = Array.from(lastByFile.keys());
 ```
 
-Resultado: lista única de arquivos modificados, com timestamp do último edit.
+Result: unique list of modified files, with timestamp of last edit.
 
 ---
 
-## Limites operacionais
+## Operational limits
 
-- Sem limite hard de tamanho — JSONL append é cheap. Tipicamente <1000 entradas em sessões longas.
-- Entradas com `ts` > 30 dias podem ser purgadas pelo Keeper (assume usuário esqueceu).
+- No hard size limit — JSONL append is cheap. Typically <1000 entries in long sessions.
+- Entries with `ts` > 30 days can be purged by Keeper (assumes user forgot).
 
 ---
 
-## Exemplo realista (sessão de 5 edits + stop)
+## Realistic example (5-edit + stop session)
 
 ```jsonl
 {"id":"9f8e7d6c-5b4a-4321-9876-543210fedcba","ts":"2026-05-01T20:25:14.123Z","phase":"post","engine":"claude-code","tool":"Edit","files":["lib/auth/login.js"]}
@@ -102,4 +102,4 @@ Resultado: lista única de arquivos modificados, com timestamp do último edit.
 {"id":"5b4a3928-1706-4987-5432-10fedcba9876","ts":"2026-05-01T20:30:00.000Z","phase":"stop","engine":"claude-code","tool":"unknown","files":[]}
 ```
 
-Keeper deduplica → lista final: `["lib/auth/login.js", "lib/middleware/rate-limit.js", "lib/auth/handler.js"]` (3 arquivos únicos).
+Keeper deduplicates → final list: `["lib/auth/login.js", "lib/middleware/rate-limit.js", "lib/auth/handler.js"]` (3 unique files).
