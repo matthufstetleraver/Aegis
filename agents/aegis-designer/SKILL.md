@@ -131,76 +131,76 @@ Phase 2 runs only after the orchestrator returns approval. Do not write any of P
 
 #### 8. Identify bounded contexts
 
-A partir de `target_business_rules.md` (regras MIGRAR), `domain.md` e da topologia decidida em `topology_decision.md`, agrupe regras / aggregates por:
+From `target_business_rules.md` (MIGRATE rules), `domain.md`, and the topology decided in `topology_decision.md`, group rules / aggregates by:
 
-- **Coesão de invariantes** (regras que falham juntas, vivem juntas).
-- **Transação** (operações que precisam ser atômicas localmente).
-- **Frequência de mudança** (módulos que evoluem juntos).
-- **Owner organizacional** (se conhecido pelo brief).
+- **Invariant cohesion** (rules that fail together, live together).
+- **Transaction** (operations that need to be locally atomic).
+- **Frequency of change** (modules that evolve together).
+- **Organizational owner** (if known from brief).
 
-Documente cada bounded context com nome, responsabilidade, justificativa de agrupamento / separação.
+Document each bounded context with name, responsibility, justification for grouping / separation.
 
 #### 9. Sketch the architecture
 
-Desenhe `target_architecture.md`:
+Draw `target_architecture.md`:
 
-- Visão geral (3 a 6 linhas).
-- Diagrama Mermaid (válido).
-- Componentes (com tipo: API / Serviço / Worker / DB / Fila).
+- Overview (3 to 6 lines).
+- Mermaid diagram (valid).
+- Components (with type: API / Service / Worker / DB / Queue).
 - Bounded contexts.
-- Decisões arquiteturais com rastreabilidade.
-- Seção obrigatória **"Honra ao paradigma escolhido"**: liste explicitamente como cada implicação do `paradigm_decision.md` se materializa nesta arquitetura.
-- Seção obrigatória **"Honra à topologia escolhida"**: descreva como a árvore de pastas / módulos do sistema novo materializa a opção registrada em `topology_decision.md` (preservar / modernizar / híbrido), incluindo o esboço final da árvore.
+- Architectural decisions with traceability.
+- Mandatory section **"Honor the chosen paradigm"**: list explicitly how each implication from `paradigm_decision.md` materializes in this architecture.
+- Mandatory section **"Honor the chosen topology"**: describe how the folder/module tree of the new system materializes the option recorded in `topology_decision.md` (preserve / modernize / hybrid), including the final sketch of the tree.
 
 #### 10. Model the domain
 
-Em `target_domain_model.md`:
+In `target_domain_model.md`:
 
-- Aggregates com root, invariantes, comandos, eventos publicados (se event-driven).
-- Entidades, value objects.
-- Eventos de domínio (obrigatório se paradigma alvo for event-driven ou híbrido).
-- Tabela "Regras de domínio" mapeando cada `BR-MIGRAR-XXX` ao local no domínio novo.
+- Aggregates with root, invariants, commands, published events (if event-driven).
+- Entities, value objects.
+- Domain events (mandatory if target paradigm is event-driven or hybrid).
+- Table "Domain rules" mapping each `BR-MIGRATE-XXX` to the location in the new domain.
 - Table "Traceability to legacy" with mapping type (1-to-1, merged, split, new).
 
 #### 11. Model the data
 
-Em `target_data_model.md`:
+In `target_data_model.md`:
 
-- Entidades de dados (tabela / coleção, aggregate dono, PK, bounded context).
-- DDL (ou equivalente para o banco escolhido).
-- Relacionamentos.
-- Restrições.
-- Considerações específicas do paradigma alvo (ex: outbox para event-driven, event store para event sourcing, imutabilidade para funcional).
+- Data entities (table / collection, owning aggregate, PK, bounded context).
+- DDL (or equivalent for the chosen database).
+- Relationships.
+- Constraints.
+- Paradigm-specific considerations (e.g., outbox for event-driven, event store for event sourcing, immutability for functional).
 - Origin in legacy (rename, split, merge, new).
 
 #### 12. Data migration plan
 
-Em `data_migration_plan.md`:
+In `data_migration_plan.md`:
 
 - Legacy → new mapping.
-- Transformações por coluna / tabela com regra explícita e tratamento de inválidos.
-- Estratégia de ETL (ferramenta, fluxo, idempotência, throughput).
-- Backfill e captura de delta.
-- Cutover de dados (sequência, verificação pós-corte).
-- Validação de qualidade (contagens, checksums, integridade referencial).
+- Transformations per column / table with explicit rule and invalid handling.
+- ETL strategy (tool, flow, idempotence, throughput).
+- Backfill and delta capture.
+- Data cutover (sequence, post-cutover verification).
+- Quality validation (counts, checksums, referential integrity).
 
 #### 13. Summarize and return control
 
-> "Designer concluiu.
-> - Topologia escolhida: <preservar | modernizar | híbrido> (registrada em `topology_decision.md`)
+> "Designer completed.
+> - Chosen topology: <preserve | modernize | hybrid> (recorded in `topology_decision.md`)
 > - Bounded contexts: <N>
 > - Aggregates: <N>
-> - Entidades de dados: <N>
-> - Eventos de domínio: <N> (se aplicável)
-> - Decisões arquiteturais com rastreabilidade: <N>
+> - Data entities: <N>
+> - Domain events: <N> (if applicable)
+> - Architectural decisions with traceability: <N>
 >
-> Próxima pausa: usuário aprova a arquitetura final. Se houver ajustes, Designer roda de novo. Próximo agente após aprovação: **Inspector**."
+> Next pause: user approves final architecture. If adjustments needed, Designer runs again. Next agent after approval: **Inspector**."
 
 ## Edge cases
 
 - **Legacy database poorly documented**: record explicit GAP in `data_migration_plan.md`, request validation in the coding agent.
-- **Sem evento natural no domínio + paradigma alvo event-driven**: identifique transições de estado significativas e proponha eventos com base nelas; documente como criação consciente do Designer.
-- **Estratégia Big Bang + sistema com integrações externas**: documente bordas externas como prioridade para adaptadores estáveis.
+- **No natural event in domain + target paradigm event-driven**: identify significant state transitions and propose events based on them; document as conscious creation by Designer.
+- **Big Bang strategy + system with external integrations**: document external boundaries as priority for stable adapters.
 
 ## Output layout (cross-cutting)
 
@@ -208,9 +208,9 @@ This agent is part of the Migration Team and writes exclusively to `aegis/migrat
 
 ## Absolute rules
 
-- Não escrever fora de `aegis/migration/`.
+- Do not write outside `aegis/migration/`.
 - Do not reuse legacy file name as bounded context name.
-- Decomposição 1-para-1 é proibida; cada agrupamento ou separação tem justificativa explícita.
-- A seção "Honra ao paradigma escolhido" é obrigatória sempre que houver mudança de paradigma.
+- 1-to-1 decomposition is forbidden; each grouping or separation has explicit justification.
+- The "Honor the chosen paradigm" section is mandatory whenever there is a paradigm shift.
 - Phase 2 (architecture, domain, data) can only run after the user approves `topology_decision.md`. Never apply modern topology silently.
-- A proposta moderna é obrigatória mesmo quando o diagnóstico estrutural for "saudável"; nesse caso, a justificativa deve reconhecer explicitamente o trade-off de preservar.
+- The modern proposal is mandatory even when structural diagnosis is "healthy"; in that case, the justification must explicitly acknowledge the trade-off of preserving.
