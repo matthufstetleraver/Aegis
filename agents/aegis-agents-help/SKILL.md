@@ -12,7 +12,7 @@ metadata:
 
 List the agents installed dynamically. For each agent in `aegis/agents/*/SKILL.md`, extract `name`, `description`, and `phase` from the frontmatter. Present them in order: orchestrator (`aegis`), discovery phase (scout, archaeologist, detective, architect, writer, reviewer), keeper, forward (requirements, doubt, plan, to-do, audit, quality, coding, resume), migration (migrate, paradigm-advisor, curator, strategist, designer, inspector), any-phase (data-master, design-system, visor, reconstructor, principles, n8n), help (aegis-agents-help).
 
-Para cada agente, use template: `## [name] — [description]` + analogia breve (se conhecida) + quando usar. Formato conciso, não copie texto hard-coded abaixo (desatualizado).
+For each agent, use the template `## [name] — [description]` + a brief analogy (if known) + when to use it. Keep it concise; do not copy the hard-coded text below (it is outdated).
 
 ---
 
@@ -85,30 +85,30 @@ O Reviewer pega os contratos do Writer e tenta furar: *"Isso é contradição. E
 
 ---
 
-## 🖼️ Visor — o ilustrador forense
+## 🖼️ Visor — the forensic illustrator
 **Comando:** `/aegis-visor`
 
-O ilustrador forense trabalha só com imagens. Recebe screenshots do sistema e reconstrói fielmente a interface: telas, formulários, fluxos de navegação. Não precisa que o sistema esteja rodando — só das fotos.
+The forensic illustrator works only with images. They receive system screenshots and faithfully reconstruct the interface: screens, forms, and navigation flows. They do not need the system running — only the pictures.
 
-> Use o Visor quando tiver screenshots disponíveis. Ele documenta a UI sem precisar de acesso ao sistema.
+> Use Visor when you have screenshots available. It documents the UI without needing system access.
 
 ---
 
-## 🗄️ Data Master — o geólogo
+## 🗄️ Data Master — the geologist
 **Comando:** `/aegis-data-master`
 
-O geólogo mapeia o subsolo — a camada que ninguém vê mas que sustenta tudo. Tabelas, relacionamentos, constraints, triggers, procedures. A fundação invisível sobre a qual a aplicação está construída.
+The geologist maps the underground layer — the part nobody sees but that supports everything. Tables, relationships, constraints, triggers, procedures. The invisible foundation on which the application is built.
 
-> Use o Data Master quando houver DDL, migrations ou modelos ORM disponíveis. Ele documenta o banco completamente.
+> Use Data Master when DDL, migrations, or ORM models are available. It documents the database completely.
 
 ---
 
-## 🎨 Design System — o estilista
+## 🎨 Design System — the stylist
 **Comando:** `/aegis-design-system`
 
-O estilista cataloga o guarda-roupa: paleta de cores, tipografia, espaçamentos, tokens de design. As "regras de moda" que governam a aparência do sistema — o que pode e o que não pode ser combinado.
+The stylist catalogs the wardrobe: color palette, typography, spacing, design tokens. The "fashion rules" that govern the system's appearance — what can and cannot be combined.
 
-> Use o Design System quando houver arquivos CSS, temas ou screenshots de interface. Ele extrai os tokens visuais do projeto.
+> Use Design System when CSS files, themes, or UI screenshots are available. It extracts the project's visual tokens.
 
 ---
 
@@ -120,6 +120,6 @@ O estilista cataloga o guarda-roupa: paleta de cores, tipografia, espaçamentos,
 Ou manualmente:
 Scout → Archaeologist (N sessões) → Detective → Architect → Writer → Reviewer
 
-Opcionais em qualquer fase:
+Optional in any phase:
 Visor · Data Master · Design System
 ```
