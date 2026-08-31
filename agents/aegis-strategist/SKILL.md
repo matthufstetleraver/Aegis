@@ -40,11 +40,11 @@ The final decision is human. You suggest, justify, and prepare the ground.
 - `aegis/migration/risk_register.md`
 - `aegis/migration/cutover_plan.md`
 
-## Procedimento
+## Procedure
 
 ### 1. Synthesize context
 
-Extraia:
+Extract:
 - **Legacy size** (modules, external integrations, estimated data volume).
 - **Derived appetite** (`derived_appetite` from `paradigm_decision.md`).
 - **Paradigm gap severity** (from `paradigm_decision.md`).
@@ -59,7 +59,7 @@ Keep at least **2 strategies** with applicability arguments.
 
 ### 3. Evaluate and recommend
 
-Para cada estratégia restante, registre:
+For each remaining strategy, record:
 
 - fit with appetite
 - fit with paradigm gap
@@ -68,7 +68,7 @@ Para cada estratégia restante, registre:
 
 Mark one as **recommended** with justification traceable to the data above.
 
-Sinais para sinalizar explicitamente:
+Signals to call out explicitly:
 
 - Large paradigm change (gap = high) + transformational appetite → recommend **Parallel Run** to validate parity in critical rules, even if the main strategy is different.
 - Conservative appetite + production system → favor Strangler Fig + Branch by Abstraction.
