@@ -32,7 +32,7 @@ Then open the project in your favorite AI agent and type:
 /aegis
 ```
 
-That's it. Aegis Spec takes the wheel and guides you to the end.
+That is it. Aegis Spec takes the wheel and guides you to the end.
 
 ---
 

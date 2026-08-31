@@ -11,7 +11,7 @@ aegis/
 ├── config/
 │   ├── state.json              ← analysis state between sessions
 │   ├── config.toml             ← project configuration
-│   ├── config.user.toml        ← your personal preferences (don't commit)
+│   ├── config.user.toml        ← your personal preferences (do not commit)
 │   ├── manifest.yaml           ← installation metadata
 │   └── files-manifest.json     ← SHA-256 hashes for safe updates
 ├── plan.md                     ← exploration plan (you can edit this)
@@ -59,7 +59,7 @@ name = "Your Name"
 answer_mode = "chat"  # "chat" or "file"
 ```
 
-!!! warning "Don't commit"
+!!! warning "Do not commit"
     Add `config.user.toml` to `.gitignore`. Each team member can have their own preferences without affecting others.
 
 ---

@@ -33,7 +33,7 @@ The most tested engine with the best support. Uses native slash commands, making
 
 ## Codex
 
-Fully compatible. Since Codex doesn't use slash commands, activation is by the agent name directly: `aegis`, `aegis-scout`, etc. The `AGENTS.md` file at the project root serves as the entry point.
+Fully compatible. Since Codex does not use slash commands, activation is by the agent name directly: `aegis`, `aegis-scout`, etc. The `AGENTS.md` file at the project root serves as the entry point.
 
 ---
 

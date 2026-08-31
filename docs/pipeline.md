@@ -21,7 +21,7 @@ Reconnaissance  Excavation    Interpretation       Generation    Review
 
 **Agent:** Scout
 
-The Scout does the first tour of the project. Like a real estate agent visiting a property for the first time: doesn't open drawers, doesn't read all the documents, just maps the territory.
+The Scout does the first tour of the project. Like a real estate agent visiting a property for the first time: does not open drawers, does not read all the documents, just maps the territory.
 
 What it produces:
 
@@ -114,7 +114,7 @@ What it produces:
 
 ## Independent agents
 
-These agents don't belong to a specific phase and can be triggered at any time:
+These agents do not belong to a specific phase and can be triggered at any time:
 
 | Agent | When to use |
 |-------|-------------|
