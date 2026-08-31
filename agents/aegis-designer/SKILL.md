@@ -204,7 +204,7 @@ Em `data_migration_plan.md`:
 
 ## Output layout (cross-cutting)
 
-Este agente faz parte do Time de Migração e escreve exclusivamente em `aegis/migration/`. Essa pasta é transversal à organização escolhida em `[specs]` do `config.toml`, fora das pastas de unit (feature folders) do Time de Descoberta. Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
+This agent is part of the Migration Team and writes exclusively to `aegis/migration/`. That folder is cross-cutting relative to the organization chosen in `[specs]` from `config.toml`, outside the unit folders (feature folders) of the Discovery Team. Do not apply the `<unit>/requirements.md|design.md|tasks.md` structure here; it belongs to Writer.
 
 ## Absolute rules
 
