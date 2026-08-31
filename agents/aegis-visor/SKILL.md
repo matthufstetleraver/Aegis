@@ -12,27 +12,27 @@ metadata:
 
 You are Visor. Your mission is to document the interface from images, without needing the system to be running.
 
-## Quando rodar
+## When to run
 
 Any-phase skill — invoke it when new screenshots arrive; it is not part of the main pipeline. If UI specs (`ui-components.md`, `wireframes/`) already exist, append new screens/flows. If the user passes `--force`, regenerate everything.
 
-## Antes de começar
+## Before you start
 
-Leia, nesta ordem:
+Read the following, in order:
 
-1. `aegis/config/state.json` → campo `output_folder` (padrão: `aegis`).
-2. `aegis/config/config.toml` → seção `[specs]` (campo `granularity`, `custom_folders`).
-3. `aegis/config/config.user.toml` → seção `[specs]` se existir, com precedência chave a chave.
+1. `aegis/config/state.json` → `output_folder` field (default: `aegis`).
+2. `aegis/config/config.toml` → `[specs]` section (`granularity`, `custom_folders`).
+3. `aegis/config/config.user.toml` → `[specs]` section if it exists, with key-by-key precedence.
 4. `aegis/runtime/context/surface.json` → `modules`, `organization_suggestion.features`.
 
 `granularity` defines how each screen is mapped to a unit (see "Screen → unit mapping" below).
 
-## Pedido ao usuário
+## User prompt
 
 If there are no screenshots yet:
 > "[Name], to document the interface, send screenshots of the system screens. You can send them one at a time or several at once. Prioritize the main screens and the most important flows."
 
-## Processo
+## Process
 
 ### 1. Screen inventory
 For each screenshot:
@@ -64,28 +64,28 @@ For each screen, decide which unit it belongs to. The unit follows the `granular
 
 | `granularity` | How to map the screen |
 |---------------|---------------------|
-| `module` | URL/route da tela bate com o nome de um módulo de `surface.json.modules` (ex.: `/orders/...` → `pedidos`) |
-| `endpoint` | Tela consome um conjunto de endpoints, escolha o endpoint principal como unit |
-| `use-case` | Tela executa um caso de uso identificável, mapeie para o caso correspondente |
-| `hybrid` | Mapeie no nível mais específico aplicável, módulo ou caso de uso aninhado |
-| `feature` | Tela faz parte de uma das features listadas em `organization_suggestion.features` |
-| `custom` | Tela bate com uma das pastas de `[specs].custom_folders` |
+| `module` | Screen route/URL matches the name of a module in `surface.json.modules` (e.g. `/orders/...` → `pedidos`) |
+| `endpoint` | Screen consumes a set of endpoints; choose the main endpoint as the unit |
+| `use-case` | Screen executes an identifiable use case; map to the corresponding case |
+| `hybrid` | Map at the most specific applicable level, module or nested use case |
+| `feature` | Screen is part of one of the features listed in `organization_suggestion.features` |
+| `custom` | Screen matches one of the folders in `[specs].custom_folders` |
 
 When the mapping is ambiguous (the screen could belong to two potential units), ask the user before saving.
 
 When the unit folder does not exist yet (Writer has not run), create it empty to hold the screenshots. When Writer runs later, it finds the folder and adds `requirements.md`, `design.md`, `tasks.md` (EC-05).
 
-## Saída
+## Output
 
 **Per unit, inside the unit folder:**
 
-- `<output_folder>/specs/sdd/<unit>/screenshots/<nome-da-tela>.<ext>`, o(s) screenshot(s) original(is) capturado(s) pelo usuário (RF-09)
-- `<output_folder>/specs/sdd/<unit>/screens.md`, spec detalhada das telas dessa unit (uma seção por tela). Substitui o antigo `screens/<nome-da-tela>.md` solto
+- `<output_folder>/specs/sdd/<unit>/screenshots/<screen-name>.<ext>`, the original screenshot(s) captured by the user (RF-09)
+- `<output_folder>/specs/sdd/<unit>/screens.md`, detailed spec for the screens in that unit (one section per screen). Replaces the old loose `screens/<screen-name>.md`
 
 **Global, in `<output_folder>/specs/ui/`:**
 
-- `inventory.md`, inventário completo de todas as telas, com a unit a que cada uma foi mapeada
-- `flow.md`, fluxo de navegação em Mermaid (atravessa units)
+- `inventory.md`, complete inventory of all screens, with the unit each one was mapped to
+- `flow.md`, navigation flow in Mermaid (cross-unit)
 
 ## Non-destructive directive
 
