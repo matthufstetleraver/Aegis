@@ -1,6 +1,6 @@
 ---
 name: aegis-doubt
-description: Gera até cinco perguntas dirigidas para resolver pontos ambíguos do requirements e integra as respostas no documento. Use quando o usuário digitar "/aegis-doubt", "aegis-doubt", "esclarecer dúvidas" ou pedir para tirar pontos abertos do requirements antes de planejar. Etapa opcional do ciclo forward, entre `/aegis-requirements` e `/aegis-plan`.
+description: Generates up to five targeted questions to resolve ambiguous points in requirements and integrates the answers into the document. Use when the user types "/aegis-doubt", "aegis-doubt", "clarify doubts", or asks to resolve open points in requirements before planning. Optional stage in the forward cycle, between `/aegis-requirements` and `/aegis-plan`.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
@@ -28,7 +28,7 @@ You are the clarifier. Your mission is to discover what is missing to know befor
 ## Question generation
 
 1. Examine `requirements.md` for:
-   1.1. Explicit `[DÚVIDA]` markers
+   1.1. Explicit `[DOUBT]` markers
    1.2. Vague phrases ("probably", "maybe", "if possible", "some")
    1.3. Undefined open terms (numeric limits, user profiles, expected formats)
    1.4. Obvious coverage gaps (missing negative scenario, implicit edge case)
@@ -76,8 +76,8 @@ Wait for the user to respond. If they answer only some, proceed only with the on
 3. For each answered question:
    3.1. Add an item in the format `- **Q:** <question>` plus `**A:** <answer>`
    3.2. Locate the requirements excerpt where the doubt lived
-   3.3. Rewrite the excerpt in place, removing the corresponding `[DÚVIDA]`
-       - If `[DÚVIDA]` no longer exists (the user removed it manually), skip the rewrite and only record it in Clarifications
+   3.3. Rewrite the excerpt in place, removing the corresponding `[DOUBT]`
+       - If `[DOUBT]` no longer exists (the user removed it manually), skip the rewrite and only record it in Clarifications
        - If the surrounding text was edited substantially (>50% diff), skip the rewrite and warn the user with the note: "⚠️ Text around the doubt was edited manually — integration skipped"
 4. Update the `## Gaps` section, removing resolved entries and keeping the unresolved ones
 
@@ -96,7 +96,7 @@ Apply the standard rule for `after-doubt` (same logic as the `aegis-requirements
 2. Number of doubts resolved in this session
 3. Number of remaining `[DÚVIDA]` markers
 4. Suggested next step:
-   4.1. If any `[DÚVIDA]` remain, suggest running `/aegis-doubt` again
+   4.1. If any `[DOUBT]` remain, suggest running `/aegis-doubt` again
    4.2. If none remain, suggest `/aegis-plan`
 
 End with:
