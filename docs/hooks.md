@@ -1,6 +1,6 @@
 # Hooks (auto Keeper)
 
-Install hook configuration in your AI engine so the Keeper runs automatically every time you edit a file.
+Install hook configuration in your AI engine so Keeper runs automatically every time you edit a file.
 
 Manual `/aegis-keeper after` always works as a fallback. Hooks just remove the friction.
 

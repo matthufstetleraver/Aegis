@@ -1,9 +1,9 @@
 # Keeper auto mode
 
 LLM-driven drift triage for the Aegis Spec Keeper. Auto mode replaces the
-three-question HITL flow with a deterministic decision tree, falling back
-to Claude Haiku only when the policy doesn't already cover the case. Spec
-rewrites use Claude Sonnet, but only on the path that auto-resolves.
+three-question human-in-the-loop flow with a deterministic decision tree and
+falls back to Claude Haiku only when the policy does not already cover the
+case. Spec rewrites use Claude Sonnet, but only on the path that auto-resolves.
 
 ```bash
 npx aegis-spec keeper auto --dry-run
@@ -60,7 +60,7 @@ npx aegis-spec keeper auto [--dry-run] [--max-specs N] [--cwd <path>]
 
 ## Audit log
 
-Every decision is appended to `aegis/runtime/audit/YYYY-MM-DD.jsonl`. Schema
+Every decision is appended to `aegis/runtime/audit/YYYY-MM-DD.jsonl`. The schema is
 documented in `lib/audit/schema.md`. Configure redaction with
 `aegis/config/audit-policy.json`:
 
@@ -72,5 +72,4 @@ documented in `lib/audit/schema.md`. Configure redaction with
 
 `bot/keeper-bot/` ships a webhook-shape-agnostic handler. See
 `bot/keeper-bot/install.md` for setup. The bot is restricted to commits
-under `aegis/**` — any change outside that prefix aborts the
-push.
+under `aegis/**` — any change outside that prefix aborts the push.
