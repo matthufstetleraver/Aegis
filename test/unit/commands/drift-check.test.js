@@ -20,7 +20,7 @@ test('drift-check: exit 2 + JSON shape with --format=json when missing', async (
   const r = await runCommand(DRIFT_MD, ['--format=json'], { cwd: root });
   assert.equal(r.exitCode, 2);
   // process.stdout.write writes raw — captured via runCommand's console.log? No,
-  // process.stdout.write bypasses console.log. Inspect process behaviour.
+  // process.stdout.write bypasses console.log. Inspect process behavior.
 });
 
 test('drift-check: exit 0 when no rows pending at high severity', async (t) => {
