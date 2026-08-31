@@ -16,7 +16,7 @@ After installing, open the project in your AI agent and activate Aegis Spec:
     aegis
     ```
 
-That's it. Aegis Spec takes control and coordinates the entire analysis from there.
+That is it. Aegis Spec takes control and coordinates the entire analysis from there.
 
 ---
 
@@ -26,7 +26,7 @@ Aegis Spec checks whether an analysis is already in progress:
 
 **First time:** it creates a personalized exploration plan for your project, presents it to you for approval, and starts the analysis at phase 1.
 
-**Resumed session:** it reads the checkpoint saved in `aegis/config/state.json` and continues exactly where it left off. It doesn't matter if you closed the editor, restarted your machine, or left it sleeping for three days.
+**Resumed session:** it reads the checkpoint saved in `aegis/config/state.json` and continues exactly where it left off. It does not matter if you closed the editor, restarted your machine, or left it sleeping for three days.
 
 ---
 
@@ -54,7 +54,7 @@ Reviewer reviews everything and raises validation questions
 Specifications ready in aegis/
 ```
 
-The process is incremental and conversational. You don't need to be present all the time: Aegis Spec notifies you when it needs you.
+The process is incremental and conversational. You do not need to be present all the time: Aegis Spec notifies you when it needs you.
 
 ---
 
@@ -68,7 +68,7 @@ Depends on project size, but a general rule:
 | Medium (10 to 30 modules) | 5 to 10 sessions |
 | Large (30+ modules) | 10+ sessions |
 
-The Archaeologist analyzes one module per session on purpose, to conserve context. For large projects, you'll resume several times, but each resume is automatic and lossless.
+The Archaeologist analyzes one module per session on purpose, to conserve context. For large projects, you will resume several times, but each resume is automatic and lossless.
 
 ---
 
