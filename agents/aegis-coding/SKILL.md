@@ -2,7 +2,7 @@
 name: aegis-coding
 description: Conduz a execução do actions.md em código. Atualiza checkboxes para [X], escreve progress.jsonl, gera legacy-impact.md e regression-watch.md. Use quando o usuário digitar "/aegis-coding", "aegis-coding", "executar plano" ou pedir para começar a codar a feature ativa. Último skill do ciclo forward, depois de `/aegis-to-do` (e opcionalmente `/aegis-audit` ou `/aegis-quality`).
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -13,18 +13,18 @@ metadata:
 
 Você é o executor. Sua missão é transformar `actions.md` em código real, fase por fase, respeitando paralelismo e dependências. Ao terminar, deixar dois rastros para auditoria futura: `legacy-impact.md` (o que foi mexido no legado) e `regression-watch.md` (o que precisa continuar verdadeiro nas próximas extrações).
 
-## Antes de começar
+## Before you start
 
 1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
 2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
 
-## Pré-requisito inegociável: extração de especificações
+## Non-negotiable prerequisite: specification extraction
 
 Esse skill **EXIGE** que a pipeline de descoberta tenha sido executada antes pelo menos uma vez. Sem `aegis/`, os dois artefatos centrais do skill (`legacy-impact.md` e `regression-watch.md`) ficam sem âncora e perdem completamente o valor, o ciclo forward vira um framework genérico qualquer. O Aegis Spec só faz sentido com a ponte legado-código viva.
 
 A verificação é estrita: `aegis/` precisa existir como diretório E conter pelo menos `architecture.md` E `domain.md`. Se qualquer condição falhar, o skill aborta com mensagem clara, NÃO oferece opção de prosseguir mesmo assim, NÃO escreve nada em disco.
 
-## Verificações Iniciais
+## Initial checks
 
 1. Leia `aegis/config/active-requirements.json`
    1.1. Se ausente, aborte com mensagem apontando `/aegis-requirements`
@@ -53,12 +53,12 @@ A verificação é estrita: `aegis/` precisa existir como diretório E conter pe
 
 4. Aplique `before-coding` da forma padrão
 
-## Escopo da rodada
+## Round scope
 
 1. Se o argumento livre indicar fase ou intervalo de IDs (ex.: "só Núcleo", "T001-T005"), restrinja a execução a esse escopo
 2. Caso contrário, execute em ordem todas as ações `[ ]` ainda não concluídas
 
-## Loop de execução por fase
+## Phase execution loop
 
 Para cada fase, na ordem Preparação, Testes, Núcleo, Integração, Polimento:
 
@@ -75,7 +75,7 @@ Para cada fase, na ordem Preparação, Testes, Núcleo, Integração, Polimento:
    6.2. Registre `status: failed` no progress
    6.3. Pare a fase e relate ao usuário
 
-## Geração do legacy-impact.md
+## Generating legacy-impact.md
 
 Após executar (mesmo que parcialmente):
 
@@ -95,7 +95,7 @@ Estrutura do arquivo:
 
 Grave em `feature-dir/legacy-impact.md` com escrita atômica, rewrite completo.
 
-## Geração do regression-watch.md
+## Generating regression-watch.md
 
 1. Para cada regra na seção "Modificadas" do `legacy-impact.md`, gere um watch item
 2. Para regras explicitamente removidas, gere watch item do tipo `ausência`
@@ -114,7 +114,7 @@ NUNCA inclua no watch principal regras que originalmente eram 🟡 ou 🔴, essa
 
 Grave em `feature-dir/regression-watch.md`. A primeira execução cria o arquivo; execuções seguintes fazem append nas seções de itens novos, jamais reescrevendo histórico ou IDs antigos.
 
-## Atualização do progress.jsonl
+## Updating progress.jsonl
 
 Cada linha deve ter, no mínimo:
 
@@ -124,11 +124,11 @@ Cada linha deve ter, no mínimo:
 
 Append-only. Jamais reescreva linhas anteriores, mesmo se descobrir que ficaram erradas. Para corrigir, adicione nova linha `status: corrected` com o ID alvo.
 
-## Ganchos Pós-execução
+## Post-run hooks
 
 Aplique `after-coding` da forma padrão.
 
-## Relatório final ao usuário
+## Final report to the user
 
 1. Quantas ações executadas com sucesso
 2. Quantas falharam (se houver)
