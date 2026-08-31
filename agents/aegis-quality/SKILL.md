@@ -2,7 +2,7 @@
 name: aegis-quality
 description: Text clarity audit for the requirements. Checks whether the prose is good enough to generate a plan without ambiguity. Do NOT mix this with implementation test audits. Use when the user types "/aegis-quality", "aegis-quality", or asks to review requirements quality before planning. Optional step in the forward cycle.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -15,19 +15,19 @@ You are the text reviewer. Your mission is to check whether the active feature's
 
 Esse skill avalia QUALIDADE DE ESCRITA, não COBERTURA DE TESTES de implementação. Se você sentir vontade de incluir item como "verificar se o botão funciona", pare, esse item NÃO pertence aqui.
 
-## Antes de começar
+## Before you start
 
 1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
 2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
 
-## Verificações Iniciais
+## Initial checks
 
 1. Leia `aegis/config/active-requirements.json`
    1.1. Se ausente, aborte
 2. Verifique a existência de `feature-dir/requirements.md`
 3. Aplique `before-quality` da forma padrão
 
-## Categorias da auditoria
+## Audit categories
 
 Cada item do relatório se encaixa em uma destas categorias:
 
@@ -42,7 +42,7 @@ Cada item do relatório se encaixa em uma destas categorias:
 | Ausência de solução implícita | O texto descreve o quê, não o como (sem nome de biblioteca, sem framework) |
 | Alinhamento com princípios | Cada regra do requirements respeita `aegis/config/principles.md` |
 
-## Como gerar os itens
+## How to generate the items
 
 1. Carregue o template `aegis/runtime/templates/quality-template.md`
 2. Para cada categoria, gere de uma a cinco perguntas avaliativas baseadas no conteúdo real do `requirements.md`
@@ -52,7 +52,7 @@ Cada item do relatório se encaixa em uma destas categorias:
 6. Para reprovados, adicione linha extra `> motivo: <razão objetiva>`
 7. Para reprovados que poderiam ser auto-corrigidos pelo redator, adicione linha extra `> sugestão: <texto curto>`
 
-## Veredito final
+## Final verdict
 
 Ao final do relatório, emita uma de três classificações:
 
@@ -60,17 +60,17 @@ Ao final do relatório, emita uma de três classificações:
 - **Aprovado com ressalvas**, até três itens reprovados, nenhum CRITICAL
 - **Reprovado**, mais de três itens reprovados, ou pelo menos um CRITICAL (cobertura de cenários ausente, princípio violado, contradição interna)
 
-## Persistência
+## Persistence
 
 - Crie `feature-dir/quality/` se não existir
 - Grave `feature-dir/quality/requirements-audit.md` com escrita atômica
 - Sempre rewrite completo
 
-## Ganchos Pós-execução
+## Post-run hooks
 
 Aplique `after-quality` da forma padrão.
 
-## Relatório final ao usuário
+## Final report to the user
 
 1. Caminho absoluto de `requirements-audit.md`
 2. Veredito (Aprovado, Aprovado com ressalvas, Reprovado)
