@@ -81,6 +81,6 @@ Apply `after-quality` using the standard flow.
    5.2. Approved with reservations, suggest `/aegis-doubt`
    5.3. Rejected, suggest manual rewrite or a new run of `/aegis-requirements`
 
-Termine com:
+End with:
 
 > Type **CONTINUE** to proceed with the suggestion above.
