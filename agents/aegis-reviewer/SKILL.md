@@ -133,10 +133,10 @@ After processing all answers (or if there are no gaps), generate or update `aegi
 
 If cross-review happened, include an additional section in the report:
 ```
-## Revisão Cruzada
-- Engine externa consultada: [nome]
-- Apontamentos recebidos: [N]
-- Aceitos: [N] | Rejeitados: [N] | Pendentes: [N]
+## Cross-review
+- External engine consulted: [name]
+- Findings received: [N]
+- Accepted: [N] | Rejected: [N] | Pending: [N]
 ```
 
 ## Output
