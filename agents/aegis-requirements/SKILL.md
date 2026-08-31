@@ -1,6 +1,6 @@
 ---
 name: aegis-requirements
-description: Transforma uma ideia em linguagem natural num documento de requisitos completo, ancorado nos artefatos da pipeline de descoberta. Use quando o usuário digitar "/aegis-requirements", "aegis-requirements", "quero levantar requisitos" ou pedir para iniciar uma nova feature a partir de uma frase. Primeiro skill do ciclo forward (requirements, doubt, plan, to-do, audit, quality, coding).
+description: Turns a natural-language idea into a complete requirements document anchored in the discovery pipeline artifacts. Use when the user types "/aegis-requirements", "aegis-requirements", "I want to gather requirements", or asks to start a new feature from a sentence. First skill in the forward cycle (requirements, doubt, plan, to-do, audit, quality, coding).
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
@@ -11,7 +11,7 @@ metadata:
   stage: requirements
 ---
 
-Você é o redator de requisitos do Aegis Spec. Sua missão é converter o argumento livre passado pelo usuário (frase ou parágrafo descrevendo o objetivo da feature) num `requirements.md` completo, atravessando o conhecimento já extraído do sistema legado.
+You are the Aegis Spec requirements writer. Your mission is to turn the user's freeform input (a sentence or paragraph describing the feature goal) into a complete `requirements.md`, drawing on the knowledge already extracted from the legacy system.
 
 ## Before you start
 
@@ -24,26 +24,26 @@ Você é o redator de requisitos do Aegis Spec. Sua missão é converter o argum
 
 ## Initial checks
 
-1. Tente ler `aegis/runtime/hooks.yml`
-   1.1. Se o YAML for inválido ou inexistente, prossiga sem ganchos
-   1.2. Se válido, procure a chave `before-requirements` e filtre entradas com `enabled: false`
-2. Para cada gancho restante:
-   2.1. Se `optional: true`, apresente como link em "## Ganchos Disponíveis" com `label`, `description` e `command`
-   2.2. Se `optional: false`, emita a diretiva `EXECUTAR: <comando>` e aguarde o resultado antes de prosseguir
-3. NUNCA tente avaliar a chave `condition` desses ganchos, apenas registre que ela existe e siga em frente
+1. Try to read `aegis/runtime/hooks.yml`
+   1.1. If the YAML is invalid or missing, continue without hooks
+   1.2. If valid, look for the `before-requirements` key and filter out entries with `enabled: false`
+2. For each remaining hook:
+   2.1. If `optional: true`, present it as a link in "## Available Hooks" with `label`, `description`, and `command`
+   2.2. If `optional: false`, emit the directive `EXECUTE: <command>` and wait for the result before continuing
+3. NEVER try to evaluate those hooks' `condition` key; just note that it exists and move on
 
 ## Detecting an active feature
 
-Antes de criar feature nova, verifique se já existe uma anterior em andamento. A detecção é baseada em **artefatos físicos da feature**, não em campos auto-declarados, porque é resistente a skills que esquecem de atualizar metadados.
+Before creating a new feature, check whether an earlier one is already in progress. Detection is based on the feature's **physical artifacts**, not self-declared fields, because that is resilient to skills that forget to update metadata.
 
-1. Tente ler `aegis/config/active-requirements.json`
-   1.1. Se o arquivo não existir, NÃO há feature em andamento, pule esta seção e siga direto para "Resolução do diretório da feature"
-   1.2. Se o JSON estiver inválido ou corrompido, trate como ausente, registre o problema em nota interna e siga adiante
-2. Leia o campo `feature-dir` do JSON
-   2.1. Se `feature-dir` não estiver presente ou apontar para pasta que não existe, trate como ausente, prossiga normalmente
-3. Identifique o **estágio físico atual** olhando os artefatos dentro de `feature-dir`:
+1. Try to read `aegis/config/active-requirements.json`
+   1.1. If the file does not exist, there is NO feature in progress; skip this section and go straight to "Resolving the feature directory"
+   1.2. If the JSON is invalid or corrupted, treat it as missing, record the issue in an internal note, and continue
+2. Read the `feature-dir` field from the JSON
+   2.1. If `feature-dir` is missing or points to a folder that does not exist, treat it as missing and continue normally
+3. Identify the **current physical stage** by inspecting the artifacts inside `feature-dir`:
 
-   | Condição observada | Estágio físico |
+   | Observed condition | Physical stage |
    |--------------------|----------------|
    | `requirements.md` ausente | `vazio` |
    | `requirements.md` presente, `roadmap.md` ausente | `requirements` |
@@ -51,48 +51,48 @@ Antes de criar feature nova, verifique se já existe uma anterior em andamento. 
    | `actions.md` presente com pelo menos uma linha `\| ... \| \[ \] \|` (checkbox aberto) | `coding-em-progresso` |
    | `actions.md` presente, TODAS as linhas de ação como `\| ... \| \[X\] \|` (checkboxes fechados) | `done` |
 
-4. Considere a feature anterior **em andamento** quando o estágio físico for QUALQUER valor diferente de `done` e `vazio`. Ou seja:
+4. Consider the previous feature **in progress** when the physical stage is ANY value other than `done` or `empty`. That is:
    4.1. `requirements`, `plan` ou `coding-em-progresso` → em andamento
    4.2. `done` → concluída, trate como ausente, sobrescreva ao criar nova
    4.3. `vazio` → corrupção, `feature-dir` existe mas sem `requirements.md`, trate como ausente
-5. Se for em andamento, registre internamente para uso na próxima seção:
-   5.1. Identificador da feature, no formato `<NNN>-<short-name>` derivado de `feature-dir` (basename)
-   5.2. Estágio físico detectado, valor entre `requirements`, `plan`, `coding-em-progresso`
-   5.3. Para `coding-em-progresso`, conte quantas ações `[X]` versus quantas `[ ]` em `actions.md`, isso ajuda o usuário a decidir
-6. Para a contagem de checkboxes em `actions.md`, considere apenas linhas de tabela que terminam com `\| [ ] \|` ou `\| [X] \|`. Cabeçalhos e linhas de texto livre são ignorados.
+5. If it is in progress, record internally for use in the next section:
+   5.1. Feature identifier, in the format `<NNN>-<short-name>`, derived from `feature-dir` (basename)
+   5.2. Detected physical stage, a value between `requirements`, `plan`, and `coding-in-progress`
+   5.3. For `coding-in-progress`, count how many `[X]` actions versus `[ ]` actions are in `actions.md`; this helps the user decide
+6. For checkbox counts in `actions.md`, consider only table rows ending with `| [ ] |` or `| [X] |`. Headers and free-text lines are ignored.
 
-A política de o que fazer quando há feature em andamento está descrita na próxima seção "Política de re-execução".
+The policy for what to do when there is an in-progress feature is described in the next section, "Re-execution policy".
 
 ## Re-execution policy
 
-Se a detecção identificou feature anterior em andamento (estágio físico em `requirements`, `plan` ou `coding-em-progresso`), **pergunte sempre ao usuário** antes de qualquer escrita. Não há default automático, o objetivo é eliminar surpresa.
+If detection identifies a previous feature in progress (physical stage `requirements`, `plan`, or `coding-in-progress`), **always ask the user** before writing anything. There is no automatic default; the goal is to avoid surprises.
 
-Apresente o bloco abaixo ao usuário:
+Present the block below to the user:
 
-> Já existe uma feature em andamento:
-> - Identificador: `<NNN>-<short-name>`
-> - Estágio detectado: `<estágio físico>`
-> - Progresso (apenas para `coding-em-progresso`): `<N>` de `<M>` ações concluídas
+> There is already a feature in progress:
+> - Identifier: `<NNN>-<short-name>`
+> - Detected stage: `<physical stage>`
+> - Progress (only for `coding-in-progress`): `<N>` of `<M>` completed actions
 >
-> Como você quer proceder?
+> How would you like to proceed?
 >
-> **1. Continuar a anterior**, vou abortar este `/aegis-requirements` e você retoma a feature em curso.
-> **2. Criar nova em paralelo**, a feature anterior fica pausada num campo `paused-features` e a nova vira ativa.
-> **3. Abandonar a anterior**, a pasta antiga fica em disco intocada mas `active-requirements.json` vai apontar pra nova.
+> **1. Continue the previous one**, I will abort this `/aegis-requirements` and you will resume the in-progress feature.
+> **2. Create a new one in parallel**, the previous feature is paused in a `paused-features` field and the new one becomes active.
+> **3. Abandon the previous one**, the old folder stays untouched on disk but `active-requirements.json` will point to the new one.
 >
 > Digite 1, 2 ou 3.
 
-Aguarde a resposta. NÃO escolha por conta própria, NÃO interprete silêncio como confirmação de qualquer opção.
+Wait for the response. Do NOT choose on your own, and do NOT interpret silence as confirmation of any option.
 
 ### Option 1, continue the previous one
 
-1. Não escreva em `active-requirements.json`
-2. Não crie pasta nova em `aegis/forward/`
-3. Sugira ao usuário o próximo skill apropriado para o estágio físico:
-   3.1. `requirements` → `/aegis-doubt` (se houver marcadores `[DÚVIDA]` no `requirements.md`) ou `/aegis-plan`
+1. Do not write to `active-requirements.json`
+2. Do not create a new folder in `aegis/forward/`
+3. Suggest the user the next skill appropriate for the physical stage:
+   3.1. `requirements` → `/aegis-doubt` (if there are `[DÚVIDA]` markers in `requirements.md`) or `/aegis-plan`
    3.2. `plan` → `/aegis-to-do`
-   3.3. `coding-em-progresso` → `/aegis-coding` (pode receber argumento livre restringindo escopo, ex.: "T010-T015")
-4. Encerre este skill com mensagem clara informando que nada foi escrito, NÃO execute as próximas seções
+   3.3. `coding-in-progress` → `/aegis-coding` (may receive a freeform argument narrowing the scope, e.g. "T010-T015")
+4. End this skill with a clear message saying nothing was written, and do NOT execute the next sections
 
 ### Option 2, create a new one in parallel
 
