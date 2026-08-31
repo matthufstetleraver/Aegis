@@ -86,7 +86,7 @@ Confirme que o checkpoint do módulo concluído está em `aegis/config/state.jso
 
 ## Layout de saída (transversal)
 
-Este agente produz artefatos transversais à organização escolhida em `[specs]` do `config.toml`. Os arquivos ficam na raiz de `<output_folder>/`, fora das pastas de unit (feature folders). Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
+This agent produces cross-cutting artifacts relative to the organization chosen in `[specs]` from `config.toml`. The files go in the root of `<output_folder>/`, outside the unit folders (feature folders). Do not apply the `<unit>/requirements.md|design.md|tasks.md` structure here; it belongs to Writer.
 
 **Optional contribution per unit:** when the `granularity` read from `[specs]` is `module`, this agent CAN additionally generate `<output_folder>/specs/sdd/<module>/legacy-mapping.md` per analyzed module, listing the legacy files that make up that module with direct reference to paths and line numbers. This artifact is optional and respects the non-destructive directive (preserves the unit folder if it already exists, created by Writer or Visor).
 

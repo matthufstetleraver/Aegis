@@ -73,11 +73,11 @@ For each module `M` in `surface.json.modules`, create the folder `<output_folder
 
 **Global artifacts, outside the unit folders:**
 
-Estes ficam fora das pastas de unit, na hierarquia padrão do `<output_folder>/`:
+These go outside the unit folders, in the standard hierarchy of `<output_folder>/`:
 
-- `<output_folder>/traceability/code-spec-matrix.md`, apenas se `doc_level` = `completo` ou `detalhado`
-- `<output_folder>/specs/openapi/<api>.yaml`, apenas se `doc_level` = `completo` ou `detalhado` (ou se a API for o produto principal no `essencial`)
-- `<output_folder>/specs/user-stories/<fluxo>.md`, apenas se `doc_level` = `completo` ou `detalhado`
+- `<output_folder>/traceability/code-spec-matrix.md`, only if `doc_level` = `completo` or `detalhado`
+- `<output_folder>/specs/openapi/<api>.yaml`, only if `doc_level` = `completo` or `detalhado` (or if the API is the main product in `essencial`)
+- `<output_folder>/specs/user-stories/<flow>.md`, only if `doc_level` = `completo` or `detalhado`
 
 ## Fundamental principle
 

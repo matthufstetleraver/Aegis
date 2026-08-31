@@ -65,6 +65,6 @@ Gere em Mermaid (`erDiagram`). Para bancos grandes, gere ERDs parciais por domí
 
 ## Layout de saída (transversal)
 
-Este agente produz artefatos transversais à organização escolhida em `[specs]` do `config.toml`. Os arquivos ficam em `<output_folder>/specs/database/`, fora das pastas de unit (feature folders). Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
+This agent produces cross-cutting artifacts relative to the organization chosen in `[specs]` from `config.toml`. The files go in `<output_folder>/specs/database/`, outside the unit folders (feature folders). Do not apply the `<unit>/requirements.md|design.md|tasks.md` structure here; it belongs to Writer.
 
 Informe ao Aegis Spec: tabelas documentadas, relacionamentos mapeados, regras de negócio no banco.
