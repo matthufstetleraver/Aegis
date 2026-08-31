@@ -34,18 +34,18 @@ The `doc_level` field in state.json controls review behavior:
 
 ## Step 0 — Check Codex availability and offer cross-review
 
-Verifique se o plugin do Codex está ativo nesta sessão — ele estará disponível se houver ferramentas com prefixo `codex:` acessíveis (ex: `codex:rescue`, `codex:setup`).
+Check whether the Codex plugin is active in this session — it will be available if tools with the `codex:` prefix are accessible (for example, `codex:rescue`, `codex:setup`).
 
-**If `doc_level` is `essencial`:** ignore this step completely. Go directly to the review process.
+**If `doc_level` is `essential`:** ignore this step completely. Go directly to the review process.
 
 **If Codex is NOT available:** ignore this step completely. Do not mention cross-review, and do not explain why. Go directly to the review process.
 
-**Se o Codex estiver disponível e `doc_level` for `completo`:** pergunte ao usuário:
+**If Codex is available and `doc_level` is `complete`:** ask the user:
 
-> "[Nome], o plugin do Codex está ativo nesta sessão. Quer que eu chame o Codex para fazer uma revisão independente das specs antes da minha? Isso garante uma segunda opinião de uma LLM diferente da que gerou o código.
+> "[Name], the Codex plugin is active in this session. Would you like me to call Codex to do an independent review of the specs before mine? That gives you a second opinion from a different LLM than the one that generated the code.
 >
-> 1. Sim — chamar o Codex agora para revisão cruzada
-> 2. Não — revisar só eu mesmo"
+> 1. Yes — call Codex now for cross-review
+> 2. No — review it myself only"
 
 If the user chooses **No**, go directly to the review process.
 If they choose **Yes**, follow the flow below.
@@ -58,7 +58,7 @@ If they choose **Yes**, follow the flow below.
 
 ### Stage A — Delegate review to Codex
 
-Use a ferramenta `codex:rescue` (ou equivalente disponível) para delegar a seguinte tarefa ao Codex:
+Use the `codex:rescue` tool (or equivalent available tool) to delegate the following task to Codex:
 
 > You are an independent technical reviewer. Read, in each unit folder within `<output_folder>/specs/sdd/`, the `requirements.md`, `design.md`, and `tasks.md` files (and any optional files present), plus the global artifacts in `<output_folder>/`. Find:
 > 1. Internal inconsistencies, rules that contradict each other within the same unit
@@ -75,11 +75,11 @@ Wait for Codex to finish.
 
 After Codex finishes:
 
-1. Leia `aegis/reports/cross-review-result.md`
-2. Para cada apontamento válido:
-   - Atualize a spec correspondente
-   - Reclassifique conforme necessário
-   - Registre a origem: `[Revisão Codex]`
+1. Read `aegis/reports/cross-review-result.md`
+2. For each valid note:
+   - Update the corresponding spec
+   - Reclassify as needed
+   - Record the source: `[Codex Review]`
 3. For contestable findings, mark them as 🟡 and include a note explaining the conflict
 4. Proceed to the normal review process for your own complementary analysis
 
@@ -111,13 +111,13 @@ Group all questions in `aegis/reports/questions.md`.
 
 ### 5. User interaction
 
-#### Se `answer_mode = "chat"` (padrão)
+#### If `answer_mode = "chat"` (default)
 Present the questions directly in chat, one by one or in thematic blocks:
 > "[Name], I found [N] points that need your validation. Should I start?"
 
 Process each response immediately, updating the spec and reclassifying.
 
-#### Se `answer_mode = "file"`
+#### If `answer_mode = "file"`
 Create `aegis/reports/questions.md` with all questions formatted and say:
 > "[Name], I created `aegis/reports/questions.md` with [N] questions that need your validation.
 > Fill in the **Answer** field for each one and let me know when you're done — just type `aegis`."
