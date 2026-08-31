@@ -184,32 +184,32 @@ Identify the relevant files. Every citation inside requirements must point to th
 4. Repeat this cycle at most three times
 5. If problems persist after three iterations, record them in a final `## Quality Pending Items` section and move on
 
-## Persistência
+## Persistence
 
-- Grave `requirements.md` em `feature-dir/`
-- A escrita deve ser atômica (tempfile mais rename)
-- Use UTF-8 sem BOM
+- Write `requirements.md` in `feature-dir/`
+- The write must be atomic (tempfile plus rename)
+- Use UTF-8 without BOM
 
-## Ganchos Pós-execução
+## Post-execution hooks
 
-1. Procure `after-requirements` em `aegis/runtime/hooks.yml`
-2. Aplique a mesma regra de filtragem (`enabled: false` é descartado)
-3. Para `optional: true`, apresente links em "## Ganchos Disponíveis"
-4. Para `optional: false`, emita `EXECUTAR: <comando>` e aguarde
+1. Look for `after-requirements` in `aegis/runtime/hooks.yml`
+2. Apply the same filtering rule (`enabled: false` is discarded)
+3. For `optional: true`, present links in "## Available Hooks"
+4. For `optional: false`, emit `EXECUTE: <command>` and wait
 
-## Relatório final
+## Final report
 
-No final da execução, mostre ao usuário:
+At the end of execution, show the user:
 
-1. Caminho absoluto de `feature-dir`
-2. Caminho absoluto de `requirements.md`
-3. Número de marcadores `[DÚVIDA]` no documento
-4. Sugestão de próximo passo:
-   4.1. Se houver `[DÚVIDA]`, sugerir `/aegis-doubt`
-   4.2. Caso contrário, sugerir `/aegis-plan`
+1. Absolute path of `feature-dir`
+2. Absolute path of `requirements.md`
+3. Number of `[DÚVIDA]` markers in the document
+4. Suggested next step:
+   4.1. If there are `[DÚVIDA]` markers, suggest `/aegis-doubt`
+   4.2. Otherwise, suggest `/aegis-plan`
 
-Termine sempre com:
+Always end with:
 
-> Digite **CONTINUAR** para prosseguir com `/aegis-doubt` ou `/aegis-plan` conforme a sugestão acima.
+> Type **CONTINUE** to proceed with `/aegis-doubt` or `/aegis-plan` according to the suggestion above.
 
-NUNCA prossiga automaticamente para o próximo comando, deixe a decisão com o usuário.
+Do NOT proceed automatically to the next command; leave the decision with the user.
