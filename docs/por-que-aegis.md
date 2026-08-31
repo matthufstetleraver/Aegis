@@ -4,7 +4,7 @@
 
 Imagine a system that went live in 2015. Nobody who wrote it is still at the company. The original documentation was a Word file nobody knows where it went. The code works, generates revenue every day, but there are parts nobody dares to touch because "change this, break that."
 
-That system carries years of accumulated knowledge: implicit business rules, architectural decisions made at 11pm before a deadline, critical logic buried in functions with names like `process_v2_final_revised`. The knowledge exists. It's in the code. But it's trapped there, inaccessible to any AI agent.
+That system carries years of accumulated knowledge: implicit business rules, architectural decisions made at 11 pm before a deadline, and critical logic buried in functions with names like `process_v2_final_revised`. The knowledge exists. It is in the code. But it is trapped there, inaccessible to any AI agent.
 
 ---
 
@@ -12,7 +12,7 @@ That system carries years of accumulated knowledge: implicit business rules, arc
 
 AI agents are transformative for creating and evolving software. But they depend on specifications to operate safely.
 
-For new systems it works well: you write the spec, the agent executes. But for legacy systems? The agent has no way of knowing what it can't break. If you ask it to "refactor the payments module," it will refactor based on what the code *seems* to do, without knowing what the code *should* do.
+For new systems it works well: you write the spec, the agent executes. But for legacy systems? The agent has no way of knowing what it cannot break. If you ask it to "refactor the payments module," it will refactor based on what the code *seems* to do, without knowing what the code *should* do.
 
 The result is that classic moment: the agent breaks a business rule that nobody had documented, and you only find out when the client calls to complain.
 
@@ -22,7 +22,7 @@ The result is that classic moment: the agent breaks a business rule that nobody 
 
 Aegis Spec is the bridge between the legacy system and AI agents.
 
-It analyzes the existing code and extracts the accumulated knowledge: business rules, flows, contracts between modules, retroactive architectural decisions. Then it transforms everything into executable, traceable specifications ready for any coding agent.
+It analyzes the existing code and extracts the accumulated knowledge: business rules, flows, contracts between modules, and retroactive architectural decisions. Then it transforms everything into executable, traceable specifications ready for any coding agent.
 
 The result is not documentation for humans to read on a quiet afternoon. These are **operational contracts** that allow an agent to evolve the system with fidelity to what already exists.
 
@@ -39,6 +39,6 @@ The result is not documentation for humans to read on a quiet afternoon. These a
 
 ## What Aegis Spec is not
 
-Aegis Spec is not a traditional static analysis tool. It doesn't generate code coverage, doesn't do linting, doesn't flag bugs. It's a **knowledge extraction** framework: it takes what is implicit in the code and makes it explicit in formal specifications.
+Aegis Spec is not a traditional static analysis tool. It does not generate code coverage, does not do linting, and does not flag bugs. It is a **knowledge extraction** framework: it takes what is implicit in the code and makes it explicit in formal specifications.
 
-It's also not a magic solution. Parts of the system that are genuinely inaccessible through static analysis (behavior dependent on real data, rules that only exist in someone's head) will appear as gaps, marked with 🔴, waiting for human validation. Honesty is part of the design.
+It is also not a magic solution. Parts of the system that are genuinely inaccessible through static analysis (behavior dependent on real data, rules that only exist in someone's head) will appear as gaps, marked with 🔴, waiting for human validation. Honesty is part of the design.
