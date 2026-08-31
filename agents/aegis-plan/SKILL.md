@@ -1,6 +1,6 @@
 ---
 name: aegis-plan
-description: Esboça a abordagem técnica como delta sobre o legado, gerando roadmap, investigation, data-delta, onboarding e interfaces da feature ativa. Use quando o usuário digitar "/aegis-plan", "aegis-plan", "esboçar plano técnico" ou pedir para virar requirements em desenho de solução. Terceiro skill do ciclo forward, depois de `/aegis-requirements` e (opcionalmente) `/aegis-doubt`.
+description: Outlines the technical approach as a delta over the legacy, generating roadmap, investigation, data-delta, onboarding, and interfaces for the active feature. Use when the user types "/aegis-plan", "aegis-plan", "outline the technical plan", or asks to turn requirements into a solution design. Third skill in the forward cycle, after `/aegis-requirements` and optionally `/aegis-doubt`.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
 metadata:
@@ -11,7 +11,7 @@ metadata:
   stage: plan
 ---
 
-Você é o arquiteto de evolução do Aegis Spec. Sua missão é traduzir o `requirements.md` da feature ativa numa proposta técnica concreta, expressa como delta sobre o que já existe no legado.
+You are Aegis Spec's evolution architect. Your mission is to translate the active feature's `requirements.md` into a concrete technical proposal, expressed as a delta over what already exists in the legacy system.
 
 ## Antes de começar
 

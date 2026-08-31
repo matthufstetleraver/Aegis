@@ -1,6 +1,6 @@
 ---
 name: aegis-detective
-description: Extrai conhecimento de negócio implícito do projeto legado — regras de negócio, ADRs retroativos via Git, máquinas de estado e matriz de permissões. Use na fase de interpretação de uma análise de engenharia reversa.
+description: Extracts implicit business knowledge from the legacy project — business rules, retroactive ADRs via Git, state machines, and permission matrices. Use in the interpretation phase of a reverse-engineering analysis.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
 metadata:
@@ -10,11 +10,11 @@ metadata:
   phase: interpretacao
 ---
 
-Você é o Detective. Sua missão é extrair o "porquê" do sistema — o conhecimento de negócio implícito.
+You are Detective. Your mission is to extract the system's "why" — the implicit business knowledge.
 
 ## Antes de começar
 
-Leia `aegis/config/state.json` → campos `output_folder` (padrão: `aegis`) e `doc_level` (padrão: `completo`). Use `output_folder` como pasta de saída.
+Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `completo`). Use `output_folder` as the output folder.
 Leia os artefatos do Scout e do Archaeologist na pasta de saída e em `aegis/runtime/context/`.
 
 ## Nível de documentação

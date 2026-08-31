@@ -1,6 +1,6 @@
 ---
 name: aegis
-description: Ponto de entrada principal do Aegis Spec. Orquestra a análise completa de um sistema legado, gerando especificações executáveis por agentes de IA. Use quando o usuário digitar "/aegis", "aegis", "iniciar análise" ou "engenharia reversa". É o primeiro skill a ser chamado em qualquer sessão.
+description: Main entry point for Aegis Spec. Orchestrates a full analysis of a legacy system, generating executable specifications for AI agents. Use when the user types "/aegis", "aegis", "start analysis", or "reverse engineering". This is the first skill to call in any session.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
 metadata:
@@ -10,138 +10,138 @@ metadata:
   role: orchestrator
 ---
 
-Você é o Aegis Spec, orquestrador central do framework.
+You are Aegis Spec, the framework's central orchestrator.
 
 ## Ao ser ativado
 
 1. Leia `aegis/config/state.json`
-2. Se o arquivo não existir ou `phase` for `null`: leia e siga `references/step-01-first-run.md`
-3. Se `phase="completo"` (todas fases concluídas): informe "Pipeline de descoberta completa. Para re-extrair specs, delete `aegis/specs/` ou passe `--force` ao writer/architect. Para manter specs atualizadas, use `/aegis-keeper after` após mudanças no código." Não rodar agentes novamente sem instrução explícita.
+2. If the file does not exist or `phase` is `null`: read and follow `references/step-01-first-run.md`
+3. If `phase="completo"` (all phases complete): say "Discovery pipeline complete. To re-extract specs, delete `aegis/specs/` or pass `--force` to writer/architect. To keep specs current, use `/aegis-keeper after` after code changes." Do not rerun agents without explicit instruction.
 4. Se `phase` estiver definida mas não `completo`: leia e siga `references/step-02-resume.md`
 
 ## Executando os agentes do plano
 
-Execute as tarefas do plano **sequencialmente, uma por vez**:
+Execute the plan tasks **sequentially, one at a time**:
 
-1. Informe o usuário: "Iniciando o **[Nome do Agente]** — [o que ele fará]."
+1. Tell the user: "Starting **[Agent Name]** — [what it will do]."
 2. Ative o skill `aegis-[agente]` correspondente. Se a engine não suportar ativação direta de skills por nome, leia `aegis/skills/aegis-[agente]/SKILL.md` na íntegra e execute no contexto atual.
 3. Após conclusão:
-   - Salve checkpoint em `aegis/config/state.json` seguindo `references/checkpoint-guide.md`
-   - **Espelhe checkpoint em `aegis/plan.md`**: para cada item da fase concluída, troque `[ ]` por `[x]` ou prefixe com ✅. Faça isso lendo o `state.json.completed` recém-salvo e marcando todas as tarefas correspondentes em `plan.md`. Nunca deixe plan.md desincronizado de state.json.
-   - **Gere compressão de contexto**: leia `references/step-05-session-compression.md` e crie/atualize o resumo da sessão em `aegis/runtime/session-summaries/`
-4. Apresente resumo breve do que foi gerado.
+   - Save a checkpoint in `aegis/config/state.json` following `references/checkpoint-guide.md`
+   - **Mirror the checkpoint in `aegis/plan.md`**: for each completed phase item, change `[ ]` to `[x]` or prefix with ✅. Do this by reading the newly saved `state.json.completed` and marking all matching tasks in `plan.md`. Never let `plan.md` drift out of sync with `state.json`.
+   - **Generate context compression**: read `references/step-05-session-compression.md` and create/update the session summary in `aegis/runtime/session-summaries/`
+4. Provide a brief summary of what was generated.
 
 ### Compressão de contexto automática
 
-A cada agente concluído, o orquestrador deve gerar um **session summary** em `aegis/runtime/session-summaries/YYYY-MM-DD-HH-MM-{agente}.md`. Esse arquivo contém:
+After each completed agent, the orchestrator must generate a **session summary** in `aegis/runtime/session-summaries/YYYY-MM-DD-HH-MM-{agent}.md`. This file contains:
 
-- O que o agente fez (em 3-5 bullet points)
-- Principais descobertas ou artefatos gerados
-- Decisões importantes tomadas pelo usuário
-- Próximo passo do pipeline
-- Qualquer informação que o próximo agente precise saber
+- What the agent did (3-5 bullet points)
+- Main discoveries or generated artifacts
+- Important decisions made by the user
+- The next pipeline step
+- Any information the next agent needs to know
 
-Na retomada (`/aegis` em sessão nova), em vez de carregar todo o histórico de contexto, o orquestrador:
-1. Lê o state.json para saber a fase atual
-2. Lê o **último session summary** mais recente em `aegis/runtime/session-summaries/`
-3. Apresenta o resumo ao usuário como contexto inicial
-4. Continua o pipeline do ponto onde parou
+On resume (`/aegis` in a new session), instead of loading the full history, the orchestrator:
+1. Read `state.json` to identify the current phase
+2. Read the **latest session summary** in `aegis/runtime/session-summaries/`
+3. Present the summary to the user as initial context
+4. Continue the pipeline from where it stopped
 
 Isso reduz drasticamente o consumo de tokens em sessões longas sem perder informação essencial.
 
-**Ação especial após o Scout:**
+**Special action after Scout:**
 
-1. Leia `aegis/runtime/context/surface.json` e atualize a Fase 2 de `aegis/plan.md` substituindo o item genérico por uma tarefa por módulo identificado. Exemplo:
+1. Read `aegis/runtime/context/surface.json` and update Phase 2 of `aegis/plan.md`, replacing the generic item with one task per identified module. Example:
 ```
 - [ ] **Archaeologist** — Análise do módulo `auth`
 - [ ] **Archaeologist** — Análise do módulo `orders`
 - [ ] **Archaeologist** — Análise do módulo `payments`
 ```
 
-2. **🛑 Checkpoint bloqueante — não prossiga para o Archaeologist sem a resposta do usuário.**
+2. **🛑 Blocking checkpoint — do not proceed to Archaeologist without the user's response.**
 
-Apresente ao usuário um resumo do que o Scout encontrou e as três opções de nível de documentação. Use exatamente este formato:
+Show the user a summary of what Scout found and the three documentation-level options. Use this exact format:
 
-> "[Nome], o Scout concluiu o mapeamento. Aqui está o que encontrei:
-> - **[N] módulos** identificados: [lista resumida]
-> - **Linguagem principal:** [linguagem]
-> - **[N] integrações externas** detectadas (ou: nenhuma)
-> - **Banco de dados:** [presente/ausente]
+> "[Name], Scout finished the mapping. Here is what I found:
+> - **[N] modules** identified: [short list]
+> - **Primary language:** [language]
+> - **[N] external integrations** detected (or: none)
+> - **Database:** [present/absent]
 >
-> Qual nível de documentação você quer para este projeto?
+> Which documentation level do you want for this project?
 >
-> ◉ **1. Essencial** ← padrão
-> &nbsp;&nbsp;&nbsp;&nbsp;Artefatos principais (code-analysis, domain, architecture, specs SDD). Ideal para projetos simples.
+> ◉ **1. Essential** ← default
+> &nbsp;&nbsp;&nbsp;&nbsp;Core artifacts (code-analysis, domain, architecture, SDD specs). Ideal for simple projects.
 >
-> ○ **2. Completo**
-> &nbsp;&nbsp;&nbsp;&nbsp;Documentação completa com diagramas C4, ERD, ADRs, OpenAPI e matrizes de rastreabilidade. Recomendado para a maioria dos projetos.
+> ○ **2. Complete**
+> &nbsp;&nbsp;&nbsp;&nbsp;Full documentation with C4 diagrams, ERD, ADRs, OpenAPI, and traceability matrices. Recommended for most projects.
 >
-> ○ **3. Detalhado**
-> &nbsp;&nbsp;&nbsp;&nbsp;Máxima profundidade: flowcharts por função, ADRs expandidos, deployment, revisão cruzada obrigatória. Para sistemas enterprise.
+> ○ **3. Detailed**
+> &nbsp;&nbsp;&nbsp;&nbsp;Maximum depth: per-function flowcharts, expanded ADRs, deployment, mandatory cross-review. For enterprise systems.
 >
-> Digite 1, 2 ou 3 — ou pressione Enter para confirmar **Essencial**."
+> Type 1, 2, or 3 — or press Enter to confirm **Essential**."
 
-Aguarde a resposta do usuário. Se o usuário pressionar Enter sem digitar nada (resposta vazia ou apenas espaços), assuma `essencial` como valor. Aceite também o nome por extenso: `essencial`/`completo`/`detalhado`.
+Wait for the user's response. If the user presses Enter without typing anything (empty response or only spaces), assume `essencial`. Also accept the full words: `essencial`/`completo`/`detalhado`.
 
-Após receber a resposta, salve em `aegis/config/state.json` → campo `doc_level`.
+After receiving the response, save it in `aegis/config/state.json` → `doc_level`.
 
-**Em seguida, antes de ativar o Archaeologist, execute o passo de organização das specs.** Leia e siga `references/step-03-specs-organization.md`. Esse passo apresenta um menu com 6 opções de organização (módulo, caso de uso, endpoint, híbrida, por features, customizada), aceita a escolha do usuário e persiste em `aegis/config/config.toml`, seção `[specs]`. Em re-execuções com a seção já decidida, o passo é pulado automaticamente.
+**Then, before activating Archaeologist, run the spec organization step.** Read and follow `references/step-03-specs-organization.md`. This step presents a menu with 6 organization options (module, use case, endpoint, hybrid, by features, custom), accepts the user's choice, and persists it in `aegis/config/config.toml`, `[specs]` section. On reruns with the section already decided, the step is skipped automatically.
 
-Só ative o Archaeologist depois que a decisão de organização estiver persistida.
+Only activate Archaeologist after the organization decision is persisted.
 
-**Sobre paralelismo:** executar etapas do plano sequencialmente é orquestração normal — não requer autorização. O que **não** deve ocorrer sem pedido explícito do usuário: execução simultânea de múltiplos agentes, spawn de subagentes em background, ou desvio da sequência do plano aprovado.
+**On parallelism:** executing plan steps sequentially is normal orchestration — it does not require approval. What **must not** happen without explicit user request: running multiple agents simultaneously, spawning background subagents, or deviating from the approved plan sequence.
 
 ## Verificação de versão
-Compare `aegis/config/version` com `https://registry.npmjs.org/aegis-spec/latest`. Se houver versão mais nova, informe discretamente após a saudação:
+Compare `aegis/config/version` with `https://registry.npmjs.org/aegis-spec/latest`. If a newer version exists, mention it discreetly after the greeting:
 
-> "💡 Nova versão do Aegis Spec disponível. Execute `npx aegis-spec update` quando quiser atualizar."
+> "💡 A new version of Aegis Spec is available. Run `npx aegis-spec update` when you're ready to update."
 
-**Fallback quando npm check falha:** se registry retorna 404 ou timeout, tente `git tag | sort -V | tail -1` no repo local. Se também falhar, skip silenciosamente (não avise usuário de erro de network).
+**Fallback when npm check fails:** if the registry returns 404 or times out, try `git tag | sort -V | tail -1` in the local repo. If that also fails, skip silently (do not surface a network error).
 
 ## Estouro de contexto
 
-Se o contexto estiver se esgotando:
-1. Salve checkpoint em `aegis/config/state.json` imediatamente
-2. Diga: "[Nome], vou pausar aqui. Tudo está salvo. Digite `/aegis` em uma nova sessão para continuar."
+If context is running low:
+1. Save a checkpoint in `aegis/config/state.json` immediately
+2. Say: "[Name], I'll pause here. Everything is saved. Type `/aegis` in a new session to continue."
 
 ## Checkpoint preventivo entre etapas
 
-Não espere o contexto estourar. Em marcos discretos do plano, ofereça uma pausa proativa para o usuário recomeçar limpo. Os marcos são:
+Do not wait for context to overflow. At discrete milestones in the plan, offer a proactive pause so the user can restart cleanly. The milestones are:
 
-- Após cada agente concluído (Scout, Archaeologist, Detective, Architect, Writer, Reviewer e os agentes independentes) **nesta sessão**
-- Antes de iniciar um agente pesado quando o anterior já consumiu sessão longa (Archaeologist, Writer, Reviewer com revisão cruzada)
+- After each completed agent (Scout, Archaeologist, Detective, Architect, Writer, Reviewer, and independent agents) **in this session**
+- Before starting a heavy agent when the previous one has already consumed a long session (Archaeologist, Writer, Reviewer with cross-review)
 
-**🚫 Nunca ofereça este prompt logo após uma retomada (`/aegis` em sessão nova).** A sessão de retomada já está limpa, sugerir `/clear` + `/aegis` ali é redundante e confunde. O prompt só vale depois que algum agente terminou trabalho real **dentro da sessão atual**.
+**🚫 Never offer this prompt immediately after a resume (`/aegis` in a new session).** The resumed session is already clean, so suggesting `/clear` + `/aegis` there is redundant and confusing. The prompt only applies after real work has finished **in the current session**.
 
-O critério é heurístico, baseado nos sinais que você consegue observar: quantos arquivos foram lidos, quantos artefatos já estão em `<output_folder>/`, há quantas trocas de mensagem desde o início. Não tente estimar tokens, isso é impreciso entre engines.
+The criterion is heuristic, based on observable signals: how many files were read, how many artifacts already exist in `<output_folder>/`, and how many message exchanges have happened since the start. Do not try to estimate tokens; that is imprecise across engines.
 
-Quando achar que vale uma pausa, pergunte assim:
+When you think a pause makes sense, ask like this:
 
-> "[Nome], o **[agente concluído]** terminou e o checkpoint está salvo. A próxima etapa é o **[próximo agente]**, que costuma ser longa. Você quer:
+> "[Name], the **[completed agent]** finished and the checkpoint is saved. The next step is **[next agent]**, which is usually long. Do you want to:
 >
-> 1. Continuar agora nesta sessão
-> 2. Pausar aqui, digitar `/clear` para limpar o contexto, e voltar com `/aegis` em sessão nova (recomendado se a sessão atual já está longa)
+> 1. Continue now in this session
+> 2. Pause here, type `/clear` to clear context, and return with `/aegis` in a new session (recommended if the current session is already long)
 >
-> Pressione 1, 2, ou apenas digite CONTINUAR para opção 1."
+> Press 1, 2, or just type CONTINUE for option 1."
 
-Antes de oferecer a opção 2, **confirme que o checkpoint está salvo** em `aegis/config/state.json` (campo `phase`, `completed`, `checkpoints` do agente que acabou de rodar). Sem checkpoint válido, oferecer pausa é arriscado.
+Before offering option 2, **confirm the checkpoint is saved** in `aegis/config/state.json` (fields `phase`, `completed`, and `checkpoints` for the agent that just ran). Without a valid checkpoint, offering a pause is risky.
 
-Não force a pausa. O usuário decide. Se ele não responder ou disser para continuar, prossiga normalmente.
+Do not force the pause. The user decides. If they do not respond or say to continue, proceed normally.
 
 ## Escala de confiança
 
-Sempre usar nas specs geradas:
-- 🟢 **CONFIRMADO** — extraído diretamente do código
-- 🟡 **INFERIDO** — baseado em padrões, pode estar errado
-- 🔴 **LACUNA** — requer validação humana
+Always use these in generated specs:
+- 🟢 **CONFIRMED** — extracted directly from code
+- 🟡 **INFERRED** — based on patterns, may be wrong
+- 🔴 **GAP** — requires human validation
 
 ## Verificação de regressão semântica (re-extrações)
 
-Após o **último agente do plano** concluir e antes de declarar a extração finalizada, leia e siga `references/step-04-regression-check.md`. O gatilho é posição (último item do plan.md), não nome de agente, porque agentes como Reviewer são opcionais e podem não estar instalados. Esse passo só executa trabalho real quando o projeto já tem `aegis/forward/` com pelo menos um `regression-watch.md`, ou seja, quando uma feature do ciclo forward já foi codada antes desta re-extração. Em projetos sem ciclo forward executado, o passo é silencioso e não atrapalha a primeira extração.
+After the **last plan agent** finishes and before declaring the extraction complete, read and follow `references/step-04-regression-check.md`. The trigger is position (the last item in `plan.md`), not agent name, because agents like Reviewer are optional and may not be installed. This step only does real work when the project already has `aegis/forward/` with at least one `regression-watch.md`, meaning a forward-cycle feature was already coded before this re-extraction. In projects without an executed forward cycle, the step is silent and does not block the initial extraction.
 
-A verificação compara cada watch item declarado em `aegis/forward/<feature>/regression-watch.md` contra os artefatos recém-gerados em `aegis/`, atribui veredito 🟢 / 🟡 / 🔴 a cada um, e atualiza o histórico de re-extrações no próprio `regression-watch.md`. Se houver vermelho, apresente alerta destacado ao usuário no relatório final.
+The check compares each watch item declared in `aegis/forward/<feature>/regression-watch.md` against the newly generated artifacts in `aegis/`, assigns a 🟢 / 🟡 / 🔴 verdict to each one, and updates the re-extraction history in the same `regression-watch.md`. If there is red, highlight it for the user in the final report.
 
 ## Regra absoluta
 
-**Nunca apague, modifique ou sobrescreva arquivos pré-existentes do projeto.**
-O Aegis Spec escreve APENAS em `aegis/`, `aegis/` e em `aegis/forward/<feature>/regression-watch.md` (apenas seção de histórico, nunca a tabela principal).
+**Never delete, modify, or overwrite pre-existing project files.**
+Aegis Spec writes ONLY to `aegis/`, `aegis/`, and `aegis/forward/<feature>/regression-watch.md` (history section only, never the main table).
