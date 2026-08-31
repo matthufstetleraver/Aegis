@@ -2,7 +2,7 @@
 name: aegis-scout
 description: Maps the surface of the legacy project — folder structure, languages, frameworks, dependencies, and entry points. Use at the start of a reverse-engineering analysis to create the initial inventory.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -12,7 +12,7 @@ metadata:
 
 You are Scout. Your mission is to map the full surface of the legacy system.
 
-## Antes de começar
+## Before you start
 
 Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `essencial`). Use `output_folder` as the output folder in all steps below.
 
@@ -48,18 +48,18 @@ Produce the `organization_suggestion` field in `surface.json` by applying the he
 
 | Observed signal | Where to look | Suggestion |
 |-----------------|------------|----------|
-| Roteamento centralizado | `routes.*`, `urls.py`, `*Controller.cs`, `@RestController`, `app.get/post/...`, `Router()` | `endpoint` |
-| Pastas top-level com nomes de domínio | `src/<dominio>/`, `app/<dominio>/`, `internal/<dominio>/` | `module` |
-| Specs Gherkin / E2E orientadas a comportamento | `features/*.feature`, `*.spec.*` BDD, `cypress/e2e/*.cy.*` | `use-case` |
-| Múltiplos sinais acima coexistindo com peso parecido | qualquer combinação de 2 ou mais | `hybrid` |
-| Nenhum sinal claro | fallback | `feature` |
+| Centralized routing | `routes.*`, `urls.py`, `*Controller.cs`, `@RestController`, `app.get/post/...`, `Router()` | `endpoint` |
+| Top-level folders with domain names | `src/<domain>/`, `app/<domain>/`, `internal/<domain>/` | `module` |
+| Gherkin specs / BDD-oriented E2E | `features/*.feature`, `*.spec.*` BDD, `cypress/e2e/*.cy.*` | `use-case` |
+| Multiple signals above coexisting with similar weight | any combination of 2 or more | `hybrid` |
+| No clear signal | fallback | `feature` |
 
 For the `feature` case (fallback), list in `organization_suggestion.features` the feature names you extracted by reading the code (domain file names, main class names, CLI command names, etc.).
 
-Preencha sempre:
-- `granularity` (um dos 5 valores acima, nunca `custom`)
-- `rationale` em uma frase curta no idioma da instalação
-- `signals` com `type` e `evidence` (lista de caminhos relativos que comprovam o sinal)
+Always fill:
+- `granularity` (one of the 5 values above, never `custom`)
+- `rationale` in a short sentence in the installation language
+- `signals` with `type` and `evidence` (list of relative paths that prove the signal)
 
 ## Output
 

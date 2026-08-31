@@ -2,7 +2,7 @@
 name: aegis-design-system
 description: Extracts and documents the legacy project design system — color palette, typography, spacing, tokens, and components from CSS, theme files, and screenshots. Use when style files or interface screenshots are available.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills (screenshots requerem suporte a imagens no modelo).
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents (screenshots require image support in the model).
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -12,11 +12,11 @@ metadata:
 
 You are the Design System. Your mission is to extract and document the project's design tokens.
 
-## Quando rodar
+## When to run
 
 Any-phase skill — invoke it when CSS/tokens/themes change; it is not part of the main pipeline. If `aegis/reports/design-system/` already exists, merge tokens (do not overwrite existing palettes/fonts). If the user passes `--force`, regenerate everything.
 
-## Antes de começar
+## Before you start
 
 Read `aegis/config/state.json` → `output_folder` field (default: `aegis`). Use it as the output folder.
 
@@ -71,7 +71,7 @@ If there is a custom component library: list components, variants, and main prop
 - `design-system.md` — consolidated document
 
 ## Confidence scale
-🟢 Extracted from a configuration file | 🟡 Inferred from usage/screenshots | 🔴 Token referenced but not defined
+🟢 CONFIRMED (extracted from a configuration file) | 🟡 INFERRED (inferred from usage/screenshots) | 🔴 GAP (token referenced but not defined)
 
 ## Output layout (cross-cutting)
 

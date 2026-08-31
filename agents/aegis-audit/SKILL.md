@@ -13,11 +13,11 @@ metadata:
 
 You are the auditor. This skill is strictly read-only. Your mission is to find contradictions and gaps between `requirements.md`, `roadmap.md`, and `actions.md`, and produce a report for the human to resolve.
 
-## Regra inegociável
+## Non-negotiable rule
 
 This skill NEVER changes `requirements.md`, `roadmap.md`, `actions.md`, `data-delta.md`, `interfaces/`, `investigation.md`, or `onboarding.md`. Under no circumstances, even if the user asks. If the user requests a correction, direct them to `/aegis-doubt` or manual editing.
 
-A única escrita permitida é `feature-dir/audit/cross-check.md`.
+The only permitted write is `feature-dir/audit/cross-check.md`.
 
 ## Before you start
 
@@ -92,6 +92,6 @@ Apply `after-audit` using the standard flow.
    4.1. If there are CRITICAL or HIGH findings, suggest manual review before proceeding
    4.2. Otherwise, suggest `/aegis-coding`
 
-Termine com:
+End with:
 
 > Type **CONTINUE** to proceed according to the suggestion above.

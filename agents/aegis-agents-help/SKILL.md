@@ -1,6 +1,6 @@
 ---
 name: aegis-agents-help
-description: Explica com analogias o que cada agente do Aegis Spec faz e quando usá-lo. Ative com /aegis-agents-help.
+description: Explains with analogies what each Aegis Spec agent does and when to use it. Activate with /aegis-agents-help.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
@@ -23,7 +23,7 @@ The Aegis Spec team is a group of specialists. Each agent does one thing — and
 ---
 
 ## 🎼 Aegis Spec — central orchestrator
-**Comando:** `/aegis`
+**Command:** `/aegis`
 
 A conductor does not play any instrument. They know the whole score and decide who comes in when, in what order, and at what pace. Without them, each musician would play their part without connecting to the others.
 
@@ -32,7 +32,7 @@ A conductor does not play any instrument. They know the whole score and decide w
 ---
 
 ## 🗺️ Scout — the real estate agent
-**Comando:** `/aegis-scout`
+**Command:** `/aegis-scout`
 
 The real estate agent does the first tour of the property. They do not open drawers, read documents, or touch anything. They only map: how many rooms, which neighborhood, what facilities exist, and the overall condition.
 
@@ -40,53 +40,53 @@ The real estate agent does the first tour of the property. They do not open draw
 
 ---
 
-## ⛏️ Archaeologist — o escavador
-**Comando:** `/aegis-archaeologist`
+## ⛏️ Archaeologist — the excavator
+**Command:** `/aegis-archaeologist`
 
-O arqueólogo escava o terreno com paciência, camada por camada. Cataloga cada artefato encontrado: tamanho, material, localização, forma. Ele não interpreta a civilização, só descreve com precisão o que está lá.
+The archaeologist digs the ground patiently, layer by layer. He catalogs each artifact found: size, material, location, shape. He does not interpret the civilization, just describes precisely what is there.
 
-> Use o Archaeologist para analisar o código módulo a módulo. Ele extrai funções, algoritmos, estruturas de dados e fluxos de controle. **Roda um módulo por sessão** para economizar tokens.
-
----
-
-## 🔍 Detective — o Sherlock Holmes
-**Comando:** `/aegis-detective`
-
-Sherlock Holmes chega depois do arqueólogo. Olha para os artefatos catalogados e pergunta: *"Mas por que isso está aqui? Quem colocou? O que isso revela sobre quem viveu aqui?"* Ele não escava. Ele interpreta.
-
-> Use o Detective após o Archaeologist. Ele extrai regras de negócio implícitas, lê o histórico git como um diário e reconstrói decisões que ninguém documentou.
+> Use the Archaeologist to analyze the code module by module. He extracts functions, algorithms, data structures, and control flows. **Runs one module per session** to save tokens.
 
 ---
 
-## 📐 Architect — o cartógrafo
-**Comando:** `/aegis-architect`
+## 🔍 Detective — Sherlock Holmes
+**Command:** `/aegis-detective`
 
-O cartógrafo visita um território e produz mapas formais: planta baixa, mapa de elevação, planta estrutural. Alguém que nunca pisou lá consegue entender tudo olhando para os mapas.
+Sherlock Holmes arrives after the archaeologist. He looks at the cataloged artifacts and asks: *"But why is this here? Who put it? What does this reveal about who lived here?"* He does not dig. He interprets.
 
-> Use o Architect após o Detective. Ele sintetiza tudo em diagramas C4, ERD completo e mapa de integrações.
-
----
-
-## 📝 Writer — o tabelião
-**Comando:** `/aegis-writer`
-
-O tabelião transforma o que foi descoberto em contratos formais, precisos e rastreáveis. Cada cláusula tem grau de certeza declarado. O documento vale como contrato: um agente de IA pode reimplementar o sistema a partir dele.
-
-> Use o Writer após o Architect. Ele gera as specs SDD, OpenAPI e user stories com rastreabilidade de código.
+> Use the Detective after the Archaeologist. He extracts implicit business rules, reads git history as a diary, and reconstructs undocumented decisions.
 
 ---
 
-## ⚖️ Reviewer — o revisor de specs
-**Comando:** `/aegis-reviewer`
+## 📐 Architect — the cartographer
+**Command:** `/aegis-architect`
 
-O Reviewer pega os contratos do Writer e tenta furar: *"Isso é contradição. Esse ponto não tem prova. Essa regra some se o usuário fizer X."* Ele não quer destruir, quer garantir que o que ficou de pé seja sólido.
+The cartographer visits a territory and produces formal maps: floor plan, elevation map, structural plan. Someone who has never been there can understand everything by looking at the maps.
 
-> Use o Reviewer após o Writer. Ele revisa criticamente as specs, reclassifica confiança e levanta perguntas para validação humana.
+> Use the Architect after the Detective. He synthesizes everything into C4 diagrams, complete ERD, and integration map.
+
+---
+
+## 📝 Writer — the notary
+**Command:** `/aegis-writer`
+
+The notary transforms what was discovered into formal, precise, and traceable contracts. Each clause has a declared degree of certainty. The document is worth as a contract: an AI agent can re-implement the system from it.
+
+> Use the Writer after the Architect. He generates SDD specs, OpenAPI, and user stories with code traceability.
+
+---
+
+## ⚖️ Reviewer — the specs reviewer
+**Command:** `/aegis-reviewer`
+
+The Reviewer takes the contracts from the Writer and tries to break them: *"This is a contradiction. This point has no proof. This rule disappears if the user does X."* He does not want to destroy, he wants to guarantee that what stands is solid.
+
+> Use the Reviewer after the Writer. He critically reviews specs, reclassifies confidence, and raises questions for human validation.
 
 ---
 
 ## 🖼️ Visor — the forensic illustrator
-**Comando:** `/aegis-visor`
+**Command:** `/aegis-visor`
 
 The forensic illustrator works only with images. They receive system screenshots and faithfully reconstruct the interface: screens, forms, and navigation flows. They do not need the system running — only the pictures.
 
@@ -95,7 +95,7 @@ The forensic illustrator works only with images. They receive system screenshots
 ---
 
 ## 🗄️ Data Master — the geologist
-**Comando:** `/aegis-data-master`
+**Command:** `/aegis-data-master`
 
 The geologist maps the underground layer — the part nobody sees but that supports everything. Tables, relationships, constraints, triggers, procedures. The invisible foundation on which the application is built.
 
@@ -104,7 +104,7 @@ The geologist maps the underground layer — the part nobody sees but that suppo
 ---
 
 ## 🎨 Design System — the stylist
-**Comando:** `/aegis-design-system`
+**Command:** `/aegis-design-system`
 
 The stylist catalogs the wardrobe: color palette, typography, spacing, design tokens. The "fashion rules" that govern the system's appearance — what can and cannot be combined.
 
@@ -112,13 +112,13 @@ The stylist catalogs the wardrobe: color palette, typography, spacing, design to
 
 ---
 
-## Sequência recomendada
+## Recommended sequence
 
 ```
-/aegis → orquestra tudo automaticamente
+/aegis → orchestrates everything automatically
 
-Ou manualmente:
-Scout → Archaeologist (N sessões) → Detective → Architect → Writer → Reviewer
+Or manually:
+Scout → Archaeologist (N sessions) → Detective → Architect → Writer → Reviewer
 
 Optional in any phase:
 Visor · Data Master · Design System

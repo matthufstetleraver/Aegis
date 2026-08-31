@@ -1,6 +1,6 @@
 ---
 name: aegis-principles
-description: Cria ou atualiza os princípios duradouros do projeto e propaga sugestões de ajuste nos templates dependentes. Princípios são raros, mudam pouco e influenciam todos os artefatos. Use quando o usuário digitar "/aegis-principles", "aegis-principles", "definir princípios" ou pedir para criar/alterar/aposentar um princípio do projeto. Pode rodar antes mesmo da primeira feature.
+description: Creates or updates the project's lasting principles and propagates adjustment suggestions to dependent templates. Principles are rare, change little, and influence all artifacts. Use when the user types "/aegis-principles", "aegis-principles", "set principles", or asks to create/change/retire a project principle. Can run before the first feature.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
@@ -29,7 +29,7 @@ This skill is rare, typically used less than once a month. It is NOT part of the
 
 ## Create mode
 
-1. Carregue `aegis/runtime/templates/principles-template.md`
+1. Load `aegis/runtime/templates/principles-template.md`
 2. Ask the user for candidate principles, in batch or one by one
 3. For each principle:
    3.1. Assign sequential Roman numerals (I, II, III, ...)
@@ -76,6 +76,6 @@ Apply `after-principles` using the standard flow.
 4. Path of the generated impact report
 5. Warning: new or changed principles only apply to features started after this date
 
-Termine com:
+End with:
 
 > Type **CONTINUE** to proceed with the next action you want.

@@ -2,7 +2,7 @@
 name: aegis-tech-brief
 description: Translates requirements.md (business language) into a tech-brief.md (technical language) for the tech lead, anchored in the recorded architecture and project business rules. Use when the user types "/aegis-tech-brief", "aegis-tech-brief", "generate tech brief", or asks to rewrite a business story in technical terms. Optional forward-cycle step between `/aegis-requirements` and `/aegis-doubt`.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: Wellington Nascimento
   version: "1.0.0"
@@ -13,13 +13,13 @@ metadata:
 
 You are the technical translator. Your mission is to convert the active feature's `requirements.md` (written in business language) into a `tech-brief.md` that the tech lead uses to decide the technical path before planning. Do not break it into tasks (that is `aegis-plan` / `aegis-to-do` work), do not raise deep questions (that is `aegis-doubt` work), and do not create ADRs (only indicate where the tech lead should create one).
 
-## Antes de começar
+## Before you start
 
 1. Read `aegis/config/state.json` to resolve `output_folder` (spec extraction), `forward_folder` (forward features), and `doc_language`
 2. When this skill mentions `aegis/` or `aegis/forward/`, use the real values from state.json
 3. Write `tech-brief.md` in the language indicated by `doc_language` (same standard as the other skills)
 
-## Verificações Iniciais
+## Initial checks
 
 1. Read `aegis/config/active-requirements.json`
    1.1. If the file does not exist, abort with a clear message pointing the user to `/aegis-requirements`
@@ -124,6 +124,6 @@ Apply the standard rule for `after-tech-brief` (same logic as the `aegis-require
 
 Never proceed automatically to the next command; leave the decision with the user.
 
-Termine com:
+End with:
 
 > Type **CONTINUE** to proceed according to the suggestion above.

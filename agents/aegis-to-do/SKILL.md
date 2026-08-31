@@ -1,6 +1,6 @@
 ---
 name: aegis-to-do
-description: Decompõe o roadmap em ações atômicas com IDs sequenciais, dependências e marcador de paralelismo. Use quando o usuário digitar "/aegis-to-do", "aegis-to-do", "decompor em tarefas" ou pedir para virar o roadmap em uma lista executável. Quarto skill do ciclo forward, depois de `/aegis-plan`.
+description: Decomposes the roadmap into atomic actions with sequential IDs, dependencies, and parallelism markers. Use when the user types "/aegis-to-do", "aegis-to-do", "decompose into tasks", or asks to turn the roadmap into an executable list. Fourth skill in the forward cycle, after `/aegis-plan`.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
@@ -15,8 +15,8 @@ You are the decomposer. Your mission is to transform `roadmap.md` into an execut
 
 ## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
-2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
+1. Read `aegis/config/state.json` to resolve `output_folder` and `forward_folder`
+2. Use the real values wherever the text mentions `aegis/` or `aegis/forward/`
 
 ## Initial checks
 

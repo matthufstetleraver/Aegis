@@ -21,15 +21,15 @@ Read all artifacts in the output folder and in `aegis/runtime/context/`.
 
 The `doc_level` field in state.json controls what to generate:
 
-| Artefato | essencial | completo | detalhado |
+| Artifact | essential | complete | detailed |
 |----------|-----------|----------|-----------|
-| `architecture.md` | sim (inclui C4 contexto + ERD se < 5 entidades) | sim | sim |
-| `c4-context.md` | sim | sim | sim |
-| `c4-containers.md` | não | sim | sim |
-| `c4-components.md` | não | sim | sim |
-| `erd-complete.md` | não (ERD embutido no architecture.md) | sim | sim |
-| `traceability/spec-impact-matrix.md` | não | sim | sim |
-| `deployment.md` | não | não | sim (se houver Dockerfile, docker-compose ou config de cloud) |
+| `architecture.md` | yes (includes C4 context + ERD if < 5 entities) | yes | yes |
+| `c4-context.md` | yes | yes | yes |
+| `c4-containers.md` | no | yes | yes |
+| `c4-components.md` | no | yes | yes |
+| `erd-complete.md` | no (ERD embedded in architecture.md) | yes | yes |
+| `traceability/spec-impact-matrix.md` | no | yes | yes |
+| `deployment.md` | no | no | yes (if Dockerfile, docker-compose, or cloud config exists) |
 
 ## Process
 
@@ -83,7 +83,7 @@ Create `aegis/traceability/spec-impact-matrix.md`: which component impacts which
 - `aegis/reports/deployment.md` — infrastructure and deployment diagram (if Dockerfile, docker-compose, or identified cloud configs exist)
 
 ## Confidence scale
-🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA
+🟢 CONFIRMED | 🟡 INFERRED | 🔴 GAP
 
 ## Output layout (cross-cutting)
 

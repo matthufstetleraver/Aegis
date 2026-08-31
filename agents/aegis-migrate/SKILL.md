@@ -1,6 +1,6 @@
 ---
 name: aegis-migrate
-description: "Migration Team orchestrator for Aegis Spec. Runs the migration pipeline after `/aegis` has populated `aegis/`. Collects the brief, invokes the 5 agents (Paradigm Advisor → Curator → Strategist → Designer → Inspector) with human pauses, and generates the final handoff.md. Use when the user types `/aegis-migrate`, `aegis-migrate`, `migrar sistema`, or `iniciar migração`."
+description: "Migration Team orchestrator for Aegis Spec. Runs the migration pipeline after `/aegis` has populated `aegis/`. Collects the brief, invokes the 5 agents (Paradigm Advisor → Curator → Strategist → Designer → Inspector) with human pauses, and generates the final handoff.md. Use when the user types `/aegis-migrate`, `aegis-migrate`, `migrate system`, or `start migration`."
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
@@ -75,7 +75,7 @@ Minimum questions (one at a time or grouped, depending on the engine):
 6. **Target stack**: language, framework, database, infrastructure, messaging, observability.
 7. **Scope**: included and excluded modules.
 
-**Não pergunte paradigma. Não pergunte apetite.** Esses são responsabilidade do Paradigm Advisor.
+**Do not ask paradigm. Do not ask appetite.** These are the Paradigm Advisor's responsibility.
 
 Render `aegis/migration/migration_brief.md` using the template in `references/templates/migration_brief.md`.
 
@@ -182,7 +182,7 @@ Record full log in `aegis/migration/.logs/<timestamp>-migrate.log` with timestam
 3. If `currentAgent.status == "awaiting_user_approval"`, follow the special case from step 2 (rerun the pending pause). Otherwise, confirm with the user before resuming.
 4. Continue from the next agent (or from the same one if it had `failed`, or from the next phase if it had been `awaiting_user_approval` and was resolved).
 
-### `--regenerate=<agent>` ou `--regenerate=designer:<phase>`
+### `--regenerate=<agent>` or `--regenerate=designer:<phase>`
 
 1. Confirm with the user (destructive operation within the `aegis/migration/` scope).
 2. Back up to `aegis/migration/.backup-<timestamp>/`.
@@ -199,7 +199,7 @@ Apply defaults without human pauses. See `references/auto-defaults.md`.
 
 Always display an explicit warning before starting and list all applied defaults.
 
-## Casos de borda
+## Edge cases
 
 - **Incomplete `aegis/`**: list missing artifacts and abort.
 - **Brief present but legacy system changed**: offer to review / recreate before proceeding.
@@ -207,19 +207,19 @@ Always display an explicit warning before starting and list all applied defaults
 - **LLM failure mid-agent**: state preserved, agent marked as `failed`. `--resume` reruns that agent.
 - **Designer requested adjustments** after architecture review: rerun Designer in the same step without advancing to Inspector.
 
-## Layout de saída (transversal)
+## Output layout (cross-cutting)
 
 This agent is part of the Migration Team and writes exclusively to `aegis/migration/`. That folder is cross-cutting relative to the organization chosen in `[specs]` in `config.toml`, outside the Discovery Team's unit folders (feature folders). Do not apply the `<unit>/requirements.md|design.md|tasks.md` structure here; it belongs to Writer.
 
-## Regras absolutas
+## Absolute rules
 
-- **Não modificar nada fora de `aegis/migration/`.**
-- Artefatos pré-existentes em `aegis/` são **lidos**, nunca modificados.
-- Backup automático antes de qualquer operação destrutiva.
-- Modo padrão é interativo. `--auto` é explícito e exibe os defaults antes de aplicar.
-- Cada pausa apresenta resumo + decisões pendentes; nunca prossegue silenciosamente.
+- **Do not modify anything outside `aegis/migration/`.**
+- Pre-existing artifacts in `aegis/` are **read**, never modified.
+- Automatic backup before any destructive operation.
+- Default mode is interactive. `--auto` is explicit and displays the defaults before applying.
+- Each pause presents a summary + pending decisions; never proceeds silently.
 
-## Saída
+## Output
 
 ```
 aegis/
@@ -238,11 +238,11 @@ aegis/
     ├── data_migration_plan.md
     ├── parity_specs.md
     ├── parity_tests/
-    │   ├── 01-<fluxo>.feature
+    │   ├── 01-<flow>.feature
     │   └── ...
     ├── ambiguity_log.md
     ├── handoff.md
-    ├── pending_decisions.md   (transitório, durante pausas)
+    ├── pending_decisions.md   (transient, during pauses)
     ├── .state.json
     └── .logs/
         └── <timestamp>-migrate.log

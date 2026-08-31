@@ -2,7 +2,7 @@
 name: aegis-visor
 description: Documents the legacy system interface from screenshots — extracts components, layouts, navigation flows, and screen states. Use when system screenshots are available, without needing the system to be running.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills (requer suporte a imagens no modelo).
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents (requires image support in the model).
 metadata:
   author: sandeco
   version: "1.1.0"
