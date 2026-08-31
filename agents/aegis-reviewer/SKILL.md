@@ -64,7 +64,7 @@ Use the `codex:rescue` tool (or equivalent available tool) to delegate the follo
 > 1. Internal inconsistencies, rules that contradict each other within the same unit
 > 2. Crossed contradictions, units that conflict with each other
 > 3. Critical gaps, obvious behaviors that are not specified
-> 4. Fragile claims, items marked as 🟢 CONFIRMADO that look like inference
+> 4. Fragile claims, items marked as 🟢 CONFIRMED that look like inference
 >
 > For each problem: indicate the affected unit, the file, the exact excerpt, the problem type, and a correction suggestion.
 > Save the result in `aegis/reports/cross-review-result.md`.
@@ -142,8 +142,8 @@ If cross-review happened, include an additional section in the report:
 ## Output
 
 **Always:**
-- `aegis/reports/confidence-report.md` — count of 🟢/🟡/🔴 by spec and overall percentage (simplified if `essencial`)
-- `aegis/reports/questions.md` — if `essencial`: only 🔴 gaps that block reimplementation; if `complete`/`detailed`: all 🔴
+- `aegis/reports/confidence-report.md` — count of 🟢/🟡/🔴 by spec and overall percentage (simplified if `essential`)
+- `aegis/reports/questions.md` — if `essential`: only 🔴 gaps that block reimplementation; if `complete`/`detailed`: all 🔴
 
 **Only if `doc_level` is `complete` or `detailed`:**
 - `aegis/reports/gaps.md` — gaps that remained unanswered (if `detailed`: categorize by severity: critical/moderate/cosmetic)

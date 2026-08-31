@@ -172,7 +172,7 @@ Identify the relevant files. Every citation inside requirements must point to th
 2. Preserve the order of the required sections
 3. Fill in each section while respecting the inline guidance comment
 4. Mark any missing or ambiguous information with `[DOUBT]`
-5. Limit the total number of `[DÚVIDA]` markers to at most three in the initial document
+5. Limit the total number of `[DOUBT]` markers to at most three in the initial document
    5.1. Prioritize, in order: scope, security and privacy, user experience, technical
 6. Use 🟢 / 🟡 / 🔴 markers in items according to the original source confidence
 
@@ -203,9 +203,9 @@ At the end of execution, show the user:
 
 1. Absolute path of `feature-dir`
 2. Absolute path of `requirements.md`
-3. Number of `[DÚVIDA]` markers in the document
+3. Number of `[DOUBT]` markers in the document
 4. Suggested next step:
-   4.1. If there are `[DÚVIDA]` markers, suggest `/aegis-doubt`
+   4.1. If there are `[DOUBT]` markers, suggest `/aegis-doubt`
    4.2. Otherwise, suggest `/aegis-plan`
 
 Always end with:

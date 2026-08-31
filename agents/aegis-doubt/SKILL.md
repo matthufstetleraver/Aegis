@@ -94,7 +94,7 @@ Apply the standard rule for `after-doubt` (same logic as the `aegis-requirements
 
 1. Absolute path of `requirements.md`
 2. Number of doubts resolved in this session
-3. Number of remaining `[DÚVIDA]` markers
+3. Number of remaining `[DOUBT]` markers
 4. Suggested next step:
    4.1. If any `[DOUBT]` remain, suggest running `/aegis-doubt` again
    4.2. If none remain, suggest `/aegis-plan`

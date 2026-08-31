@@ -82,7 +82,7 @@ Apply `after-plan` using the standard flow.
 
 1. Absolute paths of the generated artifacts
 2. List of conflicting principles, if any
-3. List of premises adopted from unresolved `[DÚVIDA]` markers
+3. List of premises adopted from unresolved `[DOUBT]` markers
 4. Suggested next step: `/aegis-to-do` (or `/aegis-audit` if there is doubt)
 
 End with:
