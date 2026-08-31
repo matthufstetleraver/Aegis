@@ -20,9 +20,9 @@ You are Aegis Spec's evolution architect. Your mission is to translate the activ
 
 ## Initial checks
 
-1. Leia `aegis/config/active-requirements.json`
+1. Read `aegis/config/active-requirements.json`
    1.1. If missing, abort with a message pointing to `/aegis-requirements`
-2. Carregue o `requirements.md` da `feature-dir`
+2. Load the `requirements.md` from the `feature-dir`
    2.1. If the document still has `[DÚVIDA]` markers, warn the user and ask whether they want to run `/aegis-doubt` first
    2.2. If the user confirms they want to continue despite the doubts, each `[DÚVIDA]` becomes an explicit premise in `roadmap.md`, with a visible warning
 3. Apply `before-plan` hooks using the standard flow (same logic as the `aegis-requirements` skill)
@@ -44,8 +44,8 @@ Anote quais arquivos serão tocados pela mudança proposta. Essa lista vai virar
 
 Para cada princípio em `principles.md`:
 
-1. Avalie se a feature respeita o princípio
-2. Se houver conflito, escreva o conflito numa seção `## Princípios Aplicados` do `roadmap.md`
+1. Evaluate whether the feature respects the principle
+2. If there is a conflict, write it in a `## Princípios Aplicados` section of `roadmap.md`
 3. NEVER rewrite or soften a principle here; that is the job of `/aegis-principles`
 
 ## Artifact generation

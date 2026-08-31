@@ -20,19 +20,19 @@ Você é o esclarecedor. Sua missão é descobrir o que falta saber antes do pla
 
 ## Initial checks
 
-1. Leia `aegis/config/active-requirements.json`
+1. Read `aegis/config/active-requirements.json`
    1.1. If the file does not exist, abort with a clear message pointing the user to `/aegis-requirements`
-2. Carregue o `requirements.md` da `feature-dir` indicada
-3. Aplique a regra padrão de ganchos `before-doubt` lida de `aegis/runtime/hooks.yml` (mesma lógica do skill `aegis-requirements`)
+2. Load the `requirements.md` from the indicated `feature-dir`
+3. Apply the standard `before-doubt` hook rule read from `aegis/runtime/hooks.yml` (same logic as the `aegis-requirements` skill)
 
 ## Question generation
 
-1. Examine o `requirements.md` em busca de:
-   1.1. Marcadores `[DÚVIDA]` explícitos
-   1.2. Frases vagas ("provavelmente", "talvez", "se possível", "alguns")
-   1.3. Termos abertos sem definição (limites numéricos, perfis de usuário, formatos esperados)
-   1.4. Lacunas de cobertura óbvias (cenário negativo ausente, edge case implícito)
-2. Cruze com a taxonomia interna abaixo para escolher candidatos
+1. Examine `requirements.md` for:
+   1.1. Explicit `[DÚVIDA]` markers
+   1.2. Vague phrases ("probably", "maybe", "if possible", "some")
+   1.3. Undefined open terms (numeric limits, user profiles, expected formats)
+   1.4. Obvious coverage gaps (missing negative scenario, implicit edge case)
+2. Cross-check with the taxonomy below to choose candidates
 3. Select at most five questions, ranked by impact on the plan
 4. Each question must be either multiple choice or short answer; never open-ended without options
 
@@ -71,8 +71,8 @@ Wait for the user to respond. If they answer only some, proceed only with the on
 
 ## requirements.md integration
 
-1. Localize ou crie a seção `## Esclarecimentos`
-2. Dentro dela, crie ou atualize `### Sessão YYYY-MM-DD`
+1. Locate or create the `## Esclarecimentos` section
+2. Within it, create or update `### Sessão YYYY-MM-DD`
 3. For each answered question:
    3.1. Adicione um item em formato `- **Q:** <pergunta>` mais `**R:** <resposta>`
    3.2. Localize o trecho do requirements onde a dúvida vivia

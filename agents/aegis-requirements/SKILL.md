@@ -2,7 +2,7 @@
 name: aegis-requirements
 description: Transforma uma ideia em linguagem natural num documento de requisitos completo, ancorado nos artefatos da pipeline de descoberta. Use quando o usuário digitar "/aegis-requirements", "aegis-requirements", "quero levantar requisitos" ou pedir para iniciar uma nova feature a partir de uma frase. Primeiro skill do ciclo forward (requirements, doubt, plan, to-do, audit, quality, coding).
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -13,7 +13,7 @@ metadata:
 
 Você é o redator de requisitos do Aegis Spec. Sua missão é converter o argumento livre passado pelo usuário (frase ou parágrafo descrevendo o objetivo da feature) num `requirements.md` completo, atravessando o conhecimento já extraído do sistema legado.
 
-## Antes de começar
+## Before you start
 
 1. Leia `aegis/config/state.json`
    1.1. `output_folder` → pasta da extração de especificações (padrão `aegis`)
@@ -22,7 +22,7 @@ Você é o redator de requisitos do Aegis Spec. Sua missão é converter o argum
 2. A partir daqui, sempre que o texto deste skill mencionar `aegis/`, troque pelo `output_folder` real
 3. Sempre que mencionar `aegis/forward/`, troque pelo `forward_folder` real
 
-## Verificações Iniciais
+## Initial checks
 
 1. Tente ler `aegis/runtime/hooks.yml`
    1.1. Se o YAML for inválido ou inexistente, prossiga sem ganchos
@@ -32,7 +32,7 @@ Você é o redator de requisitos do Aegis Spec. Sua missão é converter o argum
    2.2. Se `optional: false`, emita a diretiva `EXECUTAR: <comando>` e aguarde o resultado antes de prosseguir
 3. NUNCA tente avaliar a chave `condition` desses ganchos, apenas registre que ela existe e siga em frente
 
-## Detecção de feature em andamento
+## Detecting an active feature
 
 Antes de criar feature nova, verifique se já existe uma anterior em andamento. A detecção é baseada em **artefatos físicos da feature**, não em campos auto-declarados, porque é resistente a skills que esquecem de atualizar metadados.
 
@@ -63,7 +63,7 @@ Antes de criar feature nova, verifique se já existe uma anterior em andamento. 
 
 A política de o que fazer quando há feature em andamento está descrita na próxima seção "Política de re-execução".
 
-## Política de re-execução
+## Re-execution policy
 
 Se a detecção identificou feature anterior em andamento (estágio físico em `requirements`, `plan` ou `coding-em-progresso`), **pergunte sempre ao usuário** antes de qualquer escrita. Não há default automático, o objetivo é eliminar surpresa.
 
@@ -84,7 +84,7 @@ Apresente o bloco abaixo ao usuário:
 
 Aguarde a resposta. NÃO escolha por conta própria, NÃO interprete silêncio como confirmação de qualquer opção.
 
-### Opção 1, continuar a anterior
+### Option 1, continue the previous one
 
 1. Não escreva em `active-requirements.json`
 2. Não crie pasta nova em `aegis/forward/`
@@ -94,7 +94,7 @@ Aguarde a resposta. NÃO escolha por conta própria, NÃO interprete silêncio c
    3.3. `coding-em-progresso` → `/aegis-coding` (pode receber argumento livre restringindo escopo, ex.: "T010-T015")
 4. Encerre este skill com mensagem clara informando que nada foi escrito, NÃO execute as próximas seções
 
-### Opção 2, criar nova em paralelo
+### Option 2, create a new one in parallel
 
 1. Leia o `active-requirements.json` atual e o campo `paused-features`
    1.1. Se o campo não existir, considere `paused-features: []`
@@ -117,7 +117,7 @@ Aguarde a resposta. NÃO escolha por conta própria, NÃO interprete silêncio c
 3. Adicione essa entrada ao final do array `paused-features` (push, ordem cronológica)
 4. Siga normalmente para "Resolução do diretório da feature". Ao escrever o `active-requirements.json` novo (passo 5 daquela seção), INCLUA o array `paused-features` atualizado no JSON
 
-### Opção 3, abandonar a anterior
+### Option 3, abandon the previous one
 
 1. Leia o `active-requirements.json` atual e o campo `paused-features`
    1.1. Se o campo não existir, considere `paused-features: []`
@@ -126,7 +126,7 @@ Aguarde a resposta. NÃO escolha por conta própria, NÃO interprete silêncio c
 
 A diretriz **non-destructive** vale aqui: em nenhuma das três opções a pasta da feature anterior em `aegis/forward/` é apagada ou modificada. Apenas o `active-requirements.json` (gerenciado pelo Aegis Spec) é reescrito.
 
-## Resolução do diretório da feature
+## Resolving the feature directory
 
 1. Leia `aegis/config/setup.json`
    1.1. Se `prefix-format` estiver ausente ou for `sequencial`, calcule o próximo `NNN` listando subpastas de `aegis/forward/` no formato `NNN-*` e somando 1 ao maior

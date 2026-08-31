@@ -2,7 +2,7 @@
 name: aegis-to-do
 description: Decompõe o roadmap em ações atômicas com IDs sequenciais, dependências e marcador de paralelismo. Use quando o usuário digitar "/aegis-to-do", "aegis-to-do", "decompor em tarefas" ou pedir para virar o roadmap em uma lista executável. Quarto skill do ciclo forward, depois de `/aegis-plan`.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -13,12 +13,12 @@ metadata:
 
 Você é o decompositor. Sua missão é transformar o `roadmap.md` num `actions.md` executável, com tarefas atômicas, IDs estáveis e marcação clara do que pode rodar em paralelo.
 
-## Antes de começar
+## Before you start
 
 1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
 2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
 
-## Verificações Iniciais
+## Initial checks
 
 1. Leia `aegis/config/active-requirements.json`
    1.1. Se ausente, aborte apontando `/aegis-requirements`
@@ -27,7 +27,7 @@ Você é o decompositor. Sua missão é transformar o `roadmap.md` num `actions.
 3. Carregue também `feature-dir/data-delta.md` e `feature-dir/interfaces/*` se existirem
 4. Aplique `before-to-do` da forma padrão
 
-## Estratégia de decomposição
+## Decomposition strategy
 
 1. Use as cinco fases padrão na ordem:
    1.1. Preparação (setup, scaffolding, migrações iniciais, configuração)
@@ -43,14 +43,14 @@ Você é o decompositor. Sua missão é transformar o `roadmap.md` num `actions.
 7. Em coluna explícita, registre o arquivo alvo principal (`src/payments/pdf.js`, por exemplo)
 8. Em coluna `confidência`, herde 🟢 / 🟡 / 🔴 da decisão correspondente no roadmap
 
-## Critérios de "atômico"
+## Atomic criteria
 
 - Uma ação é atômica quando pode ser concluída por um agente em um turno, sem precisar de feedback humano no meio
 - Se uma ação tem mais de cinco subpontos lógicos, quebre
 - Se uma ação toca mais de três arquivos não relacionados, quebre
 - Se uma ação inclui "e também", "depois", "em seguida", quebre
 
-## Construção do actions.md
+## Building actions.md
 
 1. Carregue o template `aegis/runtime/templates/actions-template.md`
 2. Para cada fase, crie tabela com colunas `ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status`
@@ -60,21 +60,21 @@ Você é o decompositor. Sua missão é transformar o `roadmap.md` num `actions.
    4.2. Total de ações paralelizáveis
    4.3. Maior cadeia de dependência
 
-## Regras de manutenção
+## Maintenance rules
 
 - IDs jamais são reciclados, mesmo que uma ação seja removida em revisão posterior
 - A renumeração só acontece quando se gera o documento pela primeira vez
 - Nunca insira ações de "configurar IDE", "rodar lint", "abrir PR", isso não é responsabilidade do Aegis Spec
 
-## Persistência
+## Persistence
 
 - Grave `feature-dir/actions.md` com escrita atômica
 
-## Ganchos Pós-execução
+## Post-run hooks
 
 Aplique `after-to-do` da forma padrão.
 
-## Relatório final
+## Final report
 
 1. Caminho absoluto de `actions.md`
 2. Total de ações por fase
