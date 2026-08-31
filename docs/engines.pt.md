@@ -8,7 +8,7 @@ O Aegis Spec funciona com as principais engines de IA do mercado. O instalador d
 
 | Engine | Arquivo criado | Skills path | Como ativar |
 |--------|---------------|-------------|-------------|
-| **Claude Code** ⭐ | `CLAUDE.md` | `aegis/skills/aegis-*/` e `aegis/skills/aegis-*/` | `/aegis` |
+| **Claude Code** ⭐ | `CLAUDE.md` | `aegis/skills/aegis-*/` | `/aegis` |
 | **Codex** ⭐ | `AGENTS.md` | `aegis/skills/aegis-*/` | `aegis` |
 | **Cursor** ⭐ | `.cursorrules` | `aegis/skills/aegis-*/` | `/aegis` |
 | **Gemini CLI** | `GEMINI.md` | `aegis/skills/aegis-*/` | `/aegis` |
@@ -27,7 +27,7 @@ O Aegis Spec funciona com as principais engines de IA do mercado. O instalador d
 
 ## Claude Code
 
-A engine mais testada e com melhor suporte. Usa slash commands nativos, o que torna a ativação intuitiva. O Aegis Spec cria os arquivos em `aegis/skills/` e em `aegis/skills/` (para compatibilidade com outras engines que possam ser adicionadas depois).
+A engine mais testada e com melhor suporte. Usa slash commands nativos, o que torna a ativação intuitiva. O Aegis Spec cria os arquivos em `aegis/skills/` (para compatibilidade com outras engines que possam ser adicionadas depois).
 
 ---
 

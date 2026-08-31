@@ -34,8 +34,7 @@ npx aegis-spec policy-check [--base <ref>] [--head <ref>]
 | medium | + `protected_file`, `protected_glob`, `new_export` |
 | low | + `auto_policy_blacklist` (path-only blacklist) |
 
-Body-only edits to protected files always approve — only contract-relevant
-changes (signature, exported flag, extends) trigger a block.
+Body-only edits to protected files always approve — only contract-relevant changes (signature, exported flag, extends) trigger a block.
 
 ### `--format`
 

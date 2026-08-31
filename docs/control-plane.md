@@ -1,7 +1,6 @@
 # Aegis Spec control plane
 
-Aegis Spec 2.0 ships a control plane around AI-generated code. Three pillars
-work together:
+Aegis Spec 2.0 ships a control plane around AI-generated code. Three pillars work together:
 
 | Pillar | What it does | Where it lives |
 |---|---|---|
