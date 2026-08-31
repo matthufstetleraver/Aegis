@@ -2,7 +2,7 @@
 name: aegis-doubt
 description: Gera até cinco perguntas dirigidas para resolver pontos ambíguos do requirements e integra as respostas no documento. Use quando o usuário digitar "/aegis-doubt", "aegis-doubt", "esclarecer dúvidas" ou pedir para tirar pontos abertos do requirements antes de planejar. Etapa opcional do ciclo forward, entre `/aegis-requirements` e `/aegis-plan`.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -13,19 +13,19 @@ metadata:
 
 Você é o esclarecedor. Sua missão é descobrir o que falta saber antes do plano e devolver as respostas ao `requirements.md` da feature ativa.
 
-## Antes de começar
+## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` (extração de especificações) e `forward_folder` (features forward)
-2. Quando o texto deste skill mencionar `aegis/` ou `aegis/forward/`, use os valores reais do state.json
+1. Read `aegis/config/state.json` to resolve `output_folder` (spec extraction) and `forward_folder` (forward features)
+2. When this skill mentions `aegis/` or `aegis/forward/`, use the real values from state.json
 
-## Verificações Iniciais
+## Initial checks
 
 1. Leia `aegis/config/active-requirements.json`
-   1.1. Se o arquivo não existir, aborte com mensagem clara apontando o usuário para `/aegis-requirements`
+   1.1. If the file does not exist, abort with a clear message pointing the user to `/aegis-requirements`
 2. Carregue o `requirements.md` da `feature-dir` indicada
 3. Aplique a regra padrão de ganchos `before-doubt` lida de `aegis/runtime/hooks.yml` (mesma lógica do skill `aegis-requirements`)
 
-## Geração das perguntas
+## Question generation
 
 1. Examine o `requirements.md` em busca de:
    1.1. Marcadores `[DÚVIDA]` explícitos
@@ -33,10 +33,10 @@ Você é o esclarecedor. Sua missão é descobrir o que falta saber antes do pla
    1.3. Termos abertos sem definição (limites numéricos, perfis de usuário, formatos esperados)
    1.4. Lacunas de cobertura óbvias (cenário negativo ausente, edge case implícito)
 2. Cruze com a taxonomia interna abaixo para escolher candidatos
-3. Selecione no máximo cinco perguntas, ranqueadas pelo impacto no plano
-4. Cada pergunta deve ser ou múltipla escolha ou resposta curta, jamais aberta sem opções
+3. Select at most five questions, ranked by impact on the plan
+4. Each question must be either multiple choice or short answer; never open-ended without options
 
-### Taxonomia para priorizar
+### Prioritization taxonomy
 
 1. Escopo funcional e comportamento
 2. Modelo de domínio e dados
@@ -50,7 +50,7 @@ Você é o esclarecedor. Sua missão é descobrir o que falta saber antes do pla
 10. Falhas e recuperação
 11. Compatibilidade com o legado mapeado em `aegis/`
 
-## Apresentação ao usuário
+## User presentation
 
 Apresente as perguntas no formato:
 
@@ -67,13 +67,13 @@ Apresente as perguntas no formato:
 
 Se uma pergunta for de resposta curta, omita o bloco de opções e use formato `Resposta esperada: <hint do tipo de valor>`.
 
-Aguarde o usuário responder. Se ele responder apenas algumas, prossiga apenas com as respondidas.
+Wait for the user to respond. If they answer only some, proceed only with the ones answered.
 
-## Integração no requirements.md
+## requirements.md integration
 
 1. Localize ou crie a seção `## Esclarecimentos`
 2. Dentro dela, crie ou atualize `### Sessão YYYY-MM-DD`
-3. Para cada pergunta respondida:
+3. For each answered question:
    3.1. Adicione um item em formato `- **Q:** <pergunta>` mais `**R:** <resposta>`
    3.2. Localize o trecho do requirements onde a dúvida vivia
    3.3. Reescreva o trecho in-place, removendo o `[DÚVIDA]` correspondente
@@ -81,16 +81,16 @@ Aguarde o usuário responder. Se ele responder apenas algumas, prossiga apenas c
        - Se trecho foi editado substancialmente (>50% diff), pule rewrite e avise usuário via nota: "⚠️ Texto ao redor da dúvida foi editado manualmente — integração pulada"
 4. Atualize a seção `## Lacunas` removendo entradas resolvidas e mantendo as não resolvidas
 
-## Persistência
+## Persistence
 
 - Grave o `requirements.md` modificado de forma atômica
 - A seção `## Esclarecimentos` deve ficar logo antes de `## Lacunas`
 
-## Ganchos Pós-execução
+## Post-run hooks
 
 Aplique a regra padrão para `after-doubt` (mesma lógica do skill `aegis-requirements`).
 
-## Relatório final
+## Final report
 
 1. Caminho absoluto do `requirements.md`
 2. Quantidade de dúvidas resolvidas nessa sessão

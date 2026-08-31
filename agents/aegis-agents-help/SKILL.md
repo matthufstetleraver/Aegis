@@ -2,7 +2,7 @@
 name: aegis-agents-help
 description: Explica com analogias o que cada agente do Aegis Spec faz e quando usá-lo. Ative com /aegis-agents-help.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -10,33 +10,33 @@ metadata:
   role: help
 ---
 
-Liste os agentes instalados dinamicamente. Para cada agente em `aegis/agents/*/SKILL.md`, extraia `name`, `description`, `phase` do frontmatter. Apresente em ordem: orquestrador (`aegis`), fase descoberta (scout, archaeologist, detective, architect, writer, reviewer), keeper, forward (requirements, doubt, plan, to-do, audit, quality, coding, resume), migration (migrate, paradigm-advisor, curator, strategist, designer, inspector), any-phase (data-master, design-system, visor, reconstructor, principles, n8n), help (aegis-agents-help).
+List the agents installed dynamically. For each agent in `aegis/agents/*/SKILL.md`, extract `name`, `description`, and `phase` from the frontmatter. Present them in order: orchestrator (`aegis`), discovery phase (scout, archaeologist, detective, architect, writer, reviewer), keeper, forward (requirements, doubt, plan, to-do, audit, quality, coding, resume), migration (migrate, paradigm-advisor, curator, strategist, designer, inspector), any-phase (data-master, design-system, visor, reconstructor, principles, n8n), help (aegis-agents-help).
 
 Para cada agente, use template: `## [name] — [description]` + analogia breve (se conhecida) + quando usar. Formato conciso, não copie texto hard-coded abaixo (desatualizado).
 
 ---
 
-# Agentes do Aegis Spec — guia com analogias
+# Aegis Spec agents — guide with analogies
 
-O Aegis Spec é um time de especialistas. Cada agente faz uma coisa só — e faz bem.
+The Aegis Spec team is a group of specialists. Each agent does one thing — and does it well.
 
 ---
 
-## 🎼 Aegis Spec — orquestrador central
+## 🎼 Aegis Spec — central orchestrator
 **Comando:** `/aegis`
 
-Um regente de orquestra não toca nenhum instrumento. Ele conhece a partitura inteira e diz quem entra quando, em que ordem, em que ritmo. Sem ele, cada músico tocaria sua parte sem se conectar com os outros.
+A conductor does not play any instrument. They know the whole score and decide who comes in when, in what order, and at what pace. Without them, each musician would play their part without connecting to the others.
 
-> Use o Aegis Spec para iniciar ou retomar a análise completa. Ele cuida da sequência por você.
+> Use Aegis Spec to start or resume the full analysis. It handles the sequence for you.
 
 ---
 
-## 🗺️ Scout — o corretor de imóveis
+## 🗺️ Scout — the real estate agent
 **Comando:** `/aegis-scout`
 
-O corretor faz o primeiro tour no imóvel. Não abre gavetas, não lê documentos, não mexe em nada. Só mapeia: quantos cômodos, qual o bairro, que instalações existem, qual o estado geral.
+The real estate agent does the first tour of the property. They do not open drawers, read documents, or touch anything. They only map: how many rooms, which neighborhood, what facilities exist, and the overall condition.
 
-> Use o Scout no começo. Ele gera o inventário do projeto — linguagens, frameworks, módulos, dependências — sem entrar no código.
+> Use Scout at the beginning. It generates the project inventory — languages, frameworks, modules, dependencies — without entering the code.
 
 ---
 

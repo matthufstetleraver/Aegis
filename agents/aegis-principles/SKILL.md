@@ -2,7 +2,7 @@
 name: aegis-principles
 description: Cria ou atualiza os princípios duradouros do projeto e propaga sugestões de ajuste nos templates dependentes. Princípios são raros, mudam pouco e influenciam todos os artefatos. Use quando o usuário digitar "/aegis-principles", "aegis-principles", "definir princípios" ou pedir para criar/alterar/aposentar um princípio do projeto. Pode rodar antes mesmo da primeira feature.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -15,30 +15,30 @@ Você é o guardião dos princípios. Esse skill lida com regras duradouras do p
 
 Esse skill é raro, frequência tipicamente menor que uma vez por mês. Ele NÃO faz parte do pipeline `requirements`, `plan`, `to-do`, `coding`. Pode rodar sozinho, antes mesmo da primeira feature.
 
-## Antes de começar
+## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
-2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
+1. Read `aegis/config/state.json` to resolve `output_folder` and `forward_folder`
+2. Use the real values wherever the text mentions `aegis/` or `aegis/forward/`
 
-## Verificações Iniciais
+## Initial checks
 
 1. Tente ler `aegis/config/principles.md`
-   1.1. Se ausente, modo é `criar`
-   1.2. Se presente, modo é `atualizar`
-2. Aplique `before-principles` da forma padrão
+   1.1. If missing, mode is `create`
+   1.2. If present, mode is `update`
+2. Apply `before-principles` using the standard flow
 
-## Modo criar
+## Create mode
 
 1. Carregue `aegis/runtime/templates/principles-template.md`
 2. Pergunte ao usuário pelos princípios candidatos, em batch ou um a um
-3. Para cada princípio:
+3. For each principle:
    3.1. Atribua numeração romana sequencial (I, II, III, ...)
    3.2. Pergunte por título curto, descrição e um exemplo concreto de aplicação
    3.3. Registre data de criação
 4. Liste, na seção "Impacto", quais templates serão afetados quando o princípio mudar (sempre `requirements-template.md`, `roadmap-template.md`, e potencialmente `actions-template.md`)
 5. Inicie a seção "Histórico de Alterações" com a entrada inicial
 
-## Modo atualizar
+## Update mode
 
 1. Apresente ao usuário a lista atual de princípios numerados
 2. Pergunte qual operação ele quer:
@@ -49,26 +49,26 @@ Esse skill é raro, frequência tipicamente menor que uma vez por mês. Ele NÃO
    3.1. Atualize a seção "Impacto" se necessário
    3.2. Adicione entrada à "Histórico de Alterações"
 
-## Propagação de impacto
+## Impact propagation
 
 1. Para cada template listado na seção "Impacto":
    1.1. Leia o template em `aegis/runtime/templates/<nome>`
    1.2. Verifique se o template precisa de novo placeholder ou seção para refletir o princípio
    1.3. NUNCA reescreva o template inteiro automaticamente, gere apenas um relatório de impacto em `aegis/reports/principles-impact-YYYYMMDD.md`
-2. O relatório lista, por template, sugestões textuais de ajuste
-3. Aplicar essas sugestões é decisão do humano, esse skill só sugere
+2. The report lists textual adjustment suggestions by template
+3. Applying those suggestions is the human's decision; this skill only suggests
 
-## Persistência
+## Persistence
 
 - Grave `aegis/config/principles.md` com escrita atômica
 - Grave o relatório de impacto em `aegis/reports/principles-impact-YYYYMMDD.md`
 - Jamais sobrescreva relatórios de impacto antigos, cada execução cria um arquivo datado
 
-## Ganchos Pós-execução
+## Post-run hooks
 
 Aplique `after-principles` da forma padrão.
 
-## Relatório final ao usuário
+## Final report to the user
 
 1. Caminho absoluto de `principles.md`
 2. Lista de princípios ativos, com numeração e título curto

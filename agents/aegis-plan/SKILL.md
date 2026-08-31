@@ -2,7 +2,7 @@
 name: aegis-plan
 description: Outlines the technical approach as a delta over the legacy, generating roadmap, investigation, data-delta, onboarding, and interfaces for the active feature. Use when the user types "/aegis-plan", "aegis-plan", "outline the technical plan", or asks to turn requirements into a solution design. Third skill in the forward cycle, after `/aegis-requirements` and optionally `/aegis-doubt`.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -13,21 +13,21 @@ metadata:
 
 You are Aegis Spec's evolution architect. Your mission is to translate the active feature's `requirements.md` into a concrete technical proposal, expressed as a delta over what already exists in the legacy system.
 
-## Antes de começar
+## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
-2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
+1. Read `aegis/config/state.json` to resolve `output_folder` and `forward_folder`
+2. Use the real values wherever the text mentions `aegis/` or `aegis/forward/`
 
-## Verificações Iniciais
+## Initial checks
 
 1. Leia `aegis/config/active-requirements.json`
-   1.1. Se ausente, aborte com mensagem apontando para `/aegis-requirements`
+   1.1. If missing, abort with a message pointing to `/aegis-requirements`
 2. Carregue o `requirements.md` da `feature-dir`
-   2.1. Se o documento ainda tiver marcadores `[DÚVIDA]`, avise o usuário e pergunte se ele prefere rodar `/aegis-doubt` antes
-   2.2. Se o usuário confirmar que quer prosseguir mesmo com dúvidas, cada `[DÚVIDA]` vira premissa explícita no `roadmap.md`, com aviso visível
-3. Aplique ganchos `before-plan` da forma padrão (mesma lógica do skill `aegis-requirements`)
+   2.1. If the document still has `[DÚVIDA]` markers, warn the user and ask whether they want to run `/aegis-doubt` first
+   2.2. If the user confirms they want to continue despite the doubts, each `[DÚVIDA]` becomes an explicit premise in `roadmap.md`, with a visible warning
+3. Apply `before-plan` hooks using the standard flow (same logic as the `aegis-requirements` skill)
 
-## Coleta de contexto técnico
+## Technical context collection
 
 Leia os artefatos da pipeline de descoberta nesta ordem, ignorando os que não existirem:
 
@@ -40,15 +40,15 @@ Leia os artefatos da pipeline de descoberta nesta ordem, ignorando os que não e
 
 Anote quais arquivos serão tocados pela mudança proposta. Essa lista vai virar parte do `legacy-impact.md` quando o `/aegis-coding` rodar mais tarde, então registre-a em rascunho mental.
 
-## Verificação de princípios
+## Principle checks
 
 Para cada princípio em `principles.md`:
 
 1. Avalie se a feature respeita o princípio
 2. Se houver conflito, escreva o conflito numa seção `## Princípios Aplicados` do `roadmap.md`
-3. NUNCA reescreva ou atenue um princípio aqui, isso é tarefa do `/aegis-principles`
+3. NEVER rewrite or soften a principle here; that is the job of `/aegis-principles`
 
-## Geração dos artefatos
+## Artifact generation
 
 Carregue o template em `aegis/runtime/templates/roadmap-template.md` e gere os arquivos abaixo na `feature-dir`:
 
@@ -60,30 +60,30 @@ Carregue o template em `aegis/runtime/templates/roadmap-template.md` e gere os a
 | `onboarding.md` | passo a passo executável para um humano que vai testar a feature pela primeira vez |
 | `interfaces/<nome>.md` | um arquivo por contrato externo afetado (HTTP, fila, gRPC, GraphQL), descreve request, response, erros, idempotência, timeouts |
 
-Quando a feature não tocar contratos externos, omita o diretório `interfaces/`.
+When the feature does not touch external contracts, omit the `interfaces/` directory.
 
-## Regras de redação
+## Writing rules
 
-- Escreva o `roadmap.md` em forma de delta, jamais redescreva a arquitetura inteira do legado
-- Cite componentes do `aegis/` por nome literal e arquivo de origem
-- Marque cada decisão técnica com 🟢 / 🟡 / 🔴 conforme a confidência sobre a fonte
-- Se uma decisão depender de uma `[DÚVIDA]` aceita como premissa, use 🟡
+- Write `roadmap.md` as a delta; never restate the entire legacy architecture
+- Cite `aegis/` components by literal name and source file
+- Mark each technical decision with 🟢 / 🟡 / 🔴 according to source confidence
+- If a decision depends on a `[DÚVIDA]` accepted as a premise, use 🟡
 
-## Persistência
+## Persistence
 
 - Grave todos os artefatos com escrita atômica
-- Crie `feature-dir/interfaces/` apenas se houver pelo menos um arquivo dentro
+- Create `feature-dir/interfaces/` only if there is at least one file inside it
 
-## Ganchos Pós-execução
+## Post-run hooks
 
 Aplique `after-plan` da forma padrão.
 
-## Relatório final
+## Final report
 
-1. Caminhos absolutos dos artefatos gerados
-2. Lista de princípios em conflito, se houver
-3. Lista de premissas adotadas a partir de marcadores `[DÚVIDA]` não resolvidos
-4. Sugestão de próximo passo: `/aegis-to-do` (ou `/aegis-audit` se houver desconfiança)
+1. Absolute paths of the generated artifacts
+2. List of conflicting principles, if any
+3. List of premises adopted from unresolved `[DÚVIDA]` markers
+4. Suggested next step: `/aegis-to-do` (or `/aegis-audit` if there is doubt)
 
 Termine com:
 
