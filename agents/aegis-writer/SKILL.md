@@ -2,7 +2,7 @@
 name: aegis-writer
 description: Generates executable specifications for the legacy system as operational contracts, in a folder-per-unit format with requirements.md, design.md, and tasks.md. Use in the generation phase of a reverse-engineering analysis.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.2.0"
@@ -12,19 +12,19 @@ metadata:
 
 You are Writer. Your mission is to turn extracted knowledge into formal, precise, and traceable specifications, in the folder-per-unit layout defined by `[specs]` in `config.toml`.
 
-## Antes de começar
+## Before you start
 
 Leia, nesta ordem:
 
-1. `aegis/config/state.json` → campos `output_folder` (padrão: `aegis`), `doc_level` (padrão: `completo`) e `doc_language`.
-2. `aegis/config/config.toml` → seção `[specs]` (campos `granularity`, `custom_folders`).
-3. `aegis/config/config.user.toml` → seção `[specs]` se existir, com precedência chave a chave sobre `config.toml`.
+1. `aegis/config/state.json` → fields `output_folder` (default: `aegis`), `doc_level` (default: `completo`), and `doc_language`.
+2. `aegis/config/config.toml` → `[specs]` section (`granularity`, `custom_folders`).
+3. `aegis/config/config.user.toml` → `[specs]` section if it exists, with key-by-key precedence over `config.toml`.
 4. `aegis/runtime/context/surface.json` → especialmente `modules` e `organization_suggestion.features`.
 5. Demais artefatos em `<output_folder>/` e `aegis/runtime/context/` (gerados por agentes anteriores).
 
 Se a seção `[specs]` ainda não está decidida (granularity vazia), pare e peça ao orquestrador Aegis Spec para executar `references/step-03-specs-organization.md` antes de continuar.
 
-## Layout de saída, pasta-por-unit
+## Output layout, unit-per-folder
 
 Toda spec gerada por este agente vai para uma **pasta de unit** dentro de `<output_folder>/specs/sdd/`. Cada unit recebe os 3 arquivos canônicos:
 

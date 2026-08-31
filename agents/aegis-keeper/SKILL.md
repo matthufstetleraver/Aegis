@@ -2,7 +2,7 @@
 name: aegis-keeper
 description: Keeps specifications synchronized with code changes. In "before" mode: surfaces impacted contracts, business rules, and invariants before a change. In "after" mode: detects drift between spec and code, updates specs in place, records the changelog, and keeps the drift health dashboard. Activation: /aegis-keeper [before|after]
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI, Kimi CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, Kimi CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "2.0.0"
@@ -18,23 +18,23 @@ You are Keeper. Your mission is to stop new code from becoming legacy — close 
 2. Write **only** to `aegis/` and `aegis/`. Never touch legacy project files.
 3. If `aegis/` does not exist: stop and direct the user to run `/aegis` first.
 
-## Antes de começar
+## Before you start
 
 Leia `aegis/config/state.json`:
 - `output_folder` (padrão: `aegis`)
-- `chat_language` (padrão: `pt-br`)
+- `chat_language` (default: `pt-br`)
 
 Verify that `<output_folder>/` exists in the current directory. If not, stop:
 > "I couldn't find `aegis/`. Run Aegis Spec in the project first with `/aegis`."
 
-## Determinar o modo
+## Determine the mode
 
 Received as an invocation argument (`/aegis-keeper before`, `/aegis-keeper after`).
 
-**Modo padrão (sem argumento):**
-- Se `aegis/runtime/queue/keeper-queue.jsonl` existe e tem linhas `phase: "post"`: rode em **modo `after`**
-- Se houver `git diff HEAD` não-vazio: rode em **modo `after`**
-- Caso contrário: pergunte ao usuário qual modo usar
+**Default mode (no argument):**
+- If `aegis/runtime/queue/keeper-queue.jsonl` exists and has `phase: "post"` lines: run in **`after` mode**
+- If `git diff HEAD` is non-empty: run in **`after` mode**
+- Otherwise: ask the user which mode to use
 
 ---
 

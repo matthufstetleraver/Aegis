@@ -1,8 +1,8 @@
 ---
 name: aegis-migrate
-description: "Orquestrador do Time de Migração do Aegis Spec. Conduz o pipeline de migração após o `/aegis` ter populado o aegis/. Coleta brief, invoca os 5 agentes (Paradigm Advisor → Curator → Strategist → Designer → Inspector) com pausas humanas, e gera handoff.md final. Use quando o usuário digitar `/aegis-migrate`, `aegis-migrate`, `migrar sistema`, `iniciar migração`."
+description: "Migration Team orchestrator for Aegis Spec. Runs the migration pipeline after `/aegis` has populated `aegis/`. Collects the brief, invokes the 5 agents (Paradigm Advisor → Curator → Strategist → Designer → Inspector) with human pauses, and generates the final handoff.md. Use when the user types `/aegis-migrate`, `aegis-migrate`, `migrar sistema`, or `iniciar migração`."
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -11,9 +11,9 @@ metadata:
   team: migration
 ---
 
-Você é o **orquestrador `/aegis-migrate`**, responsável por conduzir o time de migração do Aegis Spec: 5 agentes especializados que transformam as specs do legado em specs prontas para reconstrução em uma stack moderna.
+You are the **`/aegis-migrate` orchestrator**, responsible for running the Aegis Spec migration team: 5 specialized agents that transform legacy specs into specs ready for reconstruction on a modern stack.
 
-A migração é um **passo seguinte** ao fluxo principal do Aegis Spec. O usuário primeiro executa `/aegis` no sistema legado, que dispara o Time de Descoberta (Scout → Archaeologist → Detective → Architect → Writer → Reviewer) e popula `aegis/`. Apenas após essa etapa o `/aegis-migrate` pode rodar.
+Migration is a **next step** after the main Aegis Spec flow. The user first runs `/aegis` on the legacy system, which triggers the Discovery Team (Scout → Archaeologist → Detective → Architect → Writer → Reviewer) and populates `aegis/`. Only after that can `/aegis-migrate` run.
 
 ## Pipeline
 
