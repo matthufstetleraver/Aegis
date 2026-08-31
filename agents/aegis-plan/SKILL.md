@@ -23,20 +23,20 @@ You are Aegis Spec's evolution architect. Your mission is to translate the activ
 1. Read `aegis/config/active-requirements.json`
    1.1. If missing, abort with a message pointing to `/aegis-requirements`
 2. Load the `requirements.md` from the `feature-dir`
-   2.1. If the document still has `[DÚVIDA]` markers, warn the user and ask whether they want to run `/aegis-doubt` first
-   2.2. If the user confirms they want to continue despite the doubts, each `[DÚVIDA]` becomes an explicit premise in `roadmap.md`, with a visible warning
+   2.1. If the document still has `[DOUBT]` markers, warn the user and ask whether they want to run `/aegis-doubt` first
+   2.2. If the user confirms they want to continue despite the doubts, each `[DOUBT]` becomes an explicit premise in `roadmap.md`, with a visible warning
 3. Apply `before-plan` hooks using the standard flow (same logic as the `aegis-requirements` skill)
 
 ## Technical context collection
 
 Read the discovery pipeline artifacts in this order, skipping any that do not exist:
 
-1. `aegis/architecture/architecture.md` (componentes, dependências internas)
-2. `aegis/architecture/c4-context.md` (fronteiras externas)
-3. `aegis/reports/state-machines.md` (máquinas de estado afetadas)
+1. `aegis/architecture/architecture.md` (components, internal dependencies)
+2. `aegis/architecture/c4-context.md` (external boundaries)
+3. `aegis/reports/state-machines.md` (affected state machines)
 4. `aegis/reports/dependencies.md` (used libraries)
-5. `aegis/reports/code-analysis.md`, mas apenas as seções dos componentes citados no requirements
-6. `aegis/config/principles.md` (princípios obrigatórios)
+5. `aegis/reports/code-analysis.md`, but only the sections for components cited in requirements
+6. `aegis/config/principles.md` (mandatory principles)
 
 Note which files will be touched by the proposed change. That list will become part of `legacy-impact.md` when `/aegis-coding` runs later, so keep it as a mental draft.
 
@@ -45,15 +45,15 @@ Note which files will be touched by the proposed change. That list will become p
 For each principle in `principles.md`:
 
 1. Evaluate whether the feature respects the principle
-2. If there is a conflict, write it in a `## Applied Principles` section of `roadmap.md`
+2. If there is a conflict, write it in an `## Applied Principles` section of `roadmap.md`
 3. NEVER rewrite or soften a principle here; that is the job of `/aegis-principles`
 
 ## Artifact generation
 
 Load the template in `aegis/runtime/templates/roadmap-template.md` and generate the files below in `feature-dir`:
 
-| Arquivo | Conteúdo esperado |
-|---------|-------------------|
+| File | Expected content |
+|------|------------------|
 | `roadmap.md` | approach summary, applied principles, technical decisions, architectural delta, data delta, contract delta, migration plan, risks, done criteria |
 | `investigation.md` | background research, alternatives considered, links to external sources, applicable patterns |
 | `data-delta.md` | conceptual diff over the model extracted in `aegis/`, new fields, removed fields, required migrations |
@@ -67,7 +67,7 @@ When the feature does not touch external contracts, omit the `interfaces/` direc
 - Write `roadmap.md` as a delta; never restate the entire legacy architecture
 - Cite `aegis/` components by literal name and source file
 - Mark each technical decision with 🟢 / 🟡 / 🔴 according to source confidence
-- If a decision depends on a `[DÚVIDA]` accepted as a premise, use 🟡
+- If a decision depends on a `[DOUBT]` accepted as a premise, use 🟡
 
 ## Persistence
 
