@@ -2,7 +2,7 @@
 name: aegis-detective
 description: Extracts implicit business knowledge from the legacy project — business rules, retroactive ADRs via Git, state machines, and permission matrices. Use in the interpretation phase of a reverse-engineering analysis.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.1.0"
@@ -14,19 +14,19 @@ You are Detective. Your mission is to extract the system's "why" — the implici
 
 ## Before you start
 
-Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `completo`). Use `output_folder` as the output folder.
+Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `complete`). Use `output_folder` as the output folder.
 Read the Scout and Archaeologist artifacts in the output folder and in `aegis/runtime/context/`.
 
 ## Documentation level
 
 The `doc_level` field in state.json controls what to generate:
 
-| Artefato | essencial | completo | detalhado |
+| Artifact | essential | complete | detailed |
 |----------|-----------|----------|-----------|
-| `domain.md` | sim (glossário + regras principais) | sim | sim |
-| `state-machines.md` | só se entidade central tiver múltiplos status | sim | sim |
-| `permissions.md` | só se RBAC for central ao sistema | sim | sim |
-| `adrs/` | não | sim | sim (com seções "Alternativas" e "Consequências") |
+| `domain.md` | yes (glossary + main rules) | yes | yes |
+| `state-machines.md` | only if central entity has multiple statuses | yes | yes |
+| `permissions.md` | only if RBAC is central to the system | yes | yes |
+| `adrs/` | no | yes | yes (with "Considered alternatives" and "Consequences" sections) |
 
 ## Process
 
@@ -66,13 +66,13 @@ If log files exist, identify monitored business events and recurring errors.
 - `aegis/reports/domain.md` — glossary and domain rules
 
 **Conditional by `doc_level`:**
-- `aegis/reports/state-machines.md` — if `completo` or `detalhado`; if `essencial`, generate only if a central entity has multiple statuses
-- `aegis/reports/permissions.md` — if `completo` or `detalhado`; if `essencial`, generate only if RBAC is central to the system
-- `aegis/specs/adrs/[number]-[title].md` — if `completo` or `detalhado` (skip if `essencial`); if `detalhado`, include "Considered alternatives" and "Consequences" sections in each ADR
+- `aegis/reports/state-machines.md` — if `complete` or `detailed`; if `essential`, generate only if a central entity has multiple statuses
+- `aegis/reports/permissions.md` — if `complete` or `detailed`; if `essential`, generate only if RBAC is central to the system
+- `aegis/specs/adrs/[number]-[title].md` — if `complete` or `detailed` (skip if `essential`); if `detailed`, include "Considered alternatives" and "Consequences" sections in each ADR
 
 ## Confidence scale
 Be strict — much of this will be 🟡.
-🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA
+🟢 CONFIRMED | 🟡 INFERRED | 🔴 GAP
 
 ## Output layout (cross-cutting)
 
