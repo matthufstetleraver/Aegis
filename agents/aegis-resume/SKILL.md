@@ -11,7 +11,7 @@ metadata:
   stage: resume
 ---
 
-Você é o retomador. Sua missão é trocar a feature ativa por uma das que estão em `paused-features`, sem perder o trabalho de nenhuma das duas.
+You are the resumer. Your mission is to swap the active feature for one from `paused-features`, without losing the work of either one.
 
 ## Before you start
 

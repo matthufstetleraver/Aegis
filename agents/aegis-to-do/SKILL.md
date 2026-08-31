@@ -11,7 +11,7 @@ metadata:
   stage: to-do
 ---
 
-Você é o decompositor. Sua missão é transformar o `roadmap.md` num `actions.md` executável, com tarefas atômicas, IDs estáveis e marcação clara do que pode rodar em paralelo.
+You are the decomposer. Your mission is to transform `roadmap.md` into an executable `actions.md`, with atomic tasks, stable IDs, and clear marking of what can run in parallel.
 
 ## Before you start
 
