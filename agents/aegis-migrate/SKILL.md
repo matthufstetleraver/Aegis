@@ -77,19 +77,19 @@ Minimum questions (one at a time or grouped, depending on the engine):
 
 **Não pergunte paradigma. Não pergunte apetite.** Esses são responsabilidade do Paradigm Advisor.
 
-Renderize `aegis/migration/migration_brief.md` usando o template em `references/templates/migration_brief.md`.
+Render `aegis/migration/migration_brief.md` using the template in `references/templates/migration_brief.md`.
 
 ### Step 4: Initialize `.state.json`
 
 Create `aegis/migration/.state.json` from the `references/state.json` template. Fill in `startedAt`, `engine`, and `aegisVersion`. Set `currentAgent.agent = "paradigm_advisor"`, `currentAgent.phase = null`, `currentAgent.status = "running"`, `currentAgent.topologyApproved = false`.
 
 **`currentAgent` contract** (object, not string):
-- `agent`: id do agente atualmente ativo (`paradigm_advisor` | `curator` | `strategist` | `designer` | `inspector` | `null` quando ocioso).
-- `phase`: nome da sub-fase (apenas quando o agente declara fases; ex: `"topology"` ou `"architecture"` para o Designer; `null` para os demais).
+- `agent`: ID of the currently active agent (`paradigm_advisor` | `curator` | `strategist` | `designer` | `inspector` | `null` when idle).
+- `phase`: name of the sub-phase (only when the agent declares phases; e.g., `"topology"` or `"architecture"` for the Designer; `null` for others).
 - `status`: `running` | `awaiting_user_approval` | `complete` | `failed`.
-- `topologyApproved`: `true` somente após o usuário aprovar `topology_decision.md`. Persiste durante toda a vida da migração; é fonte única de verdade.
+- `topologyApproved`: `true` only after the user approves `topology_decision.md`. Persists throughout the migration lifetime; it is the single source of truth.
 
-Ao transicionar para o próximo agente, **reescreva o objeto inteiro**, não atribua uma string. Ao mover um agente para `completedAgents`, defina `currentAgent.agent` para o próximo da fila (ou `null` ao final), reset `phase` e `status`, e **preserve** `topologyApproved` (ele não pertence à transição de agente).
+When transitioning to the next agent, **rewrite the entire object**, do not assign a string. When moving an agent to `completedAgents`, set `currentAgent.agent` to the next in queue (or `null` at the end), reset `phase` and `status`, and **preserve** `topologyApproved` (it does not belong to the agent transition).
 
 ### Step 5: Execute the 5 agents in sequence
 
@@ -101,11 +101,11 @@ For each agent, do the following:
 4. Update `.state.json`: move the agent from `pendingAgents` → `completedAgents`, update `lastCheckpoint`, and record artifacts with SHA-256 hashes.
 5. **Human pause** (see step 6) before proceeding, according to the table below.
 
-#### Passo 5b: Checkpoint intra-agente (Designer Fase 1)
+#### Step 5b: Intra-agent checkpoint (Designer Phase 1)
 
 Some agents operate in phases with human pauses between them. Currently, only the **Designer** behaves this way: in Phase 1 it produces `topology_decision.md` and returns control without entering Phase 2.
 
-Fluxo:
+Flow:
 
 1. Designer runs Phase 1, writes `topology_decision.md`, and returns control to the orchestrator with signal `phase: topology, status: awaiting_user_approval`.
 2. The orchestrator writes `currentAgent.phase = "topology"` and `currentAgent.status = "awaiting_user_approval"` into `.state.json`. It does **not** move Designer to `completedAgents`.
@@ -140,38 +140,38 @@ Behavior by engine:
 - **Engines without interactive TTY**: write `aegis/migration/pending_decisions.md` with the open decisions, instruct the user to edit it and signal completion; reread the file after the signal.
 - **`--auto` / `--auto-approve` mode**: apply the defaults documented in `references/auto-defaults.md`. Mark each auto-applied decision in `ambiguity_log.md` for later review. Do not request human approval — the pipeline runs end to end without pauses.
 
-### Passo 7: Consolidar `ambiguity_log.md`
+### Step 7: Consolidate `ambiguity_log.md`
 
-Após cada agente, integre itens ⚠️ e pendências em `aegis/migration/ambiguity_log.md`. Ao final, organize em três grupos:
+After each agent, integrate ⚠️ items and pending items into `aegis/migration/ambiguity_log.md`. At the end, organize into three groups:
 
-- PENDENTES (não pode haver após Inspector concluir)
-- RESOLVIDOS COM DECISÃO HUMANA
-- REFERIDOS À CODIFICAÇÃO
+- PENDING (must not exist after Inspector completes)
+- RESOLVED BY HUMAN DECISION
+- DEFERRED TO CODING
 
-### Passo 8: Gerar `handoff.md`
+### Step 8: Generate `handoff.md`
 
-Após Inspector concluir e `ambiguity_log` consolidado:
+After Inspector completes and `ambiguity_log` is consolidated:
 
-1. Renderize `aegis/migration/handoff.md` usando o template em `references/templates/handoff.md`.
-2. Liste todos os artefatos produzidos.
-3. **Destaque `paradigm_decision.md` e `topology_decision.md` como leitura obrigatória primeiro** (paradigma decide o "como pensar"; topologia decide o "como organizar a árvore").
-4. Liste itens REFERIDOS À CODIFICAÇÃO em seção dedicada.
-5. Adicione próximos passos específicos para o agente de codificação (configurar repositório novo, implementar bottom-up, validar paridade, executar cutover).
-6. Em modo `--auto`: liste itens auto-decididos para revisão posterior.
+1. Render `aegis/migration/handoff.md` using the template in `references/templates/handoff.md`.
+2. List all produced artifacts.
+3. **Highlight `paradigm_decision.md` and `topology_decision.md` as mandatory reading first** (paradigm decides the "how to think"; topology decides the "how to organize the tree").
+4. List items DEFERRED TO CODING in a dedicated section.
+5. Add next steps specific to the coding agent (set up new repository, implement bottom-up, validate parity, execute cutover).
+6. In `--auto` mode: list auto-decided items for later review.
 
-### Passo 9: Resumo final e logs
+### Step 9: Final summary and logs
 
-Apresente no chat:
+Present in chat:
 
-> "Migração concluída.
-> - Agentes executados: 5
-> - Artefatos criados: <N>
-> - Itens em `ambiguity_log.md`: <N> pendentes (esperado 0), <N> resolvidos, <N> referidos à codificação
-> - Tempo total: <minutos>
+> "Migration completed.
+> - Agents executed: 5
+> - Artifacts created: <N>
+> - Items in `ambiguity_log.md`: <N> pending (expected 0), <N> resolved, <N> deferred to coding
+> - Total time: <minutes>
 >
-> Próximo passo: abra `aegis/migration/handoff.md` no agente de codificação que vai implementar o sistema novo."
+> Next step: open `aegis/migration/handoff.md` in the coding agent that will implement the new system."
 
-Grave log completo em `aegis/migration/.logs/<timestamp>-migrate.log` com timestamp por entrada e identificação do agente. Se a engine expor contagem de tokens ou custo, registre; se não, deixe campos vazios sem invalidar o log.
+Record full log in `aegis/migration/.logs/<timestamp>-migrate.log` with timestamp per entry and agent identification. If the engine exposes token count or cost, record it; if not, leave fields empty without invalidating the log.
 
 ## Modos especiais
 
