@@ -67,13 +67,13 @@ If `aegis/migration/migration_brief.md` does **not** exist, conduct the intervie
 
 Minimum questions (one at a time or grouped, depending on the engine):
 
-1. **Objetivo da migração**: por que estamos migrando?
-2. **Métricas de sucesso**: como saberemos que deu certo?
-3. **Restrições**: prazo, orçamento, técnicas, regulatórias.
-4. **Fatores de risco conhecidos**.
-5. **Stakeholders**: quem precisa ser ouvido / informado?
-6. **Stack alvo**: linguagem, framework, banco, infra, mensageria, observabilidade.
-7. **Escopo**: módulos incluídos e excluídos.
+1. **Migration objective**: why are we migrating?
+2. **Success metrics**: how will we know it worked?
+3. **Constraints**: timeline, budget, technical, regulatory.
+4. **Known risk factors**.
+5. **Stakeholders**: who needs to be heard from / informed?
+6. **Target stack**: language, framework, database, infrastructure, messaging, observability.
+7. **Scope**: included and excluded modules.
 
 **Não pergunte paradigma. Não pergunte apetite.** Esses são responsabilidade do Paradigm Advisor.
 
@@ -81,9 +81,9 @@ Renderize `aegis/migration/migration_brief.md` usando o template em `references/
 
 ### Step 4: Initialize `.state.json`
 
-Crie `aegis/migration/.state.json` a partir do template `references/state.json`. Preencha `startedAt`, `engine`, `aegisVersion`. Marque `currentAgent.agent = "paradigm_advisor"`, `currentAgent.phase = null`, `currentAgent.status = "running"`, `currentAgent.topologyApproved = false`.
+Create `aegis/migration/.state.json` from the `references/state.json` template. Fill in `startedAt`, `engine`, and `aegisVersion`. Set `currentAgent.agent = "paradigm_advisor"`, `currentAgent.phase = null`, `currentAgent.status = "running"`, `currentAgent.topologyApproved = false`.
 
-**Contrato do `currentAgent`** (objeto, não string):
+**`currentAgent` contract** (object, not string):
 - `agent`: id do agente atualmente ativo (`paradigm_advisor` | `curator` | `strategist` | `designer` | `inspector` | `null` quando ocioso).
 - `phase`: nome da sub-fase (apenas quando o agente declara fases; ex: `"topology"` ou `"architecture"` para o Designer; `null` para os demais).
 - `status`: `running` | `awaiting_user_approval` | `complete` | `failed`.
@@ -93,17 +93,17 @@ Ao transicionar para o próximo agente, **reescreva o objeto inteiro**, não atr
 
 ### Step 5: Execute the 5 agents in sequence
 
-Para cada agente, faça:
+For each agent, do the following:
 
-1. Anuncie ao usuário: `"Iniciando o **<Agente>**, <responsabilidade curta>."`.
-2. Ative a skill do agente (`aegis-paradigm-advisor`, `aegis-curator`, `aegis-strategist`, `aegis-designer`, `aegis-inspector`). Se a engine não suportar ativação direta por nome, instrua a leitura de `aegis/skills/<id>/SKILL.md` no contexto atual.
-3. Aguarde a conclusão **ou** um checkpoint intra-agente (ver passo 5b). Se for conclusão, valide os artefatos previstos.
-4. Atualize `.state.json`: mover agente de `pendingAgents` → `completedAgents`, atualizar `lastCheckpoint`, registrar artefatos com hash SHA-256.
-5. **Pausa humana** (ver passo 6) antes de prosseguir, conforme tabela abaixo.
+1. Announce to the user: `"Starting **<Agent>**, <short responsibility>."`.
+2. Activate the agent skill (`aegis-paradigm-advisor`, `aegis-curator`, `aegis-strategist`, `aegis-designer`, `aegis-inspector`). If the engine does not support direct activation by name, instruct it to read `aegis/skills/<id>/SKILL.md` in the current context.
+3. Wait for completion **or** an intra-agent checkpoint (see step 5b). If it completes, validate the expected artifacts.
+4. Update `.state.json`: move the agent from `pendingAgents` → `completedAgents`, update `lastCheckpoint`, and record artifacts with SHA-256 hashes.
+5. **Human pause** (see step 6) before proceeding, according to the table below.
 
 #### Passo 5b: Checkpoint intra-agente (Designer Fase 1)
 
-Alguns agentes operam em fases com pausa humana entre elas. Atualmente, apenas o **Designer** se comporta assim: na Fase 1 produz `topology_decision.md` e devolve controle sem entrar na Fase 2.
+Some agents operate in phases with human pauses between them. Currently, only the **Designer** behaves this way: in Phase 1 it produces `topology_decision.md` and returns control without entering Phase 2.
 
 Fluxo:
 
