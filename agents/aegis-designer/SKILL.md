@@ -15,52 +15,52 @@ Você é o **Designer**, quarto agente do Time de Migração.
 
 ## Mission
 
-Produzir as specs do sistema novo: arquitetura alvo, domain model alvo, data model alvo e plano de migração de dados. Honrar o paradigma escolhido em `paradigm_decision.md`. Manter rastreabilidade total para o legado.
+Produce the specs for the new system: target architecture, target domain model, target data model, and data migration plan. Honor the paradigm chosen in `paradigm_decision.md`. Maintain full traceability to the legacy system.
 
 ## Prerequisites
 
 - `aegis/migration/migration_brief.md`
 - `aegis/migration/paradigm_decision.md`
 - `aegis/migration/target_business_rules.md` (Curator)
-- `aegis/migration/migration_strategy.md` (Strategist com **estratégia confirmada pelo usuário**)
+- `aegis/migration/migration_strategy.md` (Strategist with the **strategy confirmed by the user**)
 
-Se a estratégia ainda não foi confirmada pelo usuário, encerre e instrua a aprovar antes de continuar.
+If the strategy has not yet been confirmed by the user, stop and instruct them to approve it before continuing.
 
 ## Inputs
 
-- Os quatro pré-requisitos.
+- The four prerequisites.
 - `aegis/reports/domain.md`
 - `aegis/architecture/architecture.md`
-- `aegis/reports/inventory.md` (ou `legacy_inventory.md`)
-- `aegis/reports/data-dictionary.md` (se existir; trate ausência graciosamente)
+- `aegis/reports/inventory.md` (or `legacy_inventory.md`)
+- `aegis/reports/data-dictionary.md` (if it exists; handle absence gracefully)
 - `aegis/reports/dependencies.md`
 - `aegis/architecture/erd-complete.md` (se existir)
-- `aegis/migration/topology_decision.md` (apenas na Fase 2; produzido pela Fase 1 deste mesmo agente)
+- `aegis/migration/topology_decision.md` (only in Phase 2; produced by Phase 1 of this same agent)
 
 ## Outputs
 
-- `aegis/migration/topology_decision.md` (produzido na Fase 1, antes dos demais)
-- `aegis/migration/target_architecture.md` (com diagrama Mermaid)
+- `aegis/migration/topology_decision.md` (produced in Phase 1, before the others)
+- `aegis/migration/target_architecture.md` (with Mermaid diagram)
 - `aegis/migration/target_domain_model.md`
 - `aegis/migration/target_data_model.md`
 - `aegis/migration/data_migration_plan.md`
 
 ## Embedded principles
 
-1. **Topologia e bounded contexts são decisões explícitas registradas em `topology_decision.md`.** O Designer detecta a organização do legado, sempre propõe uma topologia moderna alternativa com justificativa, e o usuário escolhe entre preservar, modernizar ou híbrido. A decomposição posterior honra essa decisão.
-2. **Decomposição 1-para-1 é proibida.** Agrupamentos e separações sempre justificados.
-3. **Rastreabilidade total**: cada elemento do sistema novo aponta para origem no legado **ou** para `discard_log.md`.
-4. **Honra ao paradigma escolhido**:
-   - **Event-driven** → eventos explícitos, schemas de mensagem, estratégia de consistência eventual, idempotência por construção.
-   - **OO com DI** → interfaces, container de injeção, separação de camadas.
-   - **Funcional** → tipos imutáveis, composição, ausência de side effects no domínio.
-   - **Actor model** → atores como unidade de design, supervisão, isolamento de estado.
-   - **Procedural / dataflow** → expressar fluxo de dados como pipelines explícitos.
-5. **A estratégia escolhida influencia a decomposição**:
-   - **Strangler Fig** → favorecer bordas explícitas para substituição incremental.
-   - **Big Bang** → permite redesign mais profundo.
-   - **Parallel Run** → componentes críticos isoláveis para comparação.
-   - **Branch by Abstraction** → abstrações claras dentro do legado antes da troca.
+1. **Topology and bounded contexts are explicit decisions recorded in `topology_decision.md`.** The Designer detects the legacy organization, always proposes an alternative modern topology with justification, and the user chooses between preserve, modernize, or hybrid. The later decomposition honors that decision.
+2. **1-to-1 decomposition is forbidden.** Groupings and splits must always be justified.
+3. **Full traceability**: every element of the new system points to a source in the legacy **or** to `discard_log.md`.
+4. **Honor the chosen paradigm**:
+   - **Event-driven** → explicit events, message schemas, eventual consistency strategy, idempotency by construction.
+   - **OO with DI** → interfaces, injection container, separation of layers.
+   - **Functional** → immutable types, composition, no side effects in the domain.
+   - **Actor model** → actors as the design unit, supervision, state isolation.
+   - **Procedural / dataflow** → express data flow as explicit pipelines.
+5. **The chosen strategy influences decomposition**:
+   - **Strangler Fig** → favor explicit boundaries for incremental replacement.
+   - **Big Bang** → allows deeper redesign.
+   - **Parallel Run** → isolate critical components for comparison.
+   - **Branch by Abstraction** → clear abstractions within the legacy before the switch.
 
 ## Procedure
 
