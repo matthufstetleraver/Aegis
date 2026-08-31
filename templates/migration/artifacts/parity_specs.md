@@ -5,60 +5,60 @@ aegis:
   version: "x.y.z"
 kind: parity_specs
 producedBy: inspector
-hash: "sha256:<hash do corpo abaixo do front-matter>"
+hash: "sha256:<body hash below frontmatter>"
 ---
 
 # Parity Specs
 
-> Estratégia de validação de equivalência comportamental entre legado e sistema novo, adaptada ao paradigma escolhido em `paradigm_decision.md`.
+> Strategy for validating behavioral equivalence between legacy and new system, adapted to paradigm chosen in `paradigm_decision.md`.
 
-## Estratégia geral
-- **Modos de validação aplicáveis** (marcar os usados):
-  - [ ] Shadow mode (espelhamento de tráfego com comparação assíncrona)
-  - [ ] Characterization tests (suíte derivada do comportamento atual do legado)
-  - [ ] Contract tests (interfaces externas)
-  - [ ] Data parity (snapshots e checksums)
-  - [ ] Outro: <especificar>
+## General strategy
+- **Applicable validation modes** (mark the ones used):
+  - [ ] Shadow mode (traffic mirroring with async comparison)
+  - [ ] Characterization tests (suite derived from current legacy behavior)
+  - [ ] Contract tests (external interfaces)
+  - [ ] Data parity (snapshots and checksums)
+  - [ ] Other: <specify>
 
-## Critérios de "paridade aceita"
-- **Métrica primária**: <ex: índice de divergência funcional < 0,01% em N dias consecutivos>
-- **Janela de observação**: <período de avaliação>
-- **Critério de bloqueio**: <quando paridade insuficiente bloqueia o cutover>
+## "Parity accepted" criteria
+- **Primary metric**: <ex: functional divergence index < 0.01% on N consecutive days>
+- **Observation window**: <evaluation period>
+- **Blocking criterion**: <when insufficient parity blocks cutover>
 
-## Cobertura adaptada ao paradigma
+## Coverage adapted to paradigm
 
-> Esta seção muda conforme o paradigma alvo confirmado em `paradigm_decision.md`.
+> This section changes based on the target paradigm confirmed in `paradigm_decision.md`.
 
-### Sem mudança de paradigma
-- Equivalência funcional padrão: mesma entrada → mesma saída → mesmo efeito colateral observável.
+### No paradigm change
+- Standard functional equivalence: same input → same output → same observable side effect.
 
-### Mudança síncrono → event-driven
-- **Ordem de mensagens**: <critério de aceitação por canal / partição>
-- **Idempotência**: <prova de que reprocessamento não duplica efeito>
-- **Consistência eventual**: <janela máxima de propagação aceita>
-- **Comportamento sob falha de fila**: <retry, DLQ, replay>
+### Sync → event-driven change
+- **Message order**: <acceptance criterion per channel / partition>
+- **Idempotency**: <proof that reprocessing does not duplicate effect>
+- **Eventual consistency**: <maximum propagation window accepted>
+- **Behavior under queue failure**: <retry, DLQ, replay>
 
-### Mudança procedural → OO
-- **Invariantes em aggregates**: <conjunto a validar>
-- **Validação em factories / construtores**: <casos críticos>
+### Procedural → OO change
+- **Invariants in aggregates**: <set to validate>
+- **Validation in factories / constructors**: <critical cases>
 
-### Mudança OO → funcional
-- **Imutabilidade**: <pontos críticos a observar>
-- **Ausência de side effects esperados**: <onde o legado tinha efeito colateral implícito>
-- **Equivalência sob composição**: <funções compostas equivalem ao fluxo legado>
+### OO → functional change
+- **Immutability**: <critical points to observe>
+- **Absence of expected side effects**: <where legacy had implicit side effect>
+- **Equivalence under composition**: <composed functions equivalent to legacy flow>
 
-## Tipos de teste a aplicar
-- **Funcionais**: <descrição, ferramenta>
-- **Contrato**: <descrição, ferramenta>
-- **Carga / performance**: <descrição, alvos>
-- **Resiliência** (se aplicável): <falha de fila, dependência externa indisponível>
+## Test types to apply
+- **Functional**: <description, tool>
+- **Contract**: <description, tool>
+- **Load / performance**: <description, targets>
+- **Resilience** (if applicable): <queue failure, external dependency unavailable>
 
-## Reuso de characterization_specs do time de descoberta
-- **Origem**: `aegis/specs/characterization_specs/` ou equivalente disponível.
-- **Adaptações necessárias para o sistema novo**: <texto>
+## Reuse of discovery team's characterization_specs
+- **Origin**: `aegis/specs/characterization_specs/` or equivalent available.
+- **Necessary adaptations for new system**: <text>
 
-## Saídas
-- `parity_tests/*.feature`: cenários em Gherkin para os fluxos críticos.
+## Outputs
+- `parity_tests/*.feature`: scenarios in Gherkin for critical flows.
 
-## Notas
-<Observações adicionais.>
+## Notes
+<Additional observations.>
