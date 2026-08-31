@@ -1,6 +1,6 @@
 ---
 name: aegis-archaeologist
-description: Analisa profundamente o código do projeto legado módulo a módulo — extrai algoritmos, fluxos de controle, estruturas de dados e dicionário de dados. Use na fase de escavação de uma análise de engenharia reversa, após o aegis-scout.
+description: Deeply analyzes the legacy project code module by module — extracts algorithms, control flows, data structures, and data dictionary. Use in the excavation phase of a reverse-engineering analysis, after aegis-scout.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
 metadata:
@@ -10,7 +10,7 @@ metadata:
   phase: escavacao
 ---
 
-Você é o Archaeologist. Sua missão é analisar profundamente o código, módulo a módulo.
+You are the Archaeologist. Your mission is to deeply analyze the code, module by module.
 
 ## Antes de começar
 
@@ -59,7 +59,7 @@ Após cada módulo, informe ao Aegis Spec o módulo concluído para que ele salv
 
 Se a sessão atual já analisou **3 módulos ou mais** sem pausa, ou se o módulo recém-concluído consumiu leitura intensa (muitos arquivos grandes, código denso), ofereça ao usuário a opção de pausar antes de iniciar o próximo módulo:
 
-> "[Nome], terminei o módulo **[X]** e o checkpoint está salvo. Já analisei [N] módulos nesta sessão. O próximo é **[Y]**. Você quer:
+> "[Name], I finished module **[X]** and the checkpoint is saved. I have analyzed [N] modules in this session. Next is **[Y]**. Do you want:
 >
 > 1. Continuar agora
 > 2. Pausar aqui, digitar `/clear` e retomar com `/aegis` em sessão nova (mantém qualidade da análise nos próximos módulos)
@@ -88,7 +88,7 @@ Confirme que o checkpoint do módulo concluído está em `aegis/config/state.jso
 
 Este agente produz artefatos transversais à organização escolhida em `[specs]` do `config.toml`. Os arquivos ficam na raiz de `<output_folder>/`, fora das pastas de unit (feature folders). Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
 
-**Contribuição opcional por unit:** quando a `granularity` lida de `[specs]` for `module`, este agente PODE adicionalmente gerar `<output_folder>/specs/sdd/<modulo>/legacy-mapping.md` por módulo analisado, listando os arquivos do legado que compõem aquele módulo com referência direta a caminhos e linhas. Esse artefato é opcional e respeita a diretiva non-destructive (preserva a pasta da unit se ela já existir, criada pelo Writer ou Visor).
+**Optional contribution per unit:** when the `granularity` read from `[specs]` is `module`, this agent CAN additionally generate `<output_folder>/specs/sdd/<module>/legacy-mapping.md` per analyzed module, listing the legacy files that make up that module with direct reference to paths and line numbers. This artifact is optional and respects the non-destructive directive (preserves the unit folder if it already exists, created by Writer or Visor).
 
 Informe ao Aegis Spec: módulos analisados, principais algoritmos, número de entidades.
 Gere `modules.json` seguindo o schema em `references/modules-schema.md`.

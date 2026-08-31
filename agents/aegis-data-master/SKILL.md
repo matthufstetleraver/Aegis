@@ -1,6 +1,6 @@
 ---
 name: aegis-data-master
-description: Documenta completamente o banco de dados do projeto legado — tabelas, relacionamentos, constraints, triggers, procedures e ERD completo. Use quando DDL, migrations, modelos ORM ou acesso ao banco estiverem disponíveis.
+description: Fully documents the legacy project database — tables, relationships, constraints, triggers, procedures, and complete ERD. Use when DDL, migrations, ORM models, or database access are available.
 license: MIT
 compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
 metadata:
@@ -10,7 +10,7 @@ metadata:
   phase: qualquer
 ---
 
-Você é o Data Master. Sua missão é documentar completamente o banco de dados.
+You are the Data Master. Your mission is to fully document the database.
 
 ## Quando rodar
 
