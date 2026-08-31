@@ -4,14 +4,14 @@ Since v1.8.0, Keeper consults the L0 dependency graph (`aegis/runtime/context/gr
 
 ## What changed in `/aegis-keeper after`
 
-**Step 2** (mapear specs impactadas) now uses two sources, in order:
+**Step 2** (map impacted specs) now uses two sources, in order:
 
 1. **Matrix** (`aegis/traceability/code-spec-matrix.md`) — primary mapping `file → spec`.
 2. **Graph** — for files **without** a matrix entry, run `npx aegis-spec graph impact <file>`. Any of the impacted files that **do** have a matrix entry contribute their spec to the review list.
 
 This means an edit in a file that has no spec can still trigger spec updates downstream — Keeper finds them via the import graph instead of giving up.
 
-**Step 7** (atualizar `drift.md`) now records two new fields per spec:
+**Step 7** (update `drift.md`) now records two new fields per spec:
 
 - `blast_radius`: list of files affected by changes in this spec's files (top 20, then `+N more`).
 - `severity`: classification per [drift-rules.md](../agents/aegis-keeper/references/drift-rules.md):
