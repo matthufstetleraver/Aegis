@@ -58,9 +58,9 @@ What it produces:
 
 Here the analysis stops being descriptive and becomes interpretive. Two agents work in this phase.
 
-**The Detective** is the team's Sherlock Holmes. Looks at what the Archaeologist cataloged and asks: *"But why is this here? Who made this decision? What does the git history reveal?"* Extracts implicit business rules, retroactive ADRs, state machines, and permission matrices.
+**The Detective** is the team's Sherlock Holmes. It looks at what the Archaeologist cataloged and asks: *"But why is this here? Who made this decision? What does the git history reveal?"* It extracts implicit business rules, retroactive ADRs, state machines, and permission matrices.
 
-**The Architect** is the cartographer. Synthesizes everything into formal architectural documentation: C4 diagrams at all three levels (Context, Containers, Components), full ERD, integration map, and technical debt.
+**The Architect** is the cartographer. It synthesizes everything into formal architectural documentation: C4 diagrams at all three levels (Context, Containers, Components), full ERD, integration map, and technical debt.
 
 What they produce:
 
@@ -78,11 +78,11 @@ What they produce:
 
 **Agent:** Writer
 
-The Writer is the team's notary. Transforms everything discovered in the previous phases into formal contracts: a folder per unit (module, endpoint, use case, feature, etc., depending on the organization chosen earlier in the flow) with the three canonical SDD files inside, plus cross-cutting globals such as OpenAPI specs and user stories.
+The Writer is the team's notary. It transforms everything discovered in the previous phases into formal contracts: a folder per unit (module, endpoint, use case, feature, etc., depending on the organization chosen earlier in the flow) with the three canonical SDD files inside, plus cross-cutting globals such as OpenAPI specs and user stories.
 
 Every statement is marked with the [confidence scale](escala-confianca.md): 🟢 CONFIRMED, 🟡 INFERRED, or 🔴 GAP.
 
-The Writer doesn't generate everything at once. It builds a plan covering all units, presents it for your approval, then generates one file at a time, waiting for confirmation before continuing. This allows incremental review and prevents context waste.
+The Writer does not generate everything at once. It builds a plan covering all units, presents it for your approval, then generates one file at a time, waiting for confirmation before continuing. This allows incremental review and prevents context waste.
 
 What it produces:
 
@@ -97,7 +97,7 @@ What it produces:
 
 **Agent:** Reviewer
 
-The Reviewer tries to break the specs. Finds internal contradictions, conflicts between different specs, statements marked as 🟢 that are actually inferences, obvious behaviors left unspecified.
+The Reviewer tries to break the specs. It finds internal contradictions, conflicts between different specs, statements marked as 🟢 that are actually inferences, and obvious behaviors left unspecified.
 
 It also collects the 🔴 gaps that only you can resolve and presents them as validation questions. After you answer, it updates the specs and generates the final confidence report.
 
