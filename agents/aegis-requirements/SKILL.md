@@ -15,12 +15,12 @@ You are the Aegis Spec requirements writer. Your mission is to turn the user's f
 
 ## Before you start
 
-1. Leia `aegis/config/state.json`
-   1.1. `output_folder` → pasta da extração de especificações (padrão `aegis`)
-   1.2. `forward_folder` → pasta das features forward (padrão `aegis/forward`)
-   1.3. `chat_language` e `doc_language` → idioma de interação e do documento
-2. A partir daqui, sempre que o texto deste skill mencionar `aegis/`, troque pelo `output_folder` real
-3. Sempre que mencionar `aegis/forward/`, troque pelo `forward_folder` real
+1. Read `aegis/config/state.json`
+   1.1. `output_folder` -> spec extraction folder (default `aegis`)
+   1.2. `forward_folder` -> forward features folder (default `aegis/forward`)
+   1.3. `chat_language` and `doc_language` -> interaction and document language
+2. From here on, whenever this skill mentions `aegis/`, replace it with the real `output_folder`
+3. Whenever it mentions `aegis/forward/`, replace it with the real `forward_folder`
 
 ## Initial checks
 
@@ -45,16 +45,16 @@ Before creating a new feature, check whether an earlier one is already in progre
 
    | Observed condition | Physical stage |
    |--------------------|----------------|
-   | `requirements.md` ausente | `vazio` |
-   | `requirements.md` presente, `roadmap.md` ausente | `requirements` |
-   | `roadmap.md` presente, `actions.md` ausente | `plan` |
-   | `actions.md` presente com pelo menos uma linha `\| ... \| \[ \] \|` (checkbox aberto) | `coding-em-progresso` |
-   | `actions.md` presente, TODAS as linhas de ação como `\| ... \| \[X\] \|` (checkboxes fechados) | `done` |
+   | `requirements.md` missing | `empty` |
+   | `requirements.md` present, `roadmap.md` missing | `requirements` |
+   | `roadmap.md` present, `actions.md` missing | `plan` |
+   | `actions.md` present with at least one `\| ... \| \[ \] \|` row (open checkbox) | `coding-in-progress` |
+   | `actions.md` present, ALL action rows as `\| ... \| \[X\] \|` (closed checkboxes) | `done` |
 
 4. Consider the previous feature **in progress** when the physical stage is ANY value other than `done` or `empty`. That is:
-   4.1. `requirements`, `plan` ou `coding-em-progresso` → em andamento
-   4.2. `done` → concluída, trate como ausente, sobrescreva ao criar nova
-   4.3. `vazio` → corrupção, `feature-dir` existe mas sem `requirements.md`, trate como ausente
+   4.1. `requirements`, `plan` or `coding-in-progress` -> in progress
+   4.2. `done` -> completed, treat as absent, overwrite when creating a new one
+   4.3. `empty` -> corruption, `feature-dir` exists but without `requirements.md`, treat as absent
 5. If it is in progress, record internally for use in the next section:
    5.1. Feature identifier, in the format `<NNN>-<short-name>`, derived from `feature-dir` (basename)
    5.2. Detected physical stage, a value between `requirements`, `plan`, and `coding-in-progress`
@@ -80,7 +80,7 @@ Present the block below to the user:
 > **2. Create a new one in parallel**, the previous feature is paused in a `paused-features` field and the new one becomes active.
 > **3. Abandon the previous one**, the old folder stays untouched on disk but `active-requirements.json` will point to the new one.
 >
-> Digite 1, 2 ou 3.
+> Type 1, 2, or 3.
 
 Wait for the response. Do NOT choose on your own, and do NOT interpret silence as confirmation of any option.
 
@@ -129,7 +129,7 @@ The **non-destructive** rule applies here: in none of the three options is the p
 ## Resolving the feature directory
 
 1. Read `aegis/config/setup.json`
-   1.1. If `prefix-format` is missing or `sequencial`, calculate the next `NNN` by listing `aegis/forward/` subfolders in the format `NNN-*` and adding 1 to the highest one
+   1.1. If `prefix-format` is missing or `sequential`, calculate the next `NNN` by listing `aegis/forward/` subfolders in the format `NNN-*` and adding 1 to the highest one
    1.2. If `prefix-format` is `timestamp`, use the current time as `YYYYMMDD-HHMMSS`
 2. Generate a kebab-case ASCII `short-name` from the freeform argument, maximum thirty characters
 3. Set `feature-dir = aegis/forward/<NNN>-<short-name>` (or `aegis/forward/<TIMESTAMP>-<short-name>`)
@@ -139,7 +139,7 @@ The **non-destructive** rule applies here: in none of the three options is the p
 ```json
 {
   "schema-version": 1,
-  "feature-dir": "<caminho relativo do projeto>",
+  "feature-dir": "<project-relative path>",
   "feature-id": "<NNN>",
   "short-name": "<short>",
   "started-at": "<ISO 8601>",

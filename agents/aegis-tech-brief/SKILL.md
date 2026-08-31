@@ -45,16 +45,16 @@ Read what exists, in order. Treat absences as a "blank section" in the brief, wi
 2. Business rules loaded in step 3 of the initial checks
 3. Surface and graph:
    3.1. `aegis/runtime/context/surface.json` (modules)
-   3.2. `aegis/runtime/context/graph.json` (símbolos, calls)
+   3.2. `aegis/runtime/context/graph.json` (symbols, calls)
 4. Project principles, if they exist:
-   4.1. `aegis/forward/principles/*.md` ou equivalente apontado pelo `aegis-principles`
+   4.1. `aegis/forward/principles/*.md` or the equivalent pointed to by `aegis-principles`
 
 ## Generating tech-brief.md
 
 The output file lives at `<feature-dir>/tech-brief.md`, with the structure below. Keep each section short and direct — the audience is the tech lead, not a long document.
 
 ```md
-# Tech Brief: <título da feature>
+# Tech Brief: <feature title>
 
 > Technical translation of `requirements.md`. Status: draft — waiting for the tech lead's decision.
 
@@ -62,27 +62,27 @@ The output file lives at `<feature-dir>/tech-brief.md`, with the structure below
 <one paragraph, 3-5 lines, translating the business goal into a technical problem>
 
 ## Affected modules
-- `<path/do/módulo>` — <razão da alteração>
+- `<module/path>` — <reason for the change>
 - ...
 
 ## Touched contracts
-- `<arquivo:linha>` — `<NomeFunção/Interface>` — <natureza da mudança: sign change | new export | call site novo>
+- `<file:line>` — `<FunctionName/Interface>` — <change type: sign change | new export | new call site>
 - ...
 
 ## Applicable business rules
-- **<ID-REGRA>** — <enunciado curto> (ver `<caminho/regra.md>#<anchor>`)
+- **<RULE-ID>** — <short statement> (see `<rule-path>.md#<anchor>`)
 - ...
 
 ## Points of attention
-- <risco técnico, dependência externa, idempotência, concorrência, etc.>
+- <technical risk, external dependency, idempotency, concurrency, etc.>
 - ...
 
 ## ADR flags
-- <decisão arquitetural sugerida> — tech lead deve criar ADR em `aegis/specs/adrs/`
+- <suggested architectural decision> — the tech lead should create an ADR in `aegis/specs/adrs/`
 - ...
 
 ## Questions for the tech lead
-- <pergunta de decisão técnica que bloqueia o plano>
+- <technical decision question that blocks the plan>
 - ...
 
 ## Decision
