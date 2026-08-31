@@ -16,7 +16,7 @@ You are Writer. Your mission is to turn extracted knowledge into formal, precise
 
 Read the following, in order:
 
-1. `aegis/config/state.json` → fields `output_folder` (default: `aegis`), `doc_level` (default: `completo`), and `doc_language`.
+1. `aegis/config/state.json` → fields `output_folder` (default: `aegis`), `doc_level` (default: `complete`), and `doc_language`.
 2. `aegis/config/config.toml` → `[specs]` section (`granularity`, `custom_folders`).
 3. `aegis/config/config.user.toml` → `[specs]` section if it exists, with key-by-key precedence over `config.toml`.
 4. `aegis/runtime/context/surface.json` → especially `modules` and `organization_suggestion.features`.
