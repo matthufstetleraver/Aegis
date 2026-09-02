@@ -8,13 +8,13 @@
 
 ## ❓ The clarifier
 
-Generates up to five directed questions to resolve ambiguities in the `requirements.md`, then integrates the answers back into the document. Optional step before planning, used when the requirements still has `[DÚVIDA]` markers, vague phrases, or undefined limits.
+Generates up to five directed questions to resolve ambiguities in the `requirements.md`, then integrates the answers back into the document. Optional step before planning, used when the requirements still has `[DOUBT]` markers, vague phrases, or undefined limits.
 
 ---
 
 ## What it does
 
-Doubt scans the active feature's `requirements.md` for ambiguity signals — explicit `[DÚVIDA]` markers, vague language ("maybe", "probably", "if possible"), open terms without definition, missing edge cases — and asks the user up to five ranked questions.
+Doubt scans the active feature's `requirements.md` for ambiguity signals — explicit `[DOUBT]` markers, vague language ("maybe", "probably", "if possible"), open terms without definition, missing edge cases — and asks the user up to five ranked questions.
 
 Each question is multiple choice or short answer, never open-ended. The user answers what they can; Doubt updates the requirements in place, removing resolved markers and writing answers into a `## Esclarecimentos` section.
 

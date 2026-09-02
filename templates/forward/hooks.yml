@@ -1,52 +1,52 @@
 # hooks.yml
-# Ganchos opcionais executados antes ou depois dos skills forward do Aegis Spec.
+# Optional hooks executed before or after Aegis Spec forward skills.
 #
-# Esquema por gancho:
-#   command:     comando que será sugerido (optional: true) ou exigido (optional: false)
-#   description: texto curto exibido ao usuário
-#   enabled:     true | false. Sem esse campo, vale como true.
-#   optional:    true (apresenta link clicável) | false (executa automaticamente e aguarda)
+# Per-hook schema:
+#   command:     command to suggest (optional: true) or require (optional: false)
+#   description: short text shown to the user
+#   enabled:     true | false. If omitted, treated as true.
+#   optional:    true (shows clickable link) | false (runs automatically and waits)
 #
-# Regras:
-#   YAML inválido aqui é tolerado: o skill segue normalmente, apenas sem ganchos.
-#   Não há DSL de condição neste arquivo. Se um gancho não deve rodar, use enabled: false.
+# Rules:
+#   Invalid YAML here is tolerated: the skill continues normally, just without hooks.
+#   There is no condition DSL in this file. If a hook should not run, use enabled: false.
 #
-# Por padrão, todos os ganchos chegam vazios. Adicione apenas os que fazem sentido para o seu projeto.
+# By default, all hooks are empty. Add only the ones that make sense for your project.
 
 schema-version: 1
 
-# Ganchos do /aegis-requirements
+# Hooks for /aegis-requirements
 before-requirements: []
 after-requirements: []
 
-# Ganchos do /aegis-tech-brief
+# Hooks for /aegis-tech-brief
 before-tech-brief: []
 after-tech-brief: []
 
-# Ganchos do /aegis-doubt
+# Hooks for /aegis-doubt
 before-doubt: []
 after-doubt: []
 
-# Ganchos do /aegis-plan
+# Hooks for /aegis-plan
 before-plan: []
 after-plan: []
 
-# Ganchos do /aegis-to-do
+# Hooks for /aegis-to-do
 before-to-do: []
 after-to-do: []
 
-# Ganchos do /aegis-audit
+# Hooks for /aegis-audit
 before-audit: []
 after-audit: []
 
-# Ganchos do /aegis-quality
+# Hooks for /aegis-quality
 before-quality: []
 after-quality: []
 
-# Ganchos do /aegis-coding
+# Hooks for /aegis-coding
 before-coding: []
 after-coding: []
 
-# Ganchos do /aegis-principles
+# Hooks for /aegis-principles
 before-principles: []
 after-principles: []

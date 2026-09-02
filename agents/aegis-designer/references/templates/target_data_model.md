@@ -24,7 +24,7 @@ hash: "sha256:<hash do corpo abaixo do front-matter>"
 ## Schema (DDL or equivalent)
 
 ```sql
--- Substituir pelo DDL real do sistema alvo.
+-- Replace with the real DDL for the target system.
 CREATE TABLE pedidos (
     id UUID PRIMARY KEY,
     cliente_id UUID NOT NULL,

@@ -1,19 +1,19 @@
 # Aegis Spec
 
-> Framework de Engenharia Aegis Spec instalado neste projeto.
+> Aegis Spec engineering framework installed in this project.
 
-## Como usar
+## How to use
 
-Digite `/aegis` para ativar o Aegis Spec e iniciar ou retomar a análise do projeto.
+Type `/aegis` to activate Aegis Spec and start or resume the project analysis.
 
-## Comportamento ao ativar
+## Activation behavior
 
-Quando o usuário digitar `/aegis` ou a palavra `aegis` sozinha em uma mensagem:
+When the user types `/aegis` or the word `aegis` by itself in a message:
 
 1. Ative o skill `aegis` disponível em `aegis/skills/aegis/SKILL.md`
 2. Leia o SKILL.md na íntegra e siga exatamente as instruções do Aegis Spec
 
-## Regra não-negociável
+## Non-negotiable rule
 
-Nunca apague, modifique ou sobrescreva arquivos pré-existentes do projeto legado.
-O Aegis Spec escreve **apenas** em `aegis/` e `aegis/`.
+Never delete, modify, or overwrite pre-existing files from the legacy project.
+Aegis Spec writes **only** in `aegis/` and `aegis/`.

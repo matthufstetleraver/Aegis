@@ -98,4 +98,4 @@ Pseudo-procedure that the agent follows when consulting the catalog:
 5. legacy event-driven + Node stack → gap = none
 6. legacy COBOL batch + TypeScript serverless stack → extreme gap, multiple implications: batch → event-driven, procedural → rich typing, absence of long loops → short invocations
 7. legacy monolithic Rails + Hanami stack → gap = classic OO (Active Record) → OO with DI, implications = [repository, optional dry-monads]
-8. legado híbrido (Rails + Sidekiq) + stack Node → híbrido decomposto: parte síncrona Rails → Node sync; parte async Sidekiq → Node fila moderna
+8. hybrid legacy (Rails + Sidekiq) + Node stack → decomposed hybrid: synchronous Rails part → Node sync; async Sidekiq part → modern Node queue

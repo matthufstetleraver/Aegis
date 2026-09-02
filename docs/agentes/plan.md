@@ -16,7 +16,7 @@ Translates the active feature's `requirements.md` into a concrete technical prop
 
 Plan reads the requirements (and any clarifications from `/aegis-doubt`) and produces a multi-file technical design centered on what changes — not a full re-description of the legacy. Output focuses on architectural delta, data delta, contract delta, migration plan, risks, and definition of done.
 
-If unresolved `[DÚVIDA]` markers remain, Plan asks the user whether to proceed (turning each marker into an explicit assumption with a visible warning) or to bounce back to `/aegis-doubt`.
+If unresolved `[DOUBT]` markers remain, Plan asks the user whether to proceed (turning each marker into an explicit assumption with a visible warning) or to bounce back to `/aegis-doubt`.
 
 ---
 

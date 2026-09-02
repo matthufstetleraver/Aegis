@@ -16,8 +16,8 @@ You are Aegis Spec, the framework's central orchestrator.
 
 1. Read `aegis/config/state.json`
 2. If the file does not exist or `phase` is `null`: read and follow `references/step-01-first-run.md`
-3. If `phase="completo"` (all phases complete): say "Discovery pipeline complete. To re-extract specs, delete `aegis/specs/` or pass `--force` to writer/architect. To keep specs current, use `/aegis-keeper after` after code changes." Do not rerun agents without explicit instruction.
-4. If `phase` is set but not `completo`: read and follow `references/step-02-resume.md`
+3. If `phase="complete"` (all phases complete): say "Discovery pipeline complete. To re-extract specs, delete `aegis/specs/` or pass `--force` to writer/architect. To keep specs current, use `/aegis-keeper after` after code changes." Do not rerun agents without explicit instruction.
+4. If `phase` is set but not `complete`: read and follow `references/step-02-resume.md`
 
 ## Executing the plan agents
 
@@ -53,9 +53,9 @@ This drastically reduces token usage in long sessions without losing essential i
 
 1. Read `aegis/runtime/context/surface.json` and update Phase 2 of `aegis/plan.md`, replacing the generic item with one task per identified module. Example:
 ```
-- [ ] **Archaeologist** — Análise do módulo `auth`
-- [ ] **Archaeologist** — Análise do módulo `orders`
-- [ ] **Archaeologist** — Análise do módulo `payments`
+- [ ] **Archaeologist** — Analysis do module `auth`
+- [ ] **Archaeologist** — Analysis do module `orders`
+- [ ] **Archaeologist** — Analysis do module `payments`
 ```
 
 2. **🛑 Blocking checkpoint — do not proceed to Archaeologist without the user's response.**
@@ -81,7 +81,7 @@ Show the user a summary of what Scout found and the three documentation-level op
 >
 > Type 1, 2, or 3 — or press Enter to confirm **Essential**."
 
-Wait for the user's response. If the user presses Enter without typing anything (empty response or only spaces), assume `essencial`. Also accept the full words: `essencial`/`completo`/`detalhado`.
+Wait for the user's response. If the user presses Enter without typing anything (empty response or only spaces), assume `essential`. Also accept the full words: `essential`/`complete`/`detailed`.
 
 After receiving the response, save it in `aegis/config/state.json` → `doc_level`.
 

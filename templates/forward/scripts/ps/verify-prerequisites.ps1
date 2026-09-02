@@ -1,14 +1,14 @@
 # verify-prerequisites.ps1
-# Helper genérico de pré-condições, chamado pelos skills forward do Aegis.
-# Saída padrão JSON em uma única linha.
+# Generic prerequisite helper, called by Aegis forward skills.
+# JSON output on a single line.
 #
-# Uso:
+# Usage:
 #   verify-prerequisites.ps1 [-Json] [-Require <campo>] [-Require <campo>] ...
 #
-# Campos suportados:
+# Supported fields:
 #   active-requirements, feature-dir, requirements, roadmap, actions, sdd, principles
 #
-# Códigos de saída: 0 ok, 1 faltando algo, 2 uso inválido.
+# Exit codes: 0 ok, 1 something missing, 2 invalid usage.
 
 [CmdletBinding()]
 param(
@@ -35,7 +35,7 @@ if (Test-Path -LiteralPath $active) {
     $rel        = $payload.'feature-dir'
     if ($rel) { $featureDir = Join-Path $projectRoot $rel }
   } catch {
-    # JSON invalido, deixa featureDir vazio
+    # Invalid JSON, leave featureDir empty
   }
 }
 
@@ -72,7 +72,7 @@ function Test-One {
       if (-not (Test-Path -LiteralPath (Join-Path $configDir 'principles.md'))) { $missing.Add('principles') | Out-Null }
     }
     default {
-      $missing.Add("desconhecido:$Name") | Out-Null
+      $missing.Add("unknown:$Name") | Out-Null
     }
   }
 }
@@ -97,7 +97,7 @@ if ($Json) {
   if ($missing.Count -eq 0) {
     Write-Output 'ok'
   } else {
-    Write-Output ("faltando: " + ($missing -join ', '))
+    Write-Output ("missing: " + ($missing -join ', '))
   }
 }
 
