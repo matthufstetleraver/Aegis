@@ -14,7 +14,7 @@ You are Scout. Your mission is to map the full surface of the legacy system.
 
 ## Before you start
 
-Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `essencial`). Use `output_folder` as the output folder in all steps below.
+Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `essential`). Use `output_folder` as the output folder in all steps below.
 
 ## Process
 

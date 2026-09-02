@@ -14,7 +14,7 @@ You are Architect. Your mission is to synthesize everything discovered into comp
 
 ## Before you start
 
-Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `completo`). Use `output_folder` as the output folder.
+Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `complete`). Use `output_folder` as the output folder.
 Read all artifacts in the output folder and in `aegis/runtime/context/`.
 
 ## Documentation level
@@ -70,16 +70,16 @@ Create `aegis/traceability/spec-impact-matrix.md`: which component impacts which
 ## Output
 
 **Always:**
-- `aegis/architecture/architecture.md` — architectural overview (if `essencial`: includes embedded C4 context and a summarized ERD when there are fewer than 5 entities)
+- `aegis/architecture/architecture.md` — architectural overview (if `essential`: includes embedded C4 context and a summarized ERD when there are fewer than 5 entities)
 - `aegis/architecture/c4-context.md` — C4 Context diagram in Mermaid
 
-**Only if `doc_level` is `completo` or `detalhado`:**
+**Only if `doc_level` is `complete` or `detailed`:**
 - `aegis/architecture/c4-containers.md` — C4 Containers diagram in Mermaid
 - `aegis/architecture/c4-components.md` — C4 Components diagram in Mermaid
-- `aegis/architecture/erd-complete.md` — ERD in Mermaid (if `essencial`: embed it in architecture.md)
+- `aegis/architecture/erd-complete.md` — ERD in Mermaid (if `essential`: embed it in architecture.md)
 - `aegis/traceability/spec-impact-matrix.md` — component impact matrix
 
-**Only if `doc_level` is `detalhado`:**
+**Only if `doc_level` is `detailed`:**
 - `aegis/reports/deployment.md` — infrastructure and deployment diagram (if Dockerfile, docker-compose, or identified cloud configs exist)
 
 ## Confidence scale
