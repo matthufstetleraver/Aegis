@@ -1,6 +1,6 @@
 # Confidence scale
 
-One of the most important parts of Aegis Spec is honesty. The system doesn't pretend to know what it doesn't know.
+One of the most important parts of Aegis Spec is honesty. The system does not pretend to know what it does not know.
 
 Every statement generated in the specifications is marked with one of the three levels below. No exceptions.
 
@@ -18,7 +18,7 @@ Every statement generated in the specifications is marked with one of the three 
 
 ## Why this matters
 
-Without this marking, an AI-generated specification is a black box of trust. You don't know what was extracted from the code and what was made up.
+Without this marking, an AI-generated specification is a black box of trust. You do not know what was extracted from the code and what was made up.
 
 With the confidence scale, you know exactly where to trust and where to question. An AI agent using this spec knows the same: "this item is 🟢, safe to use. This one is 🔴, needs a human source."
 
@@ -31,7 +31,7 @@ With the confidence scale, you know exactly where to trust and where to question
 > The `calculate_discount` function applies 15% for orders above $500.
 > Source: `src/pricing/discount.js`, line 47.
 
-This was extracted literally from the code. If someone disputes it, there's somewhere to point.
+This was extracted literally from the code. If someone disputes it, there is somewhere to point.
 
 ---
 
@@ -47,7 +47,7 @@ The field exists, the pattern is well-known, but nowhere in the code is it expli
 
 > Could not determine the system's behavior when payment fails due to gateway timeout.
 
-The code calls the gateway, but there's no timeout error handling. The actual behavior may exist at the infrastructure layer, in a database that wasn't analyzed, or may never have been implemented. Someone who knows the system needs to answer this.
+The code calls the gateway, but there is no timeout error handling. The actual behavior may exist at the infrastructure layer, in a database that was not analyzed, or may never have been implemented. Someone who knows the system needs to answer this.
 
 ---
 
@@ -55,4 +55,4 @@ The code calls the gateway, but there's no timeout error handling. The actual be
 
 The Reviewer collects all 🔴 gaps and presents them as questions for you to answer. After you answer, it updates the specs and reclassifies: 🔴 becomes 🟢 if you confirmed with evidence, or 🟡 if you gave an answer but without absolute certainty.
 
-Gaps that couldn't be answered remain in `aegis/gaps.md` for later handling.
+Gaps that could not be answered remain in `aegis/gaps.md` for later handling.

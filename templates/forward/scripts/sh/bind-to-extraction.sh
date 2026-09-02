@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 #
 # bind-to-extraction.sh
-# Helper que lê aegis/ e devolve um JSON com as fontes canônicas que os skills forward devem consultar como contexto.
-# Diferencial AEGIS: skills forward jamais partem do zero, sempre amarram raciocínio nos artefatos da pipeline de extração.
+# Helper that reads aegis/ and returns JSON with canonical sources that forward skills should consult as context.
+# AEGIS Differential: forward skills never start from zero, always anchor reasoning in artifacts from the extraction pipeline.
 #
-# Uso:
-#   bind-to-extraction.sh [--json] [--for <comando>]
+# Usage:
+#   bind-to-extraction.sh [--json] [--for <command>]
 #
-# Argumentos:
-#   --for requirements   Lista architecture, domain, inventory, principles
-#   --for plan           Lista architecture, c4-context, state-machines, dependencies, code-analysis, principles
-#   --for to-do          Lista architecture, code-analysis
-#   --for audit          Lista architecture, domain
-#   --for coding         Lista architecture, domain, code-analysis (para gerar legacy-impact)
-#   sem --for            Lista todos os arquivos canônicos em aegis/
+# Arguments:
+#   --for requirements   List architecture, domain, inventory, principles
+#   --for plan           List architecture, c4-context, state-machines, dependencies, code-analysis, principles
+#   --for to-do          List architecture, code-analysis
+#   --for audit          List architecture, domain
+#   --for coding         List architecture, domain, code-analysis (to generate legacy-impact)
+#   no --for             List all canonical files in aegis/
 #
-# Códigos de saída:
-#   0 = sucesso
-#   1 = aegis/ ausente
-#   2 = uso inválido
+# Exit codes:
+#   0 = success
+#   1 = aegis/ missing
+#   2 = invalid usage
 
 set -u
 
@@ -33,12 +33,12 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --json) JSON_MODE=1; shift ;;
     --for) shift; TARGET="${1:-}"; shift ;;
-    *) echo "uso invalido: $1" >&2; exit 2 ;;
+    *) echo "invalid usage: $1" >&2; exit 2 ;;
   esac
 done
 
 if [ ! -d "$AEGIS_DIR" ]; then
-  echo "erro: $AEGIS_DIR nao existe. rode a pipeline de extração antes." >&2
+  echo "error: $AEGIS_DIR does not exist. run the extraction pipeline first." >&2
   exit 1
 fi
 
@@ -90,11 +90,11 @@ emit_json() {
 if [ $JSON_MODE -eq 1 ]; then
   emit_json
 else
-  echo "presentes:"
+  echo "present:"
   for f in "${present[@]:-}"; do
     [ -n "$f" ] && echo "  $AEGIS_DIR/$f"
   done
-  echo "ausentes:"
+  echo "absent:"
   for f in "${absent[@]:-}"; do
     [ -n "$f" ] && echo "  $f"
   done

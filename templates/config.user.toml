@@ -1,8 +1,8 @@
-# Aegis Spec — Configurações Pessoais
-# Este arquivo é para suas customizações pessoais. NÃO commite este arquivo.
-# Adicione aegis/config/config.user.toml ao seu .gitignore pessoal.
+# Aegis Spec — Personal Settings
+# This file is for your personal customizations. DO NOT commit this file.
+# Add aegis/config/config.user.toml to your personal .gitignore.
 
-# Exemplo de override:
+# Override example:
 # [user]
 # name = "Seu Nome"
 # chat_language = "pt-br"

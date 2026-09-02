@@ -1,72 +1,72 @@
-# Template de entrada do changelog
+# Changelog entry template
 
-Use este formato ao adicionar entradas em `<output_folder>/changelog/YYYY-MM-DD.md`.
+Use this format when adding entries in `<output_folder>/changelog/YYYY-MM-DD.md`.
 
-Cada entrada começa com `## HH:MM` (hora em UTC). Sempre **append** — nunca sobrescreva entradas anteriores do mesmo dia.
+Each entry starts with `## HH:MM` (time in UTC). Always **append** — never overwrite previous entries from the same day.
 
 ---
 
-## Estrutura
+## Structure
 
 ```markdown
-## HH:MM — [descrição curta da alteração]
+## HH:MM — [short description of change]
 
-**O quê:** [resumo técnico baseado no diff — 1-3 linhas]
+**What:** [technical summary based on diff — 1-3 lines]
 
-**Por quê:** [resposta do usuário à pergunta 1]
+**Why:** [user answer to question 1]
 
-**Impacto:** [resposta da pergunta 2 — quebras / efeitos colaterais. Use "Nenhum" se confirmado]
+**Impact:** [answer to question 2 — breaks / side effects. Use "None" if confirmed]
 
-**Arquivos:**
-- `caminho/arquivo1.ext` — [verbo: adicionado | modificado | deletado]
-- `caminho/arquivo2.ext` — [verbo]
+**Files:**
+- `path/file1.ext` — [verb: added | modified | deleted]
+- `path/file2.ext` — [verb]
 
-**Specs afetadas:**
-- `specs/sdd/componente1.md` — atualizada
-- `specs/sdd/componente2.md` — confiança reclassificada (🟢 → 🟡)
+**Specs affected:**
+- `specs/sdd/component1.md` — updated
+- `specs/sdd/component2.md` — confidence reclassified (🟢 → 🟡)
 
-**Contexto:** [resposta da pergunta 3, ou omitir esta linha se o usuário pulou]
+**Context:** [answer to question 3, or omit this line if user skipped]
 
 **Engine:** [claude-code | codex | cursor | kimi-cli | opencode | manual]
 ```
 
 ---
 
-## Exemplo preenchido
+## Filled example
 
 ```markdown
-## 14:32 — Adiciona rate limiting no endpoint de login
+## 14:32 — Add rate limiting to login endpoint
 
-**O quê:** Adicionado middleware de rate limit (5 req/min por IP) na rota POST /auth/login. Bloqueio retorna 429 com header Retry-After.
+**What:** Added rate limit middleware (5 req/min per IP) to POST /auth/login route. Blocks return 429 with Retry-After header.
 
-**Por quê:** Picos de tentativas de brute force detectados em produção esta semana.
+**Why:** Spikes in brute force attempts detected in production this week.
 
-**Impacto:** Quebra para clientes que faziam mais de 5 logins/min do mesmo IP (caso raro — uso humano fica abaixo). Frontend precisa tratar 429.
+**Impact:** Breaks for clients that do >5 logins/min from same IP (rare case — human usage stays below). Frontend needs to handle 429.
 
-**Arquivos:**
-- `lib/auth/login.js` — modificado
-- `lib/middleware/rate-limit.js` — adicionado
-- `lib/routes.js` — modificado
+**Files:**
+- `lib/auth/login.js` — modified
+- `lib/middleware/rate-limit.js` — added
+- `lib/routes.js` — modified
 
-**Specs afetadas:**
-- `specs/sdd/authentication.md` — atualizada (nova seção "Rate limiting")
-- `specs/sdd/api-contract.md` — confiança da resposta de erro reclassificada (🟡 → 🟢)
+**Specs affected:**
+- `specs/sdd/authentication.md` — updated (new section "Rate limiting")
+- `specs/sdd/api-contract.md` — confidence of error response reclassified (🟡 → 🟢)
 
-**Contexto:** Implementação usa `express-rate-limit`. Configuração centralizada em `config/rate-limits.js` para futuras rotas.
+**Context:** Implementation uses `express-rate-limit`. Configuration centralized in `config/rate-limits.js` for future routes.
 
 **Engine:** claude-code
 ```
 
 ---
 
-## Cabeçalho do arquivo do dia
+## File header for the day
 
-Quando o arquivo do dia for criado pela primeira vez, comece com:
+When the day's file is created for the first time, start with:
 
 ```markdown
 # Changelog — YYYY-MM-DD
 
-Entradas em ordem cronológica (mais antigas no topo).
+Entries in chronological order (oldest at top).
 ```
 
-Depois, append cada entrada nova com `## HH:MM`.
+Then, append each new entry with `## HH:MM`.

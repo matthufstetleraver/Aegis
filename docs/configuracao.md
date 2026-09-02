@@ -11,7 +11,7 @@ aegis/
 ├── config/
 │   ├── state.json              ← analysis state between sessions
 │   ├── config.toml             ← project configuration
-│   ├── config.user.toml        ← your personal preferences (don't commit)
+│   ├── config.user.toml        ← your personal preferences (do not commit)
 │   ├── manifest.yaml           ← installation metadata
 │   └── files-manifest.json     ← SHA-256 hashes for safe updates
 ├── plan.md                     ← exploration plan (you can edit this)
@@ -51,7 +51,7 @@ You can change the output `folder` if you prefer a different name than `aegis`.
 
 ## `config.user.toml`: personal preferences
 
-For preferences that are yours and shouldn't be committed:
+For preferences that are yours and should not be committed:
 
 ```toml
 [user]
@@ -59,7 +59,7 @@ name = "Your Name"
 answer_mode = "chat"  # "chat" or "file"
 ```
 
-!!! warning "Don't commit"
+!!! warning "Do not commit"
     Add `config.user.toml` to `.gitignore`. Each team member can have their own preferences without affecting others.
 
 ---
@@ -68,7 +68,7 @@ answer_mode = "chat"  # "chat" or "file"
 
 Aegis Spec generates this file in the first session, after talking with you about the project. It lists the analysis tasks in order.
 
-You can edit it directly: reorder tasks, remove modules you don't want to analyze, add notes. Aegis Spec will respect whatever is here when it resumes.
+You can edit it directly: reorder tasks, remove modules you do not want to analyze, add notes. Aegis Spec will respect whatever is here when it resumes.
 
 ---
 
@@ -91,8 +91,8 @@ Defines the volume of artifacts each agent generates during the analysis. **Not 
 
 | Value | When to use | Artifacts generated |
 |-------|-------------|---------------------|
-| `essencial` | Simple projects, scripts, prototypes **(default)** | Code analysis, domain, architecture (C4 context), SDD specs |
-| `completo` | Medium projects, small teams | Everything in essential + full C4 diagrams, ERD, ADRs, OpenAPI, user stories, traceability matrices |
-| `detalhado` | Enterprise systems, high criticality | Everything in complete + per-function flowcharts, expanded ADRs, deployment diagram, mandatory cross-review |
+| `essential` | Simple projects, scripts, prototypes **(default)** | Code analysis, domain, architecture (C4 context), SDD specs |
+| `complete` | Medium projects, small teams | Everything in essential + full C4 diagrams, ERD, ADRs, OpenAPI, user stories, traceability matrices |
+| `detailed` | Enterprise systems, high criticality | Everything in complete + per-function flowcharts, expanded ADRs, deployment diagram, mandatory cross-review |
 
 The choice is saved in `aegis/config/state.json` under the `doc_level` field. You can edit it manually at any time to adjust the level mid-analysis.

@@ -1,10 +1,10 @@
 # Contributing to Aegis Spec
 
-Thank you for contributing to Aegis Spec! This guide will help you get started.
+Thank you for contributing to Aegis Spec. This guide will help you get started.
 
 ## Code of Conduct
 
-Be respectful, constructive, and professional. We're all here to improve AI-assisted development.
+Be respectful, constructive, and professional. We are all here to improve AI-assisted development.
 
 ## How to Contribute
 
@@ -14,7 +14,7 @@ Open an issue with:
 - **Title**: Clear, specific description
 - **Environment**: Node version, OS, Aegis version
 - **Steps to reproduce**: Minimal example
-- **Expected vs actual**: What should happen vs what does
+- **Expected vs actual**: What should happen versus what does
 - **Logs**: Error messages, stack traces
 
 Example:
@@ -66,7 +66,7 @@ We prioritize features that:
    ```
 
 3. **Make changes**:
-   - Follow existing code style
+   - Follow the existing code style
    - Add tests for new features
    - Update docs if behavior changes
 

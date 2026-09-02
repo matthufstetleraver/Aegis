@@ -1,11 +1,11 @@
-# Lista declarativa de artefatos esperados em aegis/ antes de iniciar a migração.
-# Atualizar esta lista é uma mudança de configuração; não exige reedição do agente aegis-migrate.
+# Declarative list of expected artifacts in aegis/ before starting the migration.
+# Updating this list is a configuration change; it does not require editing the aegis-migrate agent again.
 #
-# Cada entrada:
-#   path: caminho relativo dentro de aegis/
-#   kind: identificador lógico do artefato (informativo, não estritamente validado contra front-matter)
-#   required: true bloqueia o pipeline se ausente; false apenas loga aviso
-#   minSchemaVersion: versão mínima esperada de schemaVersion (informativo; ausência tolerada hoje)
+# Each entry:
+#   path: relative path inside aegis/
+#   kind: logical artifact identifier (informational, not strictly validated against front-matter)
+#   required: true blocks the pipeline if missing; false only logs a warning
+#   minSchemaVersion: minimum expected schemaVersion (informational; absence is tolerated today)
 
 schemaVersion: 1
 artifacts:
@@ -63,8 +63,8 @@ artifacts:
     minSchemaVersion: 1
 
 # Aliases:
-# Nomes legados aceitos para compatibilidade com versões anteriores do time de descoberta.
-# Cada alias mapeia "nome esperado" → lista de nomes alternativos aceitos.
+# Legacy names accepted for compatibility with previous discovery-team versions.
+# Each alias maps "expected name" → list of accepted alternate names.
 aliases:
   "domain.md":
     - "domain_model.md"

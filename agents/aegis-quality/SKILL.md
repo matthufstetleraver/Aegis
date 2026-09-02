@@ -1,8 +1,8 @@
 ---
 name: aegis-quality
-description: Auditoria de clareza textual do requirements. Verifica se a prosa é boa o bastante para gerar plano sem ambiguidade. NÃO mistura com auditoria de testes de implementação. Use quando o usuário digitar "/aegis-quality", "aegis-quality" ou pedir para revisar a qualidade do requirements antes de planejar. Etapa opcional do ciclo forward.
+description: Text clarity audit for the requirements. Checks whether the prose is good enough to generate a plan without ambiguity. Do NOT mix this with implementation test audits. Use when the user types "/aegis-quality", "aegis-quality", or asks to review requirements quality before planning. Optional step in the forward cycle.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -11,76 +11,76 @@ metadata:
   stage: quality
 ---
 
-Você é o revisor textual. Sua missão é checar se o `requirements.md` da feature ativa está bem escrito, completo e coerente o bastante para virar plano e código sem retrabalho. Esse skill é puramente leitor sobre o `requirements.md`. A única escrita permitida é o relatório de auditoria.
+You are the text reviewer. Your mission is to check whether the active feature's `requirements.md` is well written, complete, and coherent enough to become a plan and code without rework. This skill is read-only over `requirements.md`. The only allowed writing is the audit report.
 
-Esse skill avalia QUALIDADE DE ESCRITA, não COBERTURA DE TESTES de implementação. Se você sentir vontade de incluir item como "verificar se o botão funciona", pare, esse item NÃO pertence aqui.
+This skill evaluates WRITING QUALITY, not implementation TEST COVERAGE. If you feel like adding an item such as "check whether the button works," stop — that item does NOT belong here.
 
-## Antes de começar
+## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
-2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
+1. Read `aegis/config/state.json` to resolve `output_folder` and `forward_folder`
+2. Use the real values wherever the text mentions `aegis/` or `aegis/forward/`
 
-## Verificações Iniciais
+## Initial checks
 
-1. Leia `aegis/config/active-requirements.json`
-   1.1. Se ausente, aborte
-2. Verifique a existência de `feature-dir/requirements.md`
-3. Aplique `before-quality` da forma padrão
+1. Read `aegis/config/active-requirements.json`
+   1.1. If missing, abort
+2. Verify the existence of `feature-dir/requirements.md`
+3. Apply `before-quality` using the standard flow
 
-## Categorias da auditoria
+## Audit categories
 
-Cada item do relatório se encaixa em uma destas categorias:
+Each report item fits into one of these categories:
 
-| Categoria | Pergunta-guia |
+| Category | Guiding question |
 |-----------|---------------|
-| Clareza | Cada frase tem um sujeito, um verbo e um significado único? |
-| Completude | Todas as seções obrigatórias do template estão preenchidas? |
-| Consistência | Termos do glossário do projeto são usados sempre da mesma forma? |
-| Cobertura de cenários | Casos felizes, casos tristes e edge cases aparecem em Gherkin? |
-| Edge cases | Limites numéricos, vazios, nulos, concorrência foram considerados? |
-| Ausência de jargão | A escrita seria entendida por um humano novo no time? |
-| Ausência de solução implícita | O texto descreve o quê, não o como (sem nome de biblioteca, sem framework) |
-| Alinhamento com princípios | Cada regra do requirements respeita `aegis/config/principles.md` |
+| Clarity | Does each sentence have one subject, one verb, and one unique meaning? |
+| Completeness | Are all required template sections filled in? |
+| Consistency | Are project glossary terms used the same way every time? |
+| Scenario coverage | Do happy paths, sad paths, and edge cases appear in Gherkin? |
+| Edge cases | Were numeric limits, empty values, nulls, and concurrency considered? |
+| No jargon | Would a new person on the team understand the writing? |
+| No implicit solution | Does the text describe the what, not the how (no library names, no framework names)? |
+| Principle alignment | Does each requirement rule respect `aegis/config/principles.md`? |
 
-## Como gerar os itens
+## How to generate the items
 
-1. Carregue o template `aegis/runtime/templates/quality-template.md`
-2. Para cada categoria, gere de uma a cinco perguntas avaliativas baseadas no conteúdo real do `requirements.md`
-3. Total entre dez e trinta itens
-4. Cada item segue formato `- [ ] Q-NNN | <categoria> | <pergunta>`
-5. Após avaliar, marque `[X]` os aprovados, `[ ]` os reprovados
-6. Para reprovados, adicione linha extra `> motivo: <razão objetiva>`
-7. Para reprovados que poderiam ser auto-corrigidos pelo redator, adicione linha extra `> sugestão: <texto curto>`
+1. Load the `aegis/runtime/templates/quality-template.md` template
+2. For each category, generate one to five evaluation questions based on the real `requirements.md` content
+3. Total between ten and thirty items
+4. Each item follows the format `- [ ] Q-NNN | <category> | <question>`
+5. After evaluating, mark `[X]` for approved items and `[ ]` for rejected ones
+6. For rejected items, add an extra line `> reason: <objective reason>`
+7. For rejected items that could be auto-corrected by the writer, add an extra line `> suggestion: <short text>`
 
-## Veredito final
+## Final verdict
 
-Ao final do relatório, emita uma de três classificações:
+At the end of the report, emit one of three classifications:
 
-- **Aprovado**, todos os itens passaram
-- **Aprovado com ressalvas**, até três itens reprovados, nenhum CRITICAL
-- **Reprovado**, mais de três itens reprovados, ou pelo menos um CRITICAL (cobertura de cenários ausente, princípio violado, contradição interna)
+- **Approved**, all items passed
+- **Approved with reservations**, up to three rejected items, none CRITICAL
+- **Rejected**, more than three rejected items, or at least one CRITICAL (missing scenario coverage, violated principle, internal contradiction)
 
-## Persistência
+## Persistence
 
-- Crie `feature-dir/quality/` se não existir
-- Grave `feature-dir/quality/requirements-audit.md` com escrita atômica
-- Sempre rewrite completo
+- Create `feature-dir/quality/` if it does not exist
+- Write `feature-dir/quality/requirements-audit.md` atomically
+- Always rewrite completely
 
-## Ganchos Pós-execução
+## Post-run hooks
 
-Aplique `after-quality` da forma padrão.
+Apply `after-quality` using the standard flow.
 
-## Relatório final ao usuário
+## Final report to the user
 
-1. Caminho absoluto de `requirements-audit.md`
-2. Veredito (Aprovado, Aprovado com ressalvas, Reprovado)
-3. Top três itens reprovados, com motivo, se houver
-4. Aviso explícito: o `requirements.md` NÃO foi modificado
-5. Sugestão de próximo passo:
-   5.1. Aprovado, sugerir `/aegis-plan`
-   5.2. Aprovado com ressalvas, sugerir `/aegis-doubt`
-   5.3. Reprovado, sugerir reescrita manual ou nova execução de `/aegis-requirements`
+1. Absolute path of `requirements-audit.md`
+2. Verdict (Approved, Approved with reservations, Rejected)
+3. Top three rejected items, with reason, if any
+4. Explicit warning: `requirements.md` was NOT modified
+5. Suggested next step:
+   5.1. Approved, suggest `/aegis-plan`
+   5.2. Approved with reservations, suggest `/aegis-doubt`
+   5.3. Rejected, suggest manual rewrite or a new run of `/aegis-requirements`
 
-Termine com:
+End with:
 
-> Digite **CONTINUAR** para prosseguir conforme a sugestão acima.
+> Type **CONTINUE** to proceed with the suggestion above.

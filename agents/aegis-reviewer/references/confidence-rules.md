@@ -1,65 +1,65 @@
-# Regras de Classificação de Confiança
+# Confidence Classification Rules
 
-Use esta escala em **toda** afirmação nas specs. Sem exceções.
+Use this scale on **every** statement in specs. No exceptions.
 
-## Definições
+## Definitions
 
-| Símbolo | Nome | Significado |
-|---------|------|-------------|
-| 🟢 | CONFIRMADO | Extraído diretamente do código — pode ser citado com arquivo e linha |
-| 🟡 | INFERIDO | Deduzido de padrões, nomes, convenções ou contexto — pode estar errado |
-| 🔴 | LACUNA | Não foi possível determinar pelo código — requer validação humana |
+| Symbol | Name | Meaning |
+|--------|------|---------|
+| 🟢 | CONFIRMED | Extracted directly from code — can be cited with file and line |
+| 🟡 | INFERRED | Deduced from patterns, names, conventions or context — may be wrong |
+| 🔴 | GAP | Could not be determined from code — requires human validation |
 
-## Quando usar cada nível
+## When to use each level
 
-### 🟢 CONFIRMADO
-- O comportamento está explícito no código (if/else, return, throw)
-- O valor é uma constante ou enum definido no código
-- A regra está em um comentário descritivo junto ao código relevante
-- Existe um teste automatizado que cobre exatamente esse comportamento
-- A DDL/migration define a constraint diretamente
+### 🟢 CONFIRMED
+- The behavior is explicit in code (if/else, return, throw)
+- The value is a constant or enum defined in code
+- The rule is in a descriptive comment near relevant code
+- Exists an automated test that covers exactly this behavior
+- DDL/migration defines constraint directly
 
-### 🟡 INFERIDO
-- O nome da função/variável sugere o comportamento, mas não há lógica explícita
-- O comportamento é consistente com convenções do framework (ex: soft delete em Eloquent)
-- Há indícios no código mas a lógica completa não está visível no escopo analisado
-- A regra foi inferida de múltiplos exemplos semelhantes, não de uma definição única
-- Comentário antigo ou TODO que pode não refletir o estado atual
+### 🟡 INFERRED
+- Function/variable name suggests behavior, but there's no explicit logic
+- Behavior is consistent with framework conventions (ex: soft delete in Eloquent)
+- There are clues in code but complete logic isn't visible in scanned scope
+- Rule was inferred from multiple similar examples, not single definition
+- Old comment or TODO that may not reflect current state
 
-### 🔴 LACUNA
-- A funcionalidade é referenciada mas não implementada no código visível
-- A lógica depende de configuração externa não acessível (variável de ambiente, banco, API)
-- O comportamento esperado contradiz o que está no código (possível bug ou lógica oculta)
-- Código gerado ou compilado sem acesso ao source original
-- Regra de negócio que só existe na cabeça dos stakeholders
+### 🔴 GAP
+- Feature is referenced but not implemented in visible code
+- Logic depends on external configuration (env var, database, API)
+- Expected behavior contradicts what's in code (possible bug or hidden logic)
+- Code is generated or compiled without access to original source
+- Business rule that only exists in stakeholders' heads
 
 ---
 
-## Reclassificação durante revisão
+## Reclassification during review
 
 ### Upgrade: 🟡 → 🟢
-Condições: encontrar evidência direta no código que confirma a afirmação.
-Ação: anote a evidência (arquivo + linha) na spec.
+Conditions: find direct evidence in code that confirms the statement.
+Action: note the evidence (file + line) in spec.
 
 ### Upgrade: 🔴 → 🟡
-Condições: encontrar indícios suficientes para uma inferência razoável.
-Ação: reformule a afirmação como inferência, não certeza.
+Conditions: find enough clues for reasonable inference.
+Action: rephrase statement as inference, not certainty.
 
 ### Upgrade: 🔴 → 🟢
-Condições: o usuário confirma com evidência concreta (ex: "sim, essa é a regra").
-Ação: atualize a spec e registre a confirmação.
+Conditions: user confirms with concrete evidence (ex: "yes, that's the rule").
+Action: update spec and record confirmation.
 
 ### Downgrade: 🟢 → 🟡
-Condições: encontrar contradição entre a spec e o código real.
-Ação: sinalize a contradição e reclassifique.
+Conditions: find contradiction between spec and actual code.
+Action: flag contradiction and reclassify.
 
 ### Downgrade: 🟡 → 🔴
-Condições: encontrar evidência de que a inferência estava errada.
-Ação: reclassifique e crie pergunta para o usuário se necessário.
+Conditions: find evidence that inference was wrong.
+Action: reclassify and create user question if needed.
 
 ---
 
-## Regra de ouro
+## Golden rule
 
-**Quando houver dúvida, use o nível mais baixo.**
-Uma 🔴 honesta é mais útil do que uma 🟡 enganosa.
+**When in doubt, use the lowest level.**
+An honest 🔴 is more useful than a misleading 🟡.

@@ -6,7 +6,7 @@
 
 **Turn legacy systems into executable specifications for AI agents.**
 
-You know that system nobody wants to touch? The one that's been running for 10 years, makes money every day, but nobody really knows what it does on the inside? Aegis Spec was built for it.
+You know that system nobody wants to touch? The one that has been running for 10 years, makes money every day, but nobody really knows what it does on the inside? Aegis Spec was built for it.
 
 ---
 
@@ -32,11 +32,11 @@ Then open the project in your favorite AI agent and type:
 /aegis
 ```
 
-That's it. Aegis Spec takes the wheel and guides you to the end.
+That is it. Aegis Spec takes the wheel and guides you to the end.
 
 ---
 
-## What you'll find here
+## What you will find here
 
 <div class="grid cards" markdown>
 
@@ -48,7 +48,7 @@ That's it. Aegis Spec takes the wheel and guides you to the end.
 
 - **Installation**
 
-    Two minutes and you're ready to go.
+    Two minutes and you are ready to go.
 
     [:octicons-arrow-right-24: Install](instalacao.md)
 

@@ -1,8 +1,8 @@
 ---
 name: aegis-architect
-description: Sintetiza a análise do projeto legado em documentação arquitetural completa — diagramas C4, ERD completo, mapa de integrações e Spec Impact Matrix. Use na fase de interpretação após o aegis-detective.
+description: Synthesizes the legacy project analysis into complete architectural documentation — C4 diagrams, full ERD, integration map, and Spec Impact Matrix. Use in the interpretation phase after aegis-detective.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.1.0"
@@ -10,87 +10,87 @@ metadata:
   phase: interpretacao
 ---
 
-Você é o Architect. Sua missão é sintetizar tudo que foi descoberto em documentação arquitetural completa.
+You are Architect. Your mission is to synthesize everything discovered into complete architectural documentation.
 
-## Antes de começar
+## Before you start
 
-Leia `aegis/config/state.json` → campos `output_folder` (padrão: `aegis`) e `doc_level` (padrão: `completo`). Use `output_folder` como pasta de saída.
-Leia todos os artefatos na pasta de saída e em `aegis/runtime/context/`.
+Read `aegis/config/state.json` → fields `output_folder` (default: `aegis`) and `doc_level` (default: `complete`). Use `output_folder` as the output folder.
+Read all artifacts in the output folder and in `aegis/runtime/context/`.
 
-## Nível de documentação
+## Documentation level
 
-O campo `doc_level` do state.json controla o que gerar:
+The `doc_level` field in state.json controls what to generate:
 
-| Artefato | essencial | completo | detalhado |
+| Artifact | essential | complete | detailed |
 |----------|-----------|----------|-----------|
-| `architecture.md` | sim (inclui C4 contexto + ERD se < 5 entidades) | sim | sim |
-| `c4-context.md` | sim | sim | sim |
-| `c4-containers.md` | não | sim | sim |
-| `c4-components.md` | não | sim | sim |
-| `erd-complete.md` | não (ERD embutido no architecture.md) | sim | sim |
-| `traceability/spec-impact-matrix.md` | não | sim | sim |
-| `deployment.md` | não | não | sim (se houver Dockerfile, docker-compose ou config de cloud) |
+| `architecture.md` | yes (includes C4 context + ERD if < 5 entities) | yes | yes |
+| `c4-context.md` | yes | yes | yes |
+| `c4-containers.md` | no | yes | yes |
+| `c4-components.md` | no | yes | yes |
+| `erd-complete.md` | no (ERD embedded in architecture.md) | yes | yes |
+| `traceability/spec-impact-matrix.md` | no | yes | yes |
+| `deployment.md` | no | no | yes (if Dockerfile, docker-compose, or cloud config exists) |
 
-## Processo
+## Process
 
-### 1. Diagrama C4 — Contexto (Nível 1)
-- O sistema no centro
-- Usuários (personas) ao redor
-- Sistemas externos com que se integra
-- Relacionamentos e protocolos
+### 1. C4 diagram — Context (Level 1)
+- System at the center
+- Users (personas) around it
+- External systems it integrates with
+- Relationships and protocols
 
-### 2. Diagrama C4 — Containers (Nível 2)
-- Aplicações, serviços, bancos de dados, filas, caches
-- Tecnologia de cada container
-- Comunicação entre containers
+### 2. C4 diagram — Containers (Level 2)
+- Applications, services, databases, queues, caches
+- Technology for each container
+- Communication between containers
 
-### 3. Diagrama C4 — Componentes (Nível 3)
-- Para os containers mais relevantes
-- Componentes internos e responsabilidades
+### 3. C4 diagram — Components (Level 3)
+- For the most relevant containers
+- Internal components and responsibilities
 
-### 4. ERD Completo
-- Todas as entidades com atributos principais
-- Relacionamentos com cardinalidades (1:1, 1:N, N:M)
-- Chaves primárias e estrangeiras
+### 4. Complete ERD
+- All entities with main attributes
+- Relationships with cardinalities (1:1, 1:N, N:M)
+- Primary and foreign keys
 
-### 5. Integrações externas
-- APIs REST/GraphQL consumidas e produzidas
-- Webhooks, eventos, mensagens
-- Protocolos e formatos de dados
+### 5. External integrations
+- REST/GraphQL APIs consumed and produced
+- Webhooks, events, messages
+- Protocols and data formats
 
-### 6. Dívidas técnicas
-- Código duplicado
-- Padrões inconsistentes
-- Dependências desatualizadas críticas
-- Ausência de testes em módulos críticos
+### 6. Technical debt
+- Duplicate code
+- Inconsistent patterns
+- Critical outdated dependencies
+- Missing tests in critical modules
 
 ### 7. Spec Impact Matrix
-Crie `aegis/traceability/spec-impact-matrix.md`: qual componente impacta qual.
+Create `aegis/traceability/spec-impact-matrix.md`: which component impacts which.
 
-## Saída
+## Output
 
-**Sempre:**
-- `aegis/architecture/architecture.md` — visão geral arquitetural (se `essencial`: inclui C4 contexto embutido e ERD resumido quando há menos de 5 entidades)
-- `aegis/architecture/c4-context.md` — diagrama C4 Contexto em Mermaid
+**Always:**
+- `aegis/architecture/architecture.md` — architectural overview (if `essential`: includes embedded C4 context and a summarized ERD when there are fewer than 5 entities)
+- `aegis/architecture/c4-context.md` — C4 Context diagram in Mermaid
 
-**Apenas se `doc_level` for `completo` ou `detalhado`:**
-- `aegis/architecture/c4-containers.md` — diagrama C4 Containers em Mermaid
-- `aegis/architecture/c4-components.md` — diagrama C4 Componentes em Mermaid
-- `aegis/architecture/erd-complete.md` — ERD em Mermaid (se `essencial`: incorpore no architecture.md)
-- `aegis/traceability/spec-impact-matrix.md` — matriz de impacto entre componentes
+**Only if `doc_level` is `complete` or `detailed`:**
+- `aegis/architecture/c4-containers.md` — C4 Containers diagram in Mermaid
+- `aegis/architecture/c4-components.md` — C4 Components diagram in Mermaid
+- `aegis/architecture/erd-complete.md` — ERD in Mermaid (if `essential`: embed it in architecture.md)
+- `aegis/traceability/spec-impact-matrix.md` — component impact matrix
 
-**Apenas se `doc_level` for `detalhado`:**
-- `aegis/reports/deployment.md` — diagrama de infraestrutura e deployment (se houver Dockerfile, docker-compose ou configs de cloud identificadas)
+**Only if `doc_level` is `detailed`:**
+- `aegis/reports/deployment.md` — infrastructure and deployment diagram (if Dockerfile, docker-compose, or identified cloud configs exist)
 
-## Escala de confiança
-🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA
+## Confidence scale
+🟢 CONFIRMED | 🟡 INFERRED | 🔴 GAP
 
-## Layout de saída (transversal)
+## Output layout (cross-cutting)
 
-Este agente produz artefatos transversais à organização escolhida em `[specs]` do `config.toml`. Os arquivos ficam na raiz de `<output_folder>/`, fora das pastas de unit (feature folders). Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
+This agent produces artifacts that cut across the organization chosen in `[specs]` in `config.toml`. The files live at the root of `<output_folder>/`, outside the unit folders (feature folders). Do not apply the `<unit>/requirements.md|design.md|tasks.md` structure here; it belongs to Writer.
 
-Informe ao Aegis Spec: componentes, containers, integrações e dívidas técnicas identificadas.
+Report to Aegis Spec: identified components, containers, integrations, and technical debt.
 
-## Diretiva non-destructive
+## Non-destructive directive
 
-Não sobrescreva diagramas C4, ERD ou spec-impact-matrix já existentes. Se usuário invocar `--force` ou `--regenerate <arquivo>`, sobrescreva arquivo especificado. Backup não obrigatório.
+Do not overwrite existing C4 diagrams, ERDs, or spec-impact-matrix files. If the user invokes `--force` or `--regenerate <file>`, overwrite the specified file. Backup is not required.

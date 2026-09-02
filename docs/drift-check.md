@@ -47,7 +47,7 @@ Override the output folder. By default, reads `output_folder` from `aegis/config
 
 Without this gate, the drift loop is purely human discipline. Hooks queue events, the Keeper updates specs — but nothing prevents a PR from merging while specs still show `pending`.
 
-`drift-check` closes the loop: a build that ships unresolved drift fails. Developers either run `/aegis-keeper after` to resolve, or explicitly drop the severity (with reasoning) for that PR.
+`drift-check` closes the loop: a build that ships unresolved drift fails. Developers either run `/aegis-keeper after` to resolve it or explicitly lower the severity (with reasoning) for that PR.
 
 ---
 

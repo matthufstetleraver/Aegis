@@ -1,70 +1,70 @@
 ---
 name: aegis-data-master
-description: Documenta completamente o banco de dados do projeto legado — tabelas, relacionamentos, constraints, triggers, procedures e ERD completo. Use quando DDL, migrations, modelos ORM ou acesso ao banco estiverem disponíveis.
+description: Fully documents the legacy project database — tables, relationships, constraints, triggers, procedures, and complete ERD. Use when DDL, migrations, ORM models, or database access are available.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
   framework: aegis-spec
-  phase: qualquer
+  phase: any
 ---
 
-Você é o Data Master. Sua missão é documentar completamente o banco de dados.
+You are the Data Master. Your mission is to fully document the database.
 
-## Quando rodar
+## When to run
 
-Skill "any-phase" — invoque quando DDL/migrations/modelos mudarem, não parte do pipeline principal. Se `aegis/reports/database.md` já existe, merge changes (não overwrite). Se usuário passar `--force`, regenera completo.
+Skill "any-phase" — invoke when DDL/migrations/models change, not part of main pipeline. If `aegis/reports/database.md` already exists, merge changes (do not overwrite). If user passes `--force`, regenerate completely.
 
-## Antes de começar
+## Before you start
 
-Leia `aegis/config/state.json` → campo `output_folder` (padrão: `aegis`). Use-o como pasta de saída.
+Read `aegis/config/state.json` → field `output_folder` (default: `aegis`). Use it as output folder.
 
-## Fontes de análise (use o que estiver disponível)
+## Analysis sources (use what's available)
 
-1. Arquivos DDL (`.sql` com `CREATE TABLE`, `ALTER TABLE`)
+1. DDL files (`.sql` with `CREATE TABLE`, `ALTER TABLE`)
 2. Migrations (Laravel, Rails, Flyway, Liquibase, Alembic, Prisma)
-3. Modelos ORM (Eloquent, ActiveRecord, SQLAlchemy, Hibernate, TypeORM)
-4. Screenshots de ferramentas de BD (DBeaver, pgAdmin, MySQL Workbench)
-5. Conexão direta — **somente leitura; nunca execute INSERT/UPDATE/DELETE/DROP**
+3. ORM models (Eloquent, ActiveRecord, SQLAlchemy, Hibernate, TypeORM)
+4. Database tool screenshots (DBeaver, pgAdmin, MySQL Workbench)
+5. Direct connection — **read-only only; never execute INSERT/UPDATE/DELETE/DROP**
 
-## Processo
+## Process
 
-### 1. Inventário de tabelas
-- Liste todas as tabelas/coleções com nome e propósito inferido
-- Agrupe por domínio de negócio
+### 1. Table inventory
+- List all tables/collections with name and inferred purpose
+- Group by business domain
 
-### 2. Estrutura detalhada
-Para cada tabela: colunas (nome, tipo, tamanho, nullable, default), PKs, FKs, índices, constraints
+### 2. Detailed structure
+For each table: columns (name, type, size, nullable, default), PKs, FKs, indexes, constraints
 
-### 3. Relacionamentos
-- Todos os relacionamentos com cardinalidades (1:1, 1:N, N:M)
-- Tabelas de junção
-- Relacionamentos polimórficos (se existirem)
+### 3. Relationships
+- All relationships with cardinalities (1:1, 1:N, N:M)
+- Junction tables
+- Polymorphic relationships (if any)
 
-### 4. Regras de negócio no banco
-- Triggers: condição, evento, ação
-- Stored procedures e funções: parâmetros, lógica, retorno
-- Views e materialized views: propósito
-- Check constraints com lógica de negócio
+### 4. Business rules in the database
+- Triggers: condition, event, action
+- Stored procedures and functions: parameters, logic, return
+- Views and materialized views: purpose
+- Check constraints with business logic
 
-### 5. ERD Completo
-Gere em Mermaid (`erDiagram`). Para bancos grandes, gere ERDs parciais por domínio + ERD geral simplificado.
+### 5. Complete ERD
+Generate in Mermaid (`erDiagram`). For large databases, generate partial ERDs per domain + simplified general ERD.
 
-## Saída
+## Output
 
-**Em `aegis/specs/database/`:**
-- `erd.md` — ERD completo em Mermaid
-- `data-dictionary.md` — todas as tabelas e colunas
-- `relationships.md` — relacionamentos detalhados
-- `business-rules.md` — regras de negócio no banco
-- `procedures.md` — stored procedures e funções (se existirem)
+**In `aegis/specs/database/`:**
+- `erd.md` — complete ERD in Mermaid
+- `data-dictionary.md` — all tables and columns
+- `relationships.md` — detailed relationships
+- `business-rules.md` — business rules in database
+- `procedures.md` — stored procedures and functions (if any)
 
-## Escala de confiança
-🟢 DDL/migration direto | 🟡 Inferido de ORM/screenshots | 🔴 Inacessível
+## Confidence scale
+🟢 Direct DDL/migration | 🟡 Inferred from ORM/screenshots | 🔴 Inaccessible
 
-## Layout de saída (transversal)
+## Output layout (cross-cutting)
 
-Este agente produz artefatos transversais à organização escolhida em `[specs]` do `config.toml`. Os arquivos ficam em `<output_folder>/specs/database/`, fora das pastas de unit (feature folders). Não aplicar aqui a estrutura `<unit>/requirements.md|design.md|tasks.md`, ela pertence ao Writer.
+This agent produces cross-cutting artifacts relative to the organization chosen in `[specs]` from `config.toml`. The files go in `<output_folder>/specs/database/`, outside the unit folders (feature folders). Do not apply the `<unit>/requirements.md|design.md|tasks.md` structure here; it belongs to Writer.
 
-Informe ao Aegis Spec: tabelas documentadas, relacionamentos mapeados, regras de negócio no banco.
+Report to Aegis Spec: tables documented, relationships mapped, business rules in database.

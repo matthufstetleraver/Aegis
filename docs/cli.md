@@ -1,6 +1,6 @@
 # CLI
 
-Aegis Spec has a simple CLI to manage the installation and lifecycle of agents in your project. All commands run with `npx aegis-spec` in the project root.
+Aegis Spec has a simple CLI to manage installation and agent lifecycle in your project. All commands run with `npx aegis-spec` in the project root.
 
 ---
 
@@ -12,7 +12,7 @@ Aegis Spec has a simple CLI to manage the installation and lifecycle of agents i
 npx aegis-spec install
 ```
 
-Installs Aegis Spec in the current legacy project. Detects present engines, asks for your preferences, and creates the entire required structure.
+Installs Aegis Spec in the current legacy project. Detects available engines, asks for your preferences, and creates the full required structure.
 
 Use once, in the root of the project you want to analyze.
 
@@ -24,7 +24,7 @@ Use once, in the root of the project you want to analyze.
 npx aegis-spec status
 ```
 
-Shows the current analysis state: which phase is in progress, which agents have already run, what's left to complete.
+Shows the current analysis state: which phase is in progress, which agents have already run, and what remains to complete.
 
 Useful for a quick overview before resuming a session.
 
@@ -38,7 +38,7 @@ npx aegis-spec update
 
 Updates agents to the latest version of Aegis Spec.
 
-The command is smart: it checks the SHA-256 manifest of each file and never overwrites files you've customized. If you made adjustments to any agent, they stay intact.
+The command checks the SHA-256 manifest of each file and never overwrites files you've customized. If you changed any agent, those changes stay intact.
 
 ---
 
@@ -58,7 +58,7 @@ Adds a specific agent to the project. Useful if you didn't install all agents du
 npx aegis-spec add-engine
 ```
 
-Adds support for an AI engine that wasn't present when you installed. For example: you installed only for Claude Code and now want to add Codex.
+Adds support for an AI engine that was not present when you installed. For example: you installed only for Claude Code and now want to add Codex.
 
 ---
 
@@ -68,7 +68,7 @@ Adds support for an AI engine that wasn't present when you installed. For exampl
 npx aegis-spec uninstall
 ```
 
-Removes Aegis Spec from the project: deletes the files created by the installation (`aegis/`, `aegis/skills/aegis-*/`, engine entry files). Hooks installed by `add-hooks` are also stripped.
+Removes Aegis Spec from the project: deletes the files created by the installation (`aegis/`, `aegis/skills/aegis-*/`, engine entry files). Hooks installed by `add-hooks` are also removed.
 
 !!! info "Your files stay intact"
     `uninstall` removes **only** what Aegis Spec created. No original project file is touched. Specifications generated in `aegis/` are also preserved by default.
@@ -81,7 +81,7 @@ Removes Aegis Spec from the project: deletes the files created by the installati
 npx aegis-spec add-hooks --engine claude-code
 ```
 
-Installs Keeper hooks in your engine's config so the agent runs automatically after every file edit. Shows a preview, asks confirmation, then writes.
+Installs Keeper hooks in your engine's config so the agent runs automatically after every file edit. Shows a preview, asks for confirmation, then writes.
 
 Supported engines: `claude-code`, `cursor`, `kimi-cli`, `codex`, `opencode`. See [Hooks](hooks.md) for the full reference.
 

@@ -1,8 +1,8 @@
 ---
 name: aegis-coding
-description: Conduz a execução do actions.md em código. Atualiza checkboxes para [X], escreve progress.jsonl, gera legacy-impact.md e regression-watch.md. Use quando o usuário digitar "/aegis-coding", "aegis-coding", "executar plano" ou pedir para começar a codar a feature ativa. Último skill do ciclo forward, depois de `/aegis-to-do` (e opcionalmente `/aegis-audit` ou `/aegis-quality`).
+description: Executes actions.md in code. Updates checkboxes to [X], writes progress.jsonl, and generates legacy-impact.md and regression-watch.md. Use when the user types "/aegis-coding", "aegis-coding", "execute plan", or asks to start coding the active feature. Final skill in the forward cycle, after `/aegis-to-do` (and optionally `/aegis-audit` or `/aegis-quality`).
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -11,134 +11,134 @@ metadata:
   stage: coding
 ---
 
-Você é o executor. Sua missão é transformar `actions.md` em código real, fase por fase, respeitando paralelismo e dependências. Ao terminar, deixar dois rastros para auditoria futura: `legacy-impact.md` (o que foi mexido no legado) e `regression-watch.md` (o que precisa continuar verdadeiro nas próximas extrações).
+You are the executor. Your mission is to turn `actions.md` into real code, phase by phase, respecting parallelism and dependencies. When finished, leave two trails for future audit: `legacy-impact.md` (what changed in the legacy) and `regression-watch.md` (what must keep holding true in later extractions).
 
-## Antes de começar
+## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` e `forward_folder`
-2. Use os valores reais nos lugares onde o texto mencionar `aegis/` ou `aegis/forward/`
+1. Read `aegis/config/state.json` to resolve `output_folder` and `forward_folder`
+2. Use the real values wherever the text mentions `aegis/` or `aegis/forward/`
 
-## Pré-requisito inegociável: extração de especificações
+## Non-negotiable prerequisite: specification extraction
 
-Esse skill **EXIGE** que a pipeline de descoberta tenha sido executada antes pelo menos uma vez. Sem `aegis/`, os dois artefatos centrais do skill (`legacy-impact.md` e `regression-watch.md`) ficam sem âncora e perdem completamente o valor, o ciclo forward vira um framework genérico qualquer. O Aegis Spec só faz sentido com a ponte legado-código viva.
+This skill **REQUIRES** the discovery pipeline to have run at least once. Without `aegis/`, the two core artifacts (`legacy-impact.md` and `regression-watch.md`) have no anchor and lose their value; the forward cycle becomes a generic framework. Aegis Spec only makes sense with the legacy-code bridge alive.
 
-A verificação é estrita: `aegis/` precisa existir como diretório E conter pelo menos `architecture.md` E `domain.md`. Se qualquer condição falhar, o skill aborta com mensagem clara, NÃO oferece opção de prosseguir mesmo assim, NÃO escreve nada em disco.
+The check is strict: `aegis/` must exist as a directory AND contain at least `architecture.md` AND `domain.md`. If any condition fails, the skill aborts with a clear message, does NOT offer to continue anyway, and writes nothing to disk.
 
-## Verificações Iniciais
+## Initial checks
 
-1. Leia `aegis/config/active-requirements.json`
-   1.1. Se ausente, aborte com mensagem apontando `/aegis-requirements`
-2. Verifique a existência de `feature-dir/actions.md`
-   2.1. Se ausente, aborte com mensagem apontando `/aegis-to-do`
-3. Verifique o pré-requisito da extração de especificações:
-   3.1. Se `aegis/` não existir como diretório, aborte com a mensagem:
+1. Read `aegis/config/active-requirements.json`
+   1.1. If missing, abort with a message pointing to `/aegis-requirements`
+2. Verify the existence of `feature-dir/actions.md`
+   2.1. If missing, abort with a message pointing to `/aegis-to-do`
+3. Verify the specification-extraction prerequisite:
+   3.1. If `aegis/` does not exist as a directory, abort with the message:
 
-       > 🛑 `/aegis-coding` exige a pipeline de descoberta executada antes. A pasta `aegis/` não foi encontrada.
+       > 🛑 `/aegis-coding` requires the discovery pipeline to have run first. The folder `aegis/` was not found.
        >
-       > Execute `/aegis` para gerar a extração do legado e depois volte para cá. Sem esse contexto, `legacy-impact.md` e `regression-watch.md` ficariam sem âncora e o ciclo forward perderia seu diferencial.
+       > Run `/aegis` to generate the legacy extraction, then come back here. Without that context, `legacy-impact.md` and `regression-watch.md` would have no anchor and the forward cycle would lose its edge.
 
-   3.2. Se `aegis/` existir mas faltar `aegis/architecture/architecture.md`, aborte com a mensagem:
+   3.2. If `aegis/` exists but `aegis/architecture/architecture.md` is missing, abort with the message:
 
-       > 🛑 `/aegis-coding` exige `aegis/architecture/architecture.md` (gerado pelo Architect na pipeline de descoberta). O arquivo está ausente, talvez a extração tenha sido parcial.
+       > 🛑 `/aegis-coding` requires `aegis/architecture/architecture.md` (generated by Architect in the discovery pipeline). The file is missing, perhaps the extraction was partial.
        >
-       > Execute `/aegis` em modo completo (mínimo `essencial`) e volte para cá.
+       > Run `/aegis` in full mode (minimum `essential`) and come back here.
 
-   3.3. Se `aegis/architecture/architecture.md` existir mas faltar `aegis/reports/domain.md`, aborte com a mensagem:
+   3.3. If `aegis/architecture/architecture.md` exists but `aegis/reports/domain.md` is missing, abort with the message:
 
-       > 🛑 `/aegis-coding` exige `aegis/reports/domain.md` (gerado pelo Detective na pipeline de descoberta). O arquivo está ausente.
+       > 🛑 `/aegis-coding` requires `aegis/reports/domain.md` (generated by Detective in the discovery pipeline). The file is missing.
        >
-       > Execute `/aegis` para completar a extração e volte para cá.
+       > Run `/aegis` to complete the extraction and come back here.
 
-   3.4. Em todos os casos do passo 3, NÃO crie `legacy-impact.md`, NÃO crie `regression-watch.md`, NÃO toque em `actions.md`, NÃO escreva `progress.jsonl`. Apenas relate e encerre.
+   3.4. In all step 3 cases, do NOT create `legacy-impact.md`, do NOT create `regression-watch.md`, do NOT touch `actions.md`, and do NOT write `progress.jsonl`. Only report and stop.
 
-4. Aplique `before-coding` da forma padrão
+4. Apply `before-coding` using the standard flow
 
-## Escopo da rodada
+## Round scope
 
-1. Se o argumento livre indicar fase ou intervalo de IDs (ex.: "só Núcleo", "T001-T005"), restrinja a execução a esse escopo
-2. Caso contrário, execute em ordem todas as ações `[ ]` ainda não concluídas
+1. If the freeform argument indicates a phase or ID range (e.g. "only Core", "T001-T005"), restrict execution to that scope
+2. Otherwise, run all remaining `[ ]` actions in order
 
-## Loop de execução por fase
+## Phase execution loop
 
-Para cada fase, na ordem Preparação, Testes, Núcleo, Integração, Polimento:
+For each phase, in the order Preparation, Tests, Core, Integration, Polish:
 
-1. Selecione todas as ações da fase com status `[ ]`
-2. Calcule o conjunto independente (ações sem dependência aberta)
-3. Para o conjunto independente, identifique sub-conjunto marcado `[//]`
-   3.1. Execute esse sub-conjunto pensando em cada ação como bloco coerente, mas relate à parte
-4. Execute as demais ações do conjunto sequencialmente
-5. Após cada ação:
-   5.1. Atualize `feature-dir/actions.md` mudando `[ ]` para `[X]`
-   5.2. Escreva linha em `feature-dir/progress.jsonl` com timestamp ISO 8601, ID da ação, status final, arquivos tocados
-6. Se uma ação falhar:
-   6.1. Mantenha `[ ]` no actions
-   6.2. Registre `status: failed` no progress
-   6.3. Pare a fase e relate ao usuário
+1. Select all `[ ]` actions in the phase
+2. Calculate the independent set (actions without open dependencies)
+3. For the independent set, identify the `[//]` subset
+   3.1. Execute that subset treating each action as a coherent block, but report per item
+4. Execute the remaining actions sequentially
+5. After each action:
+   5.1. Update `feature-dir/actions.md` by changing `[ ]` to `[X]`
+   5.2. Write a line to `feature-dir/progress.jsonl` with ISO 8601 timestamp, action ID, final status, and touched files
+6. If an action fails:
+   6.1. Keep `[ ]` in actions
+   6.2. Record `status: failed` in progress
+   6.3. Stop the phase and report to the user
 
-## Geração do legacy-impact.md
+## Generating legacy-impact.md
 
-Após executar (mesmo que parcialmente):
+After running (even partially):
 
-1. Para cada arquivo do projeto tocado, mapeie ao componente correspondente em `aegis/architecture/architecture.md` quando possível
-2. Para cada componente afetado, classifique o tipo de impacto: `regra-alterada`, `regra-removida`, `regra-nova`, `componente-novo`, `componente-extinto`, `delta-de-dados`, `delta-de-contrato-externo`
-3. Atribua severidade alinhada com `/aegis-audit` (CRITICAL, HIGH, MEDIUM, LOW)
-4. Liste regras 🟢 do `aegis/reports/domain.md` que continuam intactas (vão para a seção "Preservadas")
-5. Liste regras 🟢 que foram alteradas ou removidas (vão para a seção "Modificadas")
+1. For each touched project file, map it to the corresponding component in `aegis/architecture/architecture.md` when possible
+2. For each affected component, classify the impact type: `rule-changed`, `rule-removed`, `new-rule`, `new-component`, `removed-component`, `data-delta`, `external-contract-delta`
+3. Assign severity aligned with `/aegis-audit` (CRITICAL, HIGH, MEDIUM, LOW)
+4. List 🟢 rules from `aegis/reports/domain.md` that remain intact (go in "Preserved")
+5. List 🟢 rules that were changed or removed (go in "Modified")
 
-Estrutura do arquivo:
+File structure:
 
-1. Cabeçalho com data e identificador da feature
-2. Tabela `Arquivo afetado | Componente | Tipo | Severidade | Justificativa`
-3. Diff conceitual por componente, em prosa
-4. Seção "Preservadas"
-5. Seção "Modificadas"
+1. Header with date and feature identifier
+2. Table `Affected file | Component | Type | Severity | Justification`
+3. Conceptual diff by component, in prose
+4. "Preserved" section
+5. "Modified" section
 
-Grave em `feature-dir/legacy-impact.md` com escrita atômica, rewrite completo.
+Write `feature-dir/legacy-impact.md` atomically, full rewrite.
 
-## Geração do regression-watch.md
+## Generating regression-watch.md
 
-1. Para cada regra na seção "Modificadas" do `legacy-impact.md`, gere um watch item
-2. Para regras explicitamente removidas, gere watch item do tipo `ausência`
-3. Para regras alteradas, gere watch item do tipo `redação` ou `presença` conforme o caso
-4. Para regras com confidência rebaixada, gere watch item do tipo `confidência`
-5. Atribua ID estável `W001`, `W002`, ..., reciclando IDs antigos do arquivo se já existir
+1. For each rule in the "Modified" section of `legacy-impact.md`, generate a watch item
+2. For explicitly removed rules, generate a watch item of type `absence`
+3. For changed rules, generate a watch item of type `wording` or `presence` as appropriate
+4. For rules with downgraded confidence, generate a watch item of type `confidence`
+5. Assign stable IDs `W001`, `W002`, ... reusing old IDs from the file if it already exists
 
-Estrutura:
+Structure:
 
-1. Cabeçalho com identificador da feature
-2. Tabela `ID | Origem (arquivo, seção) | Regra esperada após mudança | Tipo de verificação | Sinal de violação`
-3. Seção "Histórico de re-extrações" inicialmente vazia, será preenchida pelo agente reverso quando rodar `/aegis` de novo
-4. Seção "Arquivadas" inicialmente vazia
+1. Header with feature identifier
+2. Table `ID | Origin (file, section) | Expected rule after change | Verification type | Violation signal`
+3. "Re-extraction history" section initially empty, to be filled by the reverse agent when `/aegis` runs again
+4. "Archived" section initially empty
 
-NUNCA inclua no watch principal regras que originalmente eram 🟡 ou 🔴, essas vão para uma seção "Observações" sem peso de regressão.
+NEVER include in the main watch rules that were originally 🟡 or 🔴; those go into an "Observations" section without regression weight.
 
-Grave em `feature-dir/regression-watch.md`. A primeira execução cria o arquivo; execuções seguintes fazem append nas seções de itens novos, jamais reescrevendo histórico ou IDs antigos.
+Write `feature-dir/regression-watch.md`. The first run creates the file; later runs append new items, never rewriting history or old IDs.
 
-## Atualização do progress.jsonl
+## Updating progress.jsonl
 
-Cada linha deve ter, no mínimo:
+Each line must contain, at minimum:
 
 ```json
 {"ts":"2026-05-05T16:30:00Z","action":"T003","status":"done","files":["src/x/y.js"]}
 ```
 
-Append-only. Jamais reescreva linhas anteriores, mesmo se descobrir que ficaram erradas. Para corrigir, adicione nova linha `status: corrected` com o ID alvo.
+Append-only. Never rewrite previous lines, even if you discover they were wrong. To correct, add a new `status: corrected` line with the target ID.
 
-## Ganchos Pós-execução
+## Post-run hooks
 
-Aplique `after-coding` da forma padrão.
+Apply `after-coding` using the standard flow.
 
-## Relatório final ao usuário
+## Final report to the user
 
-1. Quantas ações executadas com sucesso
-2. Quantas falharam (se houver)
-3. Caminho absoluto de `actions.md`, `progress.jsonl`, `legacy-impact.md`, `regression-watch.md`
-4. Quantos watch items foram criados nessa rodada
-5. Aviso explícito: para fechar o ciclo, rode `/aegis` (extração de especificações) novamente em algum momento futuro
-6. Se a execução foi parcial, indique a próxima fase ou ação pendente
+1. How many actions completed successfully
+2. How many failed (if any)
+3. Absolute path of `actions.md`, `progress.jsonl`, `legacy-impact.md`, `regression-watch.md`
+4. How many watch items were created in this run
+5. Explicit warning: to close the loop, run `/aegis` (spec extraction) again at some future point
+6. If execution was partial, indicate the next phase or pending action
 
-NUNCA dispare a re-extração sozinho, isso é decisão do usuário.
+NEVER trigger re-extraction on your own; that is the user's decision.
 
-Termine com:
+End with:
 
-> Digite **CONTINUAR** para prosseguir com `/aegis` (re-extração) ou outra ação que o usuário quiser.
+> Type **CONTINUE** to proceed with `/aegis` (re-extraction) or any other action the user wants.

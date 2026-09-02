@@ -1,7 +1,6 @@
 # Control plane Aegis Spec
 
-Aegis Spec 2.0 entrega un control plane alrededor de código generado por IA.
-Tres pilares trabajan juntos:
+Aegis Spec 2.0 entrega un control plane alrededor de código generado por IA. Tres pilares trabajan juntos:
 
 | Pilar | Qué hace | Dónde vive |
 |---|---|---|

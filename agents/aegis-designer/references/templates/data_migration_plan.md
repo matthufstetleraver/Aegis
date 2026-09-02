@@ -10,71 +10,71 @@ hash: "sha256:<hash do corpo abaixo do front-matter>"
 
 # Data Migration Plan
 
-> Plano de migração dos dados do legado para o sistema novo: mapeamento, transformações, ETL, cutover de dados e validação.
+> Migration plan for data from the legacy system to the new system: mapping, transformations, ETL, data cutover, and validation.
 
-## Resumo
-- Volume estimado: <linhas / GB por entidade principal>
-- Janela de migração: <ver `cutover_plan.md`>
-- Estratégia: backfill prévio + delta + corte | bulk único | replicação contínua
+## Summary
+- Estimated volume: <rows / GB per main entity>
+- Migration window: <see `cutover_plan.md`>
+- Strategy: prior backfill + delta + cutover | single bulk load | continuous replication
 
-## Mapeamento legado → novo
+## Legacy → new mapping
 
-| Origem | Destino | Tipo | Notas |
+| Source | Destination | Type | Notes |
 |---|---|---|---|
-| `<schema legado>.tb_pedidos` | `pedidos` | renomeação | normalização de tipos |
-| `<schema legado>.tb_pedido_item` | `pedido_itens` | renomeação | FK ajustada |
-| `<schema legado>.usr_x` | `usuarios` (parcial) + `perfis` | divisão | extrai dados de perfil |
+| `<schema legado>.tb_pedidos` | `pedidos` | rename | type normalization |
+| `<schema legado>.tb_pedido_item` | `pedido_itens` | rename | adjusted FK |
+| `<schema legado>.usr_x` | `usuarios` (partial) + `perfis` | split | extracts profile data |
 
-## Transformações
+## Transformations
 
-### Transformação T-01: <nome>
-- **Aplica em**: <coluna ou tabela>
-- **Regra**: <texto explícito>
-- **Tratamento de inválidos**: <descartar | rejeitar | preencher com default>
-- **Origem da regra**: <referência a `target_business_rules.md` ou `discard_log.md`>
+### Transformation T-01: <name>
+- **Applies to**: <column or table>
+- **Rule**: <explicit text>
+- **Invalid data handling**: <discard | reject | fill with default>
+- **Rule source**: <reference to `target_business_rules.md` or `discard_log.md`>
 
-<repetir por transformação>
+<repeat for each transformation>
 
-## Estratégia de ETL
+## ETL strategy
 
-- **Ferramenta**: <ex: scripts SQL, dbt, Airbyte, custom>
-- **Fluxo**:
-  1. <extração>
-  2. <transformação>
-  3. <carga>
-- **Idempotência**: <como o ETL é seguro para reexecução>
-- **Throughput esperado**: <ex: 50k linhas/s>
+- **Tool**: <e.g. SQL scripts, dbt, Airbyte, custom>
+- **Flow**:
+  1. <extraction>
+  2. <transformation>
+  3. <load>
+- **Idempotency**: <how the ETL is safe to rerun>
+- **Expected throughput**: <e.g. 50k rows/s>
 
-## Backfill e delta
+## Backfill and delta
 
-- **Backfill**: <data inicial, escopo, duração>
-- **Captura de delta**:
-  - **Mecanismo**: CDC | log mining | timestamps | replicação | trigger
-  - **Latência aceitável**: <segundos>
-- **Reconciliação periódica**: <frequência, escopo>
+- **Backfill**: <initial date, scope, duration>
+- **Delta capture**:
+  - **Mechanism**: CDC | log mining | timestamps | replication | trigger
+  - **Acceptable latency**: <seconds>
+- **Periodic reconciliation**: <frequency, scope>
 
-## Cutover de dados
+## Data cutover
 
-> Ver também `cutover_plan.md`. Aqui apenas a parte específica de dados.
+> See also `cutover_plan.md`. Only the data-specific part belongs here.
 
-- **Janela**: <ISO-8601>
-- **Sequência de corte**:
-  1. <passo>
-  2. <passo>
-- **Verificação pós-corte**:
-  - **Contagens**: <quais tabelas, tolerância>
-  - **Checksums**: <colunas críticas>
+- **Window**: <ISO-8601>
+- **Cutover sequence**:
+  1. <step>
+  2. <step>
+- **Post-cutover verification**:
+  - **Counts**: <which tables, tolerance>
+  - **Checksums**: <critical columns>
 
-## Validação de qualidade
+## Quality validation
 
-| Métrica | Alvo | Fonte de medição |
+| Metric | Target | Measurement source |
 |---|---|---|
-| Contagem por entidade | igual ± 0% | comparação direta |
-| Soma de valores monetários | igual ± 0,01% | reconciliação financeira |
-| Integridade referencial | 0 órfãos | scripts de auditoria |
+| Count by entity | equal ± 0% | direct comparison |
+| Sum of monetary values | equal ± 0.01% | financial reconciliation |
+| Referential integrity | 0 orphans | audit scripts |
 
-## Riscos específicos de dados
-- <RISK-XXX: ver `risk_register.md`>
+## Data-specific risks
+- <RISK-XXX: see `risk_register.md`>
 
-## Notas
-<Observações adicionais.>
+## Notes
+<Additional observations.>

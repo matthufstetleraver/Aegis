@@ -21,7 +21,7 @@ Reconnaissance  Excavation    Interpretation       Generation    Review
 
 **Agent:** Scout
 
-The Scout does the first tour of the project. Like a real estate agent visiting a property for the first time: doesn't open drawers, doesn't read all the documents, just maps the territory.
+The Scout does the first tour of the project. Like a real estate agent visiting a property for the first time: does not open drawers, does not read all the documents, just maps the territory.
 
 What it produces:
 
@@ -39,7 +39,7 @@ This is also when Aegis Spec presents the Scout summary and asks for the **docum
 
 **Agent:** Archaeologist
 
-The Archaeologist digs through the code module by module. With patience and precision, it catalogs every artifact: functions, algorithms, data structures, control flows. No interpretation or judgment. Just a precise description of what's there.
+The Archaeologist digs through the code module by module. With patience and precision, it catalogs every artifact: functions, algorithms, data structures, control flows. No interpretation or judgment. Just a precise description of what is there.
 
 **Important:** the Archaeologist runs one module per session, intentionally. Large projects have many modules, and trying to analyze everything at once burns context and reduces analysis quality.
 
@@ -58,9 +58,9 @@ What it produces:
 
 Here the analysis stops being descriptive and becomes interpretive. Two agents work in this phase.
 
-**The Detective** is the team's Sherlock Holmes. Looks at what the Archaeologist cataloged and asks: *"But why is this here? Who made this decision? What does the git history reveal?"* Extracts implicit business rules, retroactive ADRs, state machines, and permission matrices.
+**The Detective** is the team's Sherlock Holmes. It looks at what the Archaeologist cataloged and asks: *"But why is this here? Who made this decision? What does the git history reveal?"* It extracts implicit business rules, retroactive ADRs, state machines, and permission matrices.
 
-**The Architect** is the cartographer. Synthesizes everything into formal architectural documentation: C4 diagrams at all three levels (Context, Containers, Components), full ERD, integration map, and technical debt.
+**The Architect** is the cartographer. It synthesizes everything into formal architectural documentation: C4 diagrams at all three levels (Context, Containers, Components), full ERD, integration map, and technical debt.
 
 What they produce:
 
@@ -78,11 +78,11 @@ What they produce:
 
 **Agent:** Writer
 
-The Writer is the team's notary. Transforms everything discovered in the previous phases into formal contracts: a folder per unit (module, endpoint, use case, feature, etc., depending on the organization chosen earlier in the flow) with the three canonical SDD files inside, plus cross-cutting globals such as OpenAPI specs and user stories.
+The Writer is the team's notary. It transforms everything discovered in the previous phases into formal contracts: a folder per unit (module, endpoint, use case, feature, etc., depending on the organization chosen earlier in the flow) with the three canonical SDD files inside, plus cross-cutting globals such as OpenAPI specs and user stories.
 
 Every statement is marked with the [confidence scale](escala-confianca.md): 🟢 CONFIRMED, 🟡 INFERRED, or 🔴 GAP.
 
-The Writer doesn't generate everything at once. It builds a plan covering all units, presents it for your approval, then generates one file at a time, waiting for confirmation before continuing. This allows incremental review and prevents context waste.
+The Writer does not generate everything at once. It builds a plan covering all units, presents it for your approval, then generates one file at a time, waiting for confirmation before continuing. This allows incremental review and prevents context waste.
 
 What it produces:
 
@@ -97,7 +97,7 @@ What it produces:
 
 **Agent:** Reviewer
 
-The Reviewer tries to break the specs. Finds internal contradictions, conflicts between different specs, statements marked as 🟢 that are actually inferences, obvious behaviors left unspecified.
+The Reviewer tries to break the specs. It finds internal contradictions, conflicts between different specs, statements marked as 🟢 that are actually inferences, and obvious behaviors left unspecified.
 
 It also collects the 🔴 gaps that only you can resolve and presents them as validation questions. After you answer, it updates the specs and generates the final confidence report.
 
@@ -114,7 +114,7 @@ What it produces:
 
 ## Independent agents
 
-These agents don't belong to a specific phase and can be triggered at any time:
+These agents do not belong to a specific phase and can be triggered at any time:
 
 | Agent | When to use |
 |-------|-------------|

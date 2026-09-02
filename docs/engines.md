@@ -8,7 +8,7 @@ Aegis Spec works with the leading AI engines on the market. The installer automa
 
 | Engine | File created | Skills path | How to activate |
 |--------|-------------|-------------|-----------------|
-| **Claude Code** ⭐ | `CLAUDE.md` | `aegis/skills/aegis-*/` and `aegis/skills/aegis-*/` | `/aegis` |
+| **Claude Code** ⭐ | `CLAUDE.md` | `aegis/skills/aegis-*/` | `/aegis` |
 | **Codex** ⭐ | `AGENTS.md` | `aegis/skills/aegis-*/` | `aegis` |
 | **Cursor** ⭐ | `.cursorrules` | `aegis/skills/aegis-*/` | `/aegis` |
 | **Gemini CLI** | `GEMINI.md` | `aegis/skills/aegis-*/` | `/aegis` |
@@ -27,13 +27,13 @@ Aegis Spec works with the leading AI engines on the market. The installer automa
 
 ## Claude Code
 
-The most tested engine with the best support. Uses native slash commands, making activation intuitive. Aegis Spec creates files in both `aegis/skills/` and `aegis/skills/` (for compatibility with other engines that may be added later).
+The most tested engine with the best support. Uses native slash commands, making activation intuitive. Aegis Spec creates files in `aegis/skills/` (for compatibility with other engines that may be added later).
 
 ---
 
 ## Codex
 
-Fully compatible. Since Codex doesn't use slash commands, activation is by the agent name directly: `aegis`, `aegis-scout`, etc. The `AGENTS.md` file at the project root serves as the entry point.
+Fully compatible. Since Codex does not use slash commands, activation is by the agent name directly: `aegis`, `aegis-scout`, etc. The `AGENTS.md` file at the project root serves as the entry point.
 
 ---
 

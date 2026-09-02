@@ -1,8 +1,8 @@
 ---
 name: aegis-doubt
-description: Gera até cinco perguntas dirigidas para resolver pontos ambíguos do requirements e integra as respostas no documento. Use quando o usuário digitar "/aegis-doubt", "aegis-doubt", "esclarecer dúvidas" ou pedir para tirar pontos abertos do requirements antes de planejar. Etapa opcional do ciclo forward, entre `/aegis-requirements` e `/aegis-plan`.
+description: Generates up to five targeted questions to resolve ambiguous points in requirements and integrates the answers into the document. Use when the user types "/aegis-doubt", "aegis-doubt", "clarify doubts", or asks to resolve open points in requirements before planning. Optional stage in the forward cycle, between `/aegis-requirements` and `/aegis-plan`.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: sandeco
   version: "1.0.0"
@@ -11,94 +11,94 @@ metadata:
   stage: doubt
 ---
 
-Você é o esclarecedor. Sua missão é descobrir o que falta saber antes do plano e devolver as respostas ao `requirements.md` da feature ativa.
+You are the clarifier. Your mission is to discover what is missing to know before the plan and return the answers to the `requirements.md` of the active feature.
 
-## Antes de começar
+## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` (extração de especificações) e `forward_folder` (features forward)
-2. Quando o texto deste skill mencionar `aegis/` ou `aegis/forward/`, use os valores reais do state.json
+1. Read `aegis/config/state.json` to resolve `output_folder` (spec extraction) and `forward_folder` (forward features)
+2. When this skill mentions `aegis/` or `aegis/forward/`, use the real values from state.json
 
-## Verificações Iniciais
+## Initial checks
 
-1. Leia `aegis/config/active-requirements.json`
-   1.1. Se o arquivo não existir, aborte com mensagem clara apontando o usuário para `/aegis-requirements`
-2. Carregue o `requirements.md` da `feature-dir` indicada
-3. Aplique a regra padrão de ganchos `before-doubt` lida de `aegis/runtime/hooks.yml` (mesma lógica do skill `aegis-requirements`)
+1. Read `aegis/config/active-requirements.json`
+   1.1. If the file does not exist, abort with a clear message pointing the user to `/aegis-requirements`
+2. Load the `requirements.md` from the indicated `feature-dir`
+3. Apply the standard `before-doubt` hook rule read from `aegis/runtime/hooks.yml` (same logic as the `aegis-requirements` skill)
 
-## Geração das perguntas
+## Question generation
 
-1. Examine o `requirements.md` em busca de:
-   1.1. Marcadores `[DÚVIDA]` explícitos
-   1.2. Frases vagas ("provavelmente", "talvez", "se possível", "alguns")
-   1.3. Termos abertos sem definição (limites numéricos, perfis de usuário, formatos esperados)
-   1.4. Lacunas de cobertura óbvias (cenário negativo ausente, edge case implícito)
-2. Cruze com a taxonomia interna abaixo para escolher candidatos
-3. Selecione no máximo cinco perguntas, ranqueadas pelo impacto no plano
-4. Cada pergunta deve ser ou múltipla escolha ou resposta curta, jamais aberta sem opções
+1. Examine `requirements.md` for:
+   1.1. Explicit `[DOUBT]` markers
+   1.2. Vague phrases ("probably", "maybe", "if possible", "some")
+   1.3. Undefined open terms (numeric limits, user profiles, expected formats)
+   1.4. Obvious coverage gaps (missing negative scenario, implicit edge case)
+2. Cross-check with the taxonomy below to choose candidates
+3. Select at most five questions, ranked by impact on the plan
+4. Each question must be either multiple choice or short answer; never open-ended without options
 
-### Taxonomia para priorizar
+### Prioritization taxonomy
 
-1. Escopo funcional e comportamento
-2. Modelo de domínio e dados
-3. Fluxo de interação e experiência
-4. Atributos não funcionais (desempenho, segurança, observabilidade)
-5. Integrações e dependências externas
-6. Permissões e autenticação
-7. Persistência e migração de dados
-8. Auditoria, log e telemetria
-9. Internacionalização e localização
-10. Falhas e recuperação
-11. Compatibilidade com o legado mapeado em `aegis/`
+1. Functional scope and behavior
+2. Domain and data model
+3. Interaction flow and experience
+4. Non-functional attributes (performance, security, observability)
+5. Integrations and external dependencies
+6. Permissions and authentication
+7. Data persistence and migration
+8. Audit, log, and telemetry
+9. Internationalization and localization
+10. Failures and recovery
+11. Compatibility with the legacy mapped in `aegis/`
 
-## Apresentação ao usuário
+## User presentation
 
-Apresente as perguntas no formato:
+Present the questions in this format:
 
 ```
-1. <pergunta>
-   a) <opção>
-   b) <opção>
-   c) <opção>
-   d) <opção>
-   e) Resposta livre
+1. <question>
+   a) <option>
+   b) <option>
+   c) <option>
+   d) <option>
+   e) Free response
 
 2. ...
 ```
 
-Se uma pergunta for de resposta curta, omita o bloco de opções e use formato `Resposta esperada: <hint do tipo de valor>`.
+If a question is short-answer, omit the options block and use the format `Expected answer: <value-type hint>`.
 
-Aguarde o usuário responder. Se ele responder apenas algumas, prossiga apenas com as respondidas.
+Wait for the user to respond. If they answer only some, proceed only with the ones answered.
 
-## Integração no requirements.md
+## requirements.md integration
 
-1. Localize ou crie a seção `## Esclarecimentos`
-2. Dentro dela, crie ou atualize `### Sessão YYYY-MM-DD`
-3. Para cada pergunta respondida:
-   3.1. Adicione um item em formato `- **Q:** <pergunta>` mais `**R:** <resposta>`
-   3.2. Localize o trecho do requirements onde a dúvida vivia
-   3.3. Reescreva o trecho in-place, removendo o `[DÚVIDA]` correspondente
-       - Se `[DÚVIDA]` não existe mais (usuário removeu manualmente), pule rewrite e só registre em Esclarecimentos
-       - Se trecho foi editado substancialmente (>50% diff), pule rewrite e avise usuário via nota: "⚠️ Texto ao redor da dúvida foi editado manualmente — integração pulada"
-4. Atualize a seção `## Lacunas` removendo entradas resolvidas e mantendo as não resolvidas
+1. Locate or create the `## Clarifications` section
+2. Within it, create or update `### Session YYYY-MM-DD`
+3. For each answered question:
+   3.1. Add an item in the format `- **Q:** <question>` plus `**A:** <answer>`
+   3.2. Locate the requirements excerpt where the doubt lived
+   3.3. Rewrite the excerpt in place, removing the corresponding `[DOUBT]`
+       - If `[DOUBT]` no longer exists (the user removed it manually), skip the rewrite and only record it in Clarifications
+       - If the surrounding text was edited substantially (>50% diff), skip the rewrite and warn the user with the note: "⚠️ Text around the doubt was edited manually — integration skipped"
+4. Update the `## Gaps` section, removing resolved entries and keeping the unresolved ones
 
-## Persistência
+## Persistence
 
-- Grave o `requirements.md` modificado de forma atômica
-- A seção `## Esclarecimentos` deve ficar logo antes de `## Lacunas`
+- Write the modified `requirements.md` atomically
+- The `## Clarifications` section must appear immediately before `## Gaps`
 
-## Ganchos Pós-execução
+## Post-run hooks
 
-Aplique a regra padrão para `after-doubt` (mesma lógica do skill `aegis-requirements`).
+Apply the standard rule for `after-doubt` (same logic as the `aegis-requirements` skill).
 
-## Relatório final
+## Final report
 
-1. Caminho absoluto do `requirements.md`
-2. Quantidade de dúvidas resolvidas nessa sessão
-3. Quantidade de marcadores `[DÚVIDA]` restantes
-4. Sugestão de próximo passo:
-   4.1. Se ainda houver `[DÚVIDA]`, sugerir nova execução de `/aegis-doubt`
-   4.2. Se zerou, sugerir `/aegis-plan`
+1. Absolute path of `requirements.md`
+2. Number of doubts resolved in this session
+3. Number of remaining `[DOUBT]` markers
+4. Suggested next step:
+   4.1. If any `[DOUBT]` remain, suggest running `/aegis-doubt` again
+   4.2. If none remain, suggest `/aegis-plan`
 
-Termine com:
+End with:
 
-> Digite **CONTINUAR** para prosseguir conforme a sugestão acima.
+> Type **CONTINUE** to proceed according to the suggestion above.

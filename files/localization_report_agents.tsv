@@ -1,0 +1,4 @@
+path	status	hits	note
+agents/aegis-designer/references/templates/data_migration_plan.md	clean	3	Visible content English; scanner hits come from preserved legacy token `legado`
+agents/aegis-designer/references/templates/target_data_model.md	clean	1	Visible content English; scanner hit comes from preserved legacy token `legado`
+agents/aegis/	ignored	0	Intentionally excluded workspace path; no actual Portuguese hits found when scanned directly

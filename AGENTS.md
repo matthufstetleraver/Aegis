@@ -2,11 +2,11 @@
 
 ## Commands
 - Runtime: Node.js 18+; package is ESM (`"type": "module"`).
-- No `npm` scripts exist for test/lint/typecheck; do not invent `npm test`/`npm run lint`.
+- No `npm` scripts exist for test/lint/typecheck; do not invent `npm test` or `npm run lint`.
 - CLI entrypoint: `node bin/aegis.js --help` or `node bin/aegis.js <command>`.
 - Syntax-check a touched JS file with `node --check <file>`; there is no project-wide checker configured.
 - Package smoke check: `npm pack --dry-run` respects the `files` whitelist in `package.json`.
-- Docs use MkDocs Material from `mkdocs.yml`; run `mkdocs build` only when local Python deps are available.
+- Docs use MkDocs Material from `mkdocs.yml`; run `mkdocs build` only when local Python dependencies are available.
 
 ## Architecture
 - `bin/aegis.js` dispatches CLI commands by dynamic import from `lib/commands/`.

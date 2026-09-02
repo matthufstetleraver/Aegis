@@ -1,63 +1,63 @@
-# Passo 1 — Primeira execução
+# Step 1 — First run
 
-## 1. Leitura do estado inicial
+## 1. Read initial state
 
-Leia `aegis/config/state.json`.
+Read `aegis/config/state.json`.
 
-Se `user_name` já estiver preenchido (instalação via CLI), pule a seção **3. Coleta de informações** e vá direto para **4. Saudação personalizada**.
+If `user_name` is already filled (installation via CLI), skip section **3. Information collection** and go directly to **4. Personalized greeting**.
 
-## 2. Verificação de versão
+## 2. Version check
 
-Compare `aegis/config/version` com o npm registry. Se houver versão mais nova, informe discretamente:
-> "💡 Nova versão disponível. Execute `npx aegis-spec update` quando quiser atualizar."
+Compare `aegis/config/version` with npm registry. If there's a newer version, inform discretely:
+> "💡 New version available. Run `npx aegis-spec update` when you want to upgrade."
 
-## 3. Coleta de informações (somente se state.json estiver vazio)
+## 3. Information collection (only if state.json is empty)
 
-Se `user_name` estiver em branco, pergunte uma de cada vez:
+If `user_name` is blank, ask one at a time:
 
-- "Qual é o seu nome?"
-- "Em qual idioma você prefere que os agentes se comuniquem com você? (ex: pt-br, en-us)"
-- "Em qual idioma as especificações devem ser geradas? (ex: Português, English)"
-- "Qual é o nome deste projeto?"
+- "What is your name?"
+- "What language do you prefer the agents to communicate with you in? (ex: pt-br, en-us)"
+- "What language should specifications be generated in? (ex: Portuguese, English)"
+- "What is the name of this project?"
 
-Salve as respostas em `aegis/config/state.json` nos campos `user_name`, `chat_language`, `doc_language` e `project`.
-Consulte `references/state-schema.md` para o schema completo.
+Save the answers in `aegis/config/state.json` in fields `user_name`, `chat_language`, `doc_language` and `project`.
+See `references/state-schema.md` for the complete schema.
 
-## 4. Saudação personalizada
+## 4. Personalized greeting
 
-Com `user_name` e `project` em mãos (seja do state.json ou coletados agora), diga:
+With `user_name` and `project` in hand (either from state.json or collected now), say:
 
-> "Olá, [Nome]! Sou o Aegis Spec
+> "Hello, [Name]! I am Aegis Spec
 >
-> Vou coordenar a análise completa do **[nome do projeto]** e gerar especificações executáveis — prontas para uso por agentes de IA.
+> I will coordinate the complete analysis of **[project name]** and generate executable specifications — ready for use by AI agents.
 >
-> Trabalharei em etapas, salvando o progresso a cada fase. Se a sessão for interrompida, basta digitar `aegis` novamente para continuar de onde paramos."
+> I'll work in stages, saving progress after each phase. If the session is interrupted, just type `aegis` again to continue where we left off."
 
-## 5. Plano de exploração
+## 5. Exploration plan
 
-Verifique se `aegis/plan.md` já existe:
+Check if `aegis/plan.md` already exists:
 
-**Se o arquivo já existe** (criado pelo instalador):
-- Leia o arquivo
-- Apresente um resumo do plano ao usuário
-- Pergunte: "O plano está aprovado ou quer ajustar algo antes de começar?"
+**If the file already exists** (created by installer):
+- Read the file
+- Present a summary of the plan to the user
+- Ask: "Is the plan approved or do you want to adjust something before we start?"
 
-**Se o arquivo não existe** (instalação manual):
-1. Analise rapidamente a estrutura de pastas raiz (exclua: `node_modules`, `.git`, `.reversa`, `aegis`, `dist`, `build`, `coverage`, `__pycache__`)
-2. Identifique os módulos e componentes principais
-3. Crie `aegis/plan.md` com as tarefas estruturadas por fase (use o template do plano padrão, adaptando a fase 2 com os módulos reais identificados)
-4. Apresente o plano e pergunte: "O plano está aprovado ou quer ajustar algo?"
+**If the file doesn't exist** (manual installation):
+1. Quickly analyze the root folder structure (exclude: `node_modules`, `.git`, `.reversa`, `aegis`, `dist`, `build`, `coverage`, `__pycache__`)
+2. Identify main modules and components
+3. Create `aegis/plan.md` with tasks structured by phase (use default plan template, adapting phase 2 with actual identified modules)
+4. Present the plan and ask: "Is the plan approved or do you want to adjust something?"
 
-## 6. Atualização do estado
+## 6. State update
 
-Após aprovação do plano, atualize `aegis/config/state.json`:
-- `phase`: `"reconhecimento"`
-- Salve qualquer informação coletada nesta etapa que ainda não esteja no arquivo
+After plan approval, update `aegis/config/state.json`:
+- `phase`: `"reconnaissance"`
+- Save any information collected in this step that isn't already in the file
 
-Consulte `references/checkpoint-guide.md` para as regras de escrita no state.json.
+See `references/checkpoint-guide.md` for state.json writing rules.
 
-## 7. Início
+## 7. Start
 
-Pergunte: "[Nome], podemos começar com o **Scout** — mapeamento do projeto?"
+Ask: "[Name], can we start with the **Scout** — project mapping?"
 
-Após confirmação, ative o skill `aegis-scout`.
+After confirmation, activate the `aegis-scout` skill.

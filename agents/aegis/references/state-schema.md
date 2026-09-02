@@ -1,22 +1,22 @@
 # Schema — aegis/config/state.json
 
-Este arquivo persiste o estado completo da análise entre sessões. O Aegis Spec lê e escreve neste arquivo.
+This file persists the complete state of analysis across sessions. Aegis Spec reads and writes to this file.
 
-## Estrutura completa
+## Complete structure
 
 ```json
 {
   "version": "1.0.0",
-  "project": "nome-do-projeto",
-  "user_name": "Nome do Usuário",
+  "project": "project-name",
+  "user_name": "User Name",
   "chat_language": "pt-br",
-  "doc_language": "Português",
+  "doc_language": "Portuguese",
   "answer_mode": "chat",
   "doc_level": null,
   "output_folder": "aegis",
-  "phase": "reconhecimento",
-  "completed": ["reconhecimento"],
-  "pending": ["escavacao", "interpretacao", "geracao", "revisao"],
+  "phase": "reconnaissance",
+  "completed": ["reconnaissance"],
+  "pending": ["excavation", "interpretation", "generation", "review"],
   "engines": ["claude-code"],
   "agents": ["reversa", "aegis-scout", "aegis-archaeologist"],
   "checkpoints": {
@@ -47,34 +47,34 @@ Este arquivo persiste o estado completo da análise entre sessões. O Aegis Spec
 }
 ```
 
-## Campos
+## Fields
 
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| `version` | string | Versão do Aegis Spec instalada |
-| `project` | string | Nome do projeto legado |
-| `user_name` | string | Nome do usuário (para interações) |
-| `chat_language` | string | Idioma das interações (ex: pt-br, en-us) |
-| `doc_language` | string | Idioma das specs geradas (ex: Português, English) |
-| `answer_mode` | string | Como o usuário responde às lacunas: `chat` ou `file` |
-| `doc_level` | string \| null | Volume de documentação gerada: `essencial`, `completo` ou `detalhado`. Começa `null` — obrigatório preencher via escolha do usuário após o Scout. |
-| `output_folder` | string | Pasta de saída das specs (padrão: `aegis`) |
-| `phase` | string \| null | Fase atual. `null` = não iniciado |
-| `completed` | string[] | Fases concluídas |
-| `pending` | string[] | Fases pendentes |
-| `checkpoints` | object | Registro de conclusão de cada agente |
-| `engines` | string[] | Engines configuradas (ex: `["claude-code", "codex"]`) |
-| `agents` | string[] | Agentes instalados |
-| `created_files` | string[] | Todos os arquivos criados pelo Aegis Spec (para uninstall seguro) |
+| Field | Type | Description |
+|-------|------|-------------|
+| `version` | string | Version of installed Aegis Spec |
+| `project` | string | Legacy project name |
+| `user_name` | string | User name (for interactions) |
+| `chat_language` | string | Language for interactions (ex: pt-br, en-us) |
+| `doc_language` | string | Language for generated specs (ex: Portuguese, English) |
+| `answer_mode` | string | How user answers gaps: `chat` or `file` |
+| `doc_level` | string \| null | Volume of generated documentation: `essential`, `complete` or `detailed`. Starts `null` — must be filled by user choice after Scout. |
+| `output_folder` | string | Output folder for specs (default: `aegis`) |
+| `phase` | string \| null | Current phase. `null` = not started |
+| `completed` | string[] | Completed phases |
+| `pending` | string[] | Pending phases |
+| `checkpoints` | object | Completion record for each agent |
+| `engines` | string[] | Configured engines (ex: `["claude-code", "codex"]`) |
+| `agents` | string[] | Installed agents |
+| `created_files` | string[] | All files created by Aegis Spec (for safe uninstall) |
 
-## Fases válidas
+## Valid phases
 
-`reconhecimento` → `escavacao` → `interpretacao` → `geracao` → `revisao`
+`reconnaissance` → `excavation` → `interpretation` → `generation` → `review`
 
-## Regra ao escrever
+## Writing rule
 
-Nunca remova campos existentes. Apenas adicione ou atualize.
+Never remove existing fields. Only add or update.
 
-## Onde NÃO escrever
+## Where NOT to write
 
-A decisão de organização das specs (granularidade, pastas customizadas, sugestão original do Scout, timestamp da escolha) **não** vai no `state.json`. Ela é persistida em `aegis/config/config.toml`, seção `[specs]`, conforme `references/step-03-specs-organization.md`. O `state.json` é estado runtime, o `config.toml` é decisão de longo prazo.
+The decision about specs organization (granularity, custom folders, original Scout suggestion, choice timestamp) does **not** go in `state.json`. It is persisted in `aegis/config/config.toml`, section `[specs]`, per `references/step-03-specs-organization.md`. `state.json` is runtime state, `config.toml` is long-term decision.

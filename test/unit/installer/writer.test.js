@@ -58,7 +58,7 @@ test('Writer.installSkill: warns and returns when agent dir missing', async (t) 
   } finally {
     console.warn = orig;
   }
-  assert.match(warned, /não encontrado/);
+  assert.match(warned, /not found/);
   assert.equal(w.createdFiles.length, 0);
 });
 

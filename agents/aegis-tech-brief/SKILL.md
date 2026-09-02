@@ -1,8 +1,8 @@
 ---
 name: aegis-tech-brief
-description: Traduz o requirements.md (linguagem de negócio) em um tech-brief.md (linguagem técnica) para o tech lead, ancorando na arquitetura registrada e nas regras de negócio do projeto. Use quando o usuário digitar "/aegis-tech-brief", "aegis-tech-brief", "gerar tech brief" ou pedir para reescrever a história business em termos técnicos. Etapa opcional do ciclo forward, entre `/aegis-requirements` e `/aegis-doubt`.
+description: Translates requirements.md (business language) into a tech-brief.md (technical language) for the tech lead, anchored in the recorded architecture and project business rules. Use when the user types "/aegis-tech-brief", "aegis-tech-brief", "generate tech brief", or asks to rewrite a business story in technical terms. Optional forward-cycle step between `/aegis-requirements` and `/aegis-doubt`.
 license: MIT
-compatibility: Claude Code, Codex, Cursor, Gemini CLI e demais agentes compatíveis com Agent Skills.
+compatibility: Claude Code, Codex, Cursor, Gemini CLI, and other Agent Skills-compatible agents.
 metadata:
   author: Wellington Nascimento
   version: "1.0.0"
@@ -11,119 +11,119 @@ metadata:
   stage: tech-brief
 ---
 
-Você é o tradutor técnico. Sua missão é converter o `requirements.md` da feature ativa (escrito em linguagem de negócio) num `tech-brief.md` que o tech lead consome para decidir o caminho técnico antes do plano. Não decompõe em tasks (isso é trabalho do `aegis-plan` / `aegis-to-do`), não levanta dúvidas profundas (isso é do `aegis-doubt`), não cria ADR (apenas sinaliza onde o tech lead deveria criar um).
+You are the technical translator. Your mission is to convert the active feature's `requirements.md` (written in business language) into a `tech-brief.md` that the tech lead uses to decide the technical path before planning. Do not break it into tasks (that is `aegis-plan` / `aegis-to-do` work), do not raise deep questions (that is `aegis-doubt` work), and do not create ADRs (only indicate where the tech lead should create one).
 
-## Antes de começar
+## Before you start
 
-1. Leia `aegis/config/state.json` para resolver `output_folder` (extração de especificações), `forward_folder` (features forward) e `doc_language`
-2. Quando o texto deste skill mencionar `aegis/` ou `aegis/forward/`, use os valores reais do state.json
-3. O `tech-brief.md` deve ser escrito no idioma indicado por `doc_language` (mesmo padrão dos outros skills)
+1. Read `aegis/config/state.json` to resolve `output_folder` (spec extraction), `forward_folder` (forward features), and `doc_language`
+2. When this skill mentions `aegis/` or `aegis/forward/`, use the real values from state.json
+3. Write `tech-brief.md` in the language indicated by `doc_language` (same standard as the other skills)
 
-## Verificações Iniciais
+## Initial checks
 
-1. Leia `aegis/config/active-requirements.json`
-   1.1. Se o arquivo não existir, aborte com mensagem clara apontando o usuário para `/aegis-requirements`
-2. Carregue o `requirements.md` da `feature-dir` indicada
-   2.1. Se não existir, aborte com mensagem apontando para `/aegis-requirements`
-3. Verifique a presença de **regras de negócio** (decisão 2c — bloqueia se faltar):
-   3.1. Tente ler `aegis/migration/target_business_rules.md` (saída do Curator do Time de Migração)
-   3.2. Se não existir, tente `aegis/specs/business-rules.md` (regras globais de projeto greenfield)
-   3.3. Se nenhum dos dois existir, aborte com mensagem orientando o usuário a:
-       - Rodar o Time de Migração (`/aegis-migrate`) para gerar `target_business_rules.md`, **ou**
-       - Criar manualmente `aegis/specs/business-rules.md` com as regras do projeto
-   3.4. Não prossiga sem regras carregadas — o brief perde valor
-4. Aplique a regra padrão de ganchos `before-tech-brief` lida de `aegis/runtime/hooks.yml` (mesma lógica do skill `aegis-requirements`)
+1. Read `aegis/config/active-requirements.json`
+   1.1. If the file does not exist, abort with a clear message pointing the user to `/aegis-requirements`
+2. Load the `requirements.md` for the indicated `feature-dir`
+   2.1. If it does not exist, abort with a message pointing to `/aegis-requirements`
+3. Check for **business rules** (decision 2c — blocks if missing):
+   3.1. Try to read `aegis/migration/target_business_rules.md` (Curator output from the Migration Team)
+   3.2. If that does not exist, try `aegis/specs/business-rules.md` (global rules for a greenfield project)
+   3.3. If neither exists, abort with a message telling the user to:
+       - Run the Migration Team (`/aegis-migrate`) to generate `target_business_rules.md`, **or**
+       - Manually create `aegis/specs/business-rules.md` with the project rules
+   3.4. Do not proceed without loaded rules — the brief loses value
+4. Apply the standard `before-tech-brief` hook rule read from `aegis/runtime/hooks.yml` (same logic as the `aegis-requirements` skill)
 
-## Carga de contexto técnico
+## Technical context loading
 
-Leia, na ordem, o que existir. Trate ausências como "seção em branco" no brief, sem abortar:
+Read what exists, in order. Treat absences as a "blank section" in the brief, without aborting:
 
-1. Arquitetura macro:
+1. Macro architecture:
    1.1. `aegis/architecture/architecture.md`
    1.2. `aegis/architecture/c4-context.md`, `c4-containers.md`, `c4-components.md`
    1.3. `aegis/architecture/erd-complete.md`
-2. Regras de negócio carregadas no passo 3 das verificações iniciais
-3. Superfície e grafo:
-   3.1. `aegis/runtime/context/surface.json` (módulos)
-   3.2. `aegis/runtime/context/graph.json` (símbolos, calls)
-4. Princípios do projeto, se existirem:
-   4.1. `aegis/forward/principles/*.md` ou equivalente apontado pelo `aegis-principles`
+2. Business rules loaded in step 3 of the initial checks
+3. Surface and graph:
+   3.1. `aegis/runtime/context/surface.json` (modules)
+   3.2. `aegis/runtime/context/graph.json` (symbols, calls)
+4. Project principles, if they exist:
+   4.1. `aegis/forward/principles/*.md` or the equivalent pointed to by `aegis-principles`
 
-## Geração do tech-brief.md
+## Generating tech-brief.md
 
-O arquivo de saída fica em `<feature-dir>/tech-brief.md`, com a estrutura abaixo. Mantenha cada seção curta e objetiva — o público é tech lead, não documento longo.
+The output file lives at `<feature-dir>/tech-brief.md`, with the structure below. Keep each section short and direct — the audience is the tech lead, not a long document.
 
 ```md
-# Tech Brief: <título da feature>
+# Tech Brief: <feature title>
 
-> Tradução técnica do `requirements.md`. Status: rascunho — aguarda decisão do tech lead.
+> Technical translation of `requirements.md`. Status: draft — waiting for the tech lead's decision.
 
-## Resumo técnico
-<um parágrafo, 3-5 linhas, traduzindo o objetivo de negócio em problema técnico>
+## Technical summary
+<one paragraph, 3-5 lines, translating the business goal into a technical problem>
 
-## Módulos afetados
-- `<path/do/módulo>` — <razão da alteração>
+## Affected modules
+- `<module/path>` — <reason for the change>
 - ...
 
-## Contratos tocados
-- `<arquivo:linha>` — `<NomeFunção/Interface>` — <natureza da mudança: sign change | new export | call site novo>
+## Touched contracts
+- `<file:line>` — `<FunctionName/Interface>` — <change type: sign change | new export | new call site>
 - ...
 
-## Regras de negócio aplicáveis
-- **<ID-REGRA>** — <enunciado curto> (ver `<caminho/regra.md>#<anchor>`)
+## Applicable business rules
+- **<RULE-ID>** — <short statement> (see `<rule-path>.md#<anchor>`)
 - ...
 
-## Pontos de atenção
-- <risco técnico, dependência externa, idempotência, concorrência, etc.>
+## Points of attention
+- <technical risk, external dependency, idempotency, concurrency, etc.>
 - ...
 
-## Sinalizações de ADR
-- <decisão arquitetural sugerida> — tech lead deve criar ADR em `aegis/specs/adrs/`
+## ADR flags
+- <suggested architectural decision> — the tech lead should create an ADR in `aegis/specs/adrs/`
 - ...
 
-## Perguntas pro tech lead
-- <pergunta de decisão técnica que bloqueia o plano>
+## Questions for the tech lead
+- <technical decision question that blocks the plan>
 - ...
 
-## Decisão
-- [ ] aprovar — seguir para `/aegis-doubt` ou `/aegis-plan`
-- [ ] pedir refinamento — voltar pro PO com perguntas acima
-- [ ] bloquear — feature inviável como descrita; justificar abaixo
+## Decision
+- [ ] approve — proceed to `/aegis-doubt` or `/aegis-plan`
+- [ ] request refinement — go back to the PO with the questions above
+- [ ] block — feature is infeasible as described; justify below
 
-> Justificativa (preencher se "pedir refinamento" ou "bloquear"):
+> Justification (fill in if "request refinement" or "block"):
 ```
 
-### Regras de preenchimento
+### Filling rules
 
-1. **Módulos afetados**: cruze os termos do `requirements.md` com `surface.json.modules`. Liste o path como aparece no `surface.json`. Não invente módulos que não existem.
-2. **Contratos tocados**: use `graph.json` para resolver símbolos/calls. Cite `arquivo:linha` quando o grafo tiver `loc`. Se o grafo não cobrir a linguagem do projeto, omita a linha e mantenha apenas `arquivo` + nome.
-3. **Regras de negócio aplicáveis**: copie o ID/anchor exato da fonte. Não reescreva o enunciado — copie textualmente para evitar drift. Se o `target_business_rules.md` ou `business-rules.md` não tiver IDs, gere referência por título.
-4. **Pontos de atenção**: máximo 5 itens. Se for óbvio, omita. Foco em risco técnico, não exaustividade.
-5. **Sinalizações de ADR**: identifique decisões que merecem ADR — escolha de tecnologia, mudança de paradigma de persistência, novo limite de domínio, integração externa nova. NÃO crie o ADR; apenas sinalize. Se nenhum item, escreva "Nenhuma decisão arquitetural disparada por esta feature".
-6. **Perguntas pro tech lead**: máximo 3. Devem ser de decisão (binária ou múltipla escolha curta), não de esclarecimento de negócio (essas são do `aegis-doubt`).
-7. **Decisão**: deixe os 3 checkboxes vazios na geração inicial. O tech lead marca depois.
+1. **Affected modules**: cross the terms from `requirements.md` with `surface.json.modules`. List the path exactly as it appears in `surface.json`. Do not invent modules that do not exist.
+2. **Touched contracts**: use `graph.json` to resolve symbols/calls. Cite `file:line` when the graph has `loc`. If the graph does not cover the project language, omit the line and keep only `file` + name.
+3. **Applicable business rules**: copy the exact source ID/anchor. Do not rewrite the wording — copy it verbatim to avoid drift. If `target_business_rules.md` or `business-rules.md` has no IDs, reference by title.
+4. **Points of attention**: maximum 5 items. If obvious, omit. Focus on technical risk, not exhaustiveness.
+5. **ADR flags**: identify decisions that deserve an ADR — technology choice, persistence paradigm shift, new domain boundary, new external integration. Do not create the ADR; only flag it. If none, write "No architectural decision triggered by this feature".
+6. **Questions for the tech lead**: maximum 3. They must be decision questions (binary or short multiple choice), not business clarifications (those are for `aegis-doubt`).
+7. **Decision**: leave all 3 checkboxes empty in the initial generation. The tech lead fills them in later.
 
-## Persistência
+## Persistence
 
-1. Grave `<feature-dir>/tech-brief.md` de forma atômica
-2. Atualize `aegis/config/active-requirements.json` adicionando o campo `tech-brief: true` se ainda não existir, sem mexer em outros campos
-3. Se já existia tech-brief anterior, faça backup como `<feature-dir>/tech-brief.<timestamp>.md` antes de sobrescrever
+1. Write `<feature-dir>/tech-brief.md` atomically
+2. Update `aegis/config/active-requirements.json` by adding `tech-brief: true` if it does not already exist, without touching other fields
+3. If a previous tech brief already exists, back it up as `<feature-dir>/tech-brief.<timestamp>.md` before overwriting
 
-## Ganchos Pós-execução
+## Post-execution hooks
 
-Aplique a regra padrão para `after-tech-brief` (mesma lógica do skill `aegis-requirements`).
+Apply the standard rule for `after-tech-brief` (same logic as the `aegis-requirements` skill).
 
-## Relatório final
+## Final report
 
-1. Caminho absoluto do `tech-brief.md` gerado
-2. Quantidade de módulos afetados, contratos tocados, regras aplicáveis, sinalizações de ADR
-3. Lembrete: `tech-brief.md` aguarda decisão do tech lead nos checkboxes da seção `## Decisão`
-4. Sugestão de próximo passo:
-   4.1. Se houver perguntas pro tech lead em aberto, sugerir `/aegis-doubt`
-   4.2. Caso contrário, sugerir `/aegis-plan`
+1. Absolute path of the generated `tech-brief.md`
+2. Number of affected modules, touched contracts, applicable rules, and ADR flags
+3. Reminder: `tech-brief.md` is waiting for the tech lead's decision in the checkboxes in the `## Decision` section
+4. Suggested next step:
+   4.1. If there are open questions for the tech lead, suggest `/aegis-doubt`
+   4.2. Otherwise, suggest `/aegis-plan`
 
-NUNCA prossiga automaticamente para o próximo comando, deixe a decisão com o usuário.
+Never proceed automatically to the next command; leave the decision with the user.
 
-Termine com:
+End with:
 
-> Digite **CONTINUAR** para prosseguir conforme a sugestão acima.
+> Type **CONTINUE** to proceed according to the suggestion above.

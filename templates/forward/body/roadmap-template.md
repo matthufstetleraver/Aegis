@@ -1,107 +1,107 @@
 <!--
-Template de corpo do roadmap.md
-Carregado por /aegis-plan.
+Roadmap.md body template
+Loaded by /aegis-plan.
 
-REGRAS DE PREENCHIMENTO:
-- Escreva como DELTA sobre o legado, jamais redescreva a arquitetura inteira.
-- Cite componentes do aegis/ por nome literal.
-- Marque cada decisão com 🟢 / 🟡 / 🔴 conforme a confidência da fonte que a sustenta.
-- Decisões dependentes de [DÚVIDA] aceitas como premissa entram com 🟡 e aparecem em "Premissas".
-- Detalhes profundos de modelo de dados vão para data-delta.md, não aqui.
-- Detalhes profundos de contrato externo vão para interfaces/<nome>.md, não aqui.
+FILLING RULES:
+- Write as DELTA over the legacy, never redescribe the entire architecture.
+- Cite aegis/ components by literal name.
+- Mark each decision with 🟢 / 🟡 / 🔴 according to the confidence level of the source supporting it.
+- Decisions depending on [DOUBT] accepted as premise enter with 🟡 and appear in "Assumptions".
+- Deep data model details go to data-delta.md, not here.
+- Deep external contract details go to interfaces/<name>.md, not here.
 -->
 
-# Roadmap: <NOME DA FEATURE>
+# Roadmap: <FEATURE NAME>
 
-> Identificador: `<NNN>-<short-name>`
-> Data: `YYYY-MM-DD`
+> Identifier: `<NNN>-<short-name>`
+> Date: `YYYY-MM-DD`
 > Requirements: `<feature-dir>/requirements.md`
-> Confidência: 🟢 CONFIRMADO, 🟡 INFERIDO, 🔴 LACUNA
+> Confidence: 🟢 CONFIRMED, 🟡 INFERRED, 🔴 GAP
 
-## 1. Resumo da abordagem
+## 1. Summary of Approach
 
-<!-- Até dez linhas. Em prosa, explique o caminho técnico escolhido. -->
+<!-- Up to ten lines. In prose, explain the technical path chosen. -->
 
-## 2. Princípios aplicados
+## 2. Applied Principles
 
 <!--
-Liste os princípios de `.aegis/principles.md` que essa feature respeita ou conflita.
-Para conflitos, descreva o conflito sem propor mudança no princípio (isso é trabalho de /aegis-principles).
+List the principles from `.aegis/principles.md` that this feature respects or conflicts with.
+For conflicts, describe the conflict without proposing a change to the principle (that is work for /aegis-principles).
 -->
 
-| Princípio | Como a feature se relaciona | Status |
+| Principle | How the feature relates | Status |
 |-----------|------------------------------|--------|
-| I. <título> | <observação> | respeita / conflita |
+| I. <title> | <observation> | respects / conflicts |
 
-## 3. Decisões técnicas
+## 3. Technical Decisions
 
-| ID | Decisão | Justificativa | Alternativas descartadas | Confidência |
+| ID | Decision | Justification | Discarded Alternatives | Confidence |
 |----|---------|----------------|--------------------------|-------------|
-| D-01 | <decisão> | <razão objetiva> | <a, b, c> | 🟢 |
-| D-02 | <decisão> | <razão objetiva> | <a, b> | 🟡 |
+| D-01 | <decision> | <objective reason> | <a, b, c> | 🟢 |
+| D-02 | <decision> | <objective reason> | <a, b> | 🟡 |
 
-## 4. Premissas
+## 4. Assumptions
 
 <!--
-Premissas adotadas a partir de [DÚVIDA] não resolvidas.
-Cada premissa precisa virar item resolvível em /aegis-doubt no futuro.
+Assumptions adopted from unresolved [DOUBT].
+Each assumption needs to become a resolvable item in /aegis-doubt in the future.
 -->
 
-| Premissa | Origem (`requirements.md` seção) | Risco se errada |
+| Assumption | Origin (`requirements.md` section) | Risk if wrong |
 |----------|----------------------------------|-----------------|
-| <texto>  | <seção> | <impacto> |
+| <text>  | <section> | <impact> |
 
-## 5. Delta arquitetural
+## 5. Architecture Delta
 
 <!--
-Liste apenas os componentes do `aegis/architecture/architecture.md` que mudam.
-Para cada um, descreva o tipo de mudança em uma linha.
+List only the components from `aegis/architecture/architecture.md` that change.
+For each one, describe the type of change in one line.
 -->
 
-| Componente | Arquivo de origem no legado | Tipo de mudança | Resumo |
+| Component | Source File in Legacy | Type of Change | Summary |
 |------------|------------------------------|-----------------|--------|
-| <nome> | `aegis/architecture/architecture.md#<id>` | regra-alterada / componente-novo / componente-extinto / contrato-novo / contrato-alterado / contrato-removido | <uma linha> |
+| <name> | `aegis/architecture/architecture.md#<id>` | rule-altered / component-new / component-removed / contract-new / contract-altered / contract-removed | <one line> |
 
-## 6. Delta no modelo de dados
+## 6. Data Model Delta
 
-<!-- Resumo. O detalhe (campos, migrações, índices) vive em data-delta.md. -->
+<!-- Summary. The details (fields, migrations, indexes) live in data-delta.md. -->
 
-- Resumo das mudanças: <prosa curta>
-- Detalhe completo em: `<feature-dir>/data-delta.md`
+- Summary of changes: <short prose>
+- Complete details in: `<feature-dir>/data-delta.md`
 
-## 7. Delta de contratos externos
+## 7. External Contracts Delta
 
-<!-- Resumo. Cada contrato afetado tem um arquivo próprio em interfaces/. -->
+<!-- Summary. Each affected contract has its own file in interfaces/. -->
 
-| Contrato | Tipo | Arquivo de detalhe |
+| Contract | Type | Detail File |
 |----------|------|--------------------|
-| <nome>   | HTTP / fila / gRPC / GraphQL / arquivo | `<feature-dir>/interfaces/<nome>.md` |
+| <name>   | HTTP / queue / gRPC / GraphQL / file | `<feature-dir>/interfaces/<name>.md` |
 
-## 8. Plano de migração
+## 8. Migration Plan
 
-<!-- Quando aplicável. Se a mudança não exige migração, registre "n/a" e siga. -->
+<!-- When applicable. If the change does not require migration, record "n/a" and proceed. -->
 
-1. <passo>
-2. <passo>
-3. <passo>
+1. <step>
+2. <step>
+3. <step>
 
-## 9. Riscos e mitigações
+## 9. Risks and Mitigations
 
-| Risco | Impacto | Probabilidade | Mitigação |
+| Risk | Impact | Probability | Mitigation |
 |-------|---------|---------------|-----------|
-| <risco> | alto / médio / baixo | alto / médio / baixo | <ação> |
+| <risk> | high / medium / low | high / medium / low | <action> |
 
-## 10. Critério de pronto
+## 10. Definition of Done
 
-<!-- O que precisa estar verdadeiro para a feature ser considerada concluída. -->
+<!-- What needs to be true for the feature to be considered complete. -->
 
-- [ ] Todas as ações do `actions.md` marcadas `[X]`
-- [ ] `cross-check.md` (se executado) sem CRITICAL nem HIGH
-- [ ] `regression-watch.md` gerado
-- [ ] Re-extração reversa executada e sem regressão vermelha (recomendado, não obrigatório)
+- [ ] All actions in `actions.md` marked `[X]`
+- [ ] `cross-check.md` (if executed) with no CRITICAL or HIGH
+- [ ] `regression-watch.md` generated
+- [ ] Re-extraction and reverse executed and no red regression (recommended, not required)
 
-## 11. Histórico de alterações
+## 11. Change History
 
-| Data | Alteração | Autor |
+| Date | Change | Author |
 |------|-----------|-------|
-| YYYY-MM-DD | Versão inicial gerada por `/aegis-plan` | reversa |
+| YYYY-MM-DD | Initial version generated by `/aegis-plan` | reverse |
